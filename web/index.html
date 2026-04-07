@@ -3,423 +3,680 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>OpenMontage — AI Video Studio</title>
+<title>OpenMontage — AI Content Factory</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e11d48'/><text x='50' y='72' text-anchor='middle' font-size='60' font-family='sans-serif'>🎬</text></svg>"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1c1c28;
-    --border: #2a2a3a;
-    --accent: #7c6af7;
-    --accent2: #a78bfa;
-    --text: #e8e8f0;
-    --muted: #6b6b80;
-    --success: #34d399;
-    --error: #f87171;
-    --radius: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-  .app { display: grid; grid-template-columns: 1fr 420px; min-height: 100vh; }
-  header {
-    grid-column: 1/-1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-  .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-  .logo span { color: var(--accent2); }
-  .badge {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-  .panel-left {
-    padding: 24px;
-    overflow-y: auto;
-    border-right: 1px solid var(--border);
-  }
-  .panel-right {
-    padding: 24px;
-    overflow-y: auto;
-    background: var(--surface);
-  }
-  .section { margin-bottom: 24px; }
-  .section-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  label { display: block; margin-bottom: 6px; font-size: 13px; }
-  label .hint { color: var(--muted); font-size: 11px; margin-left: 4px; }
-  input[type="text"], input[type="number"], textarea, select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-size: 13px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color .15s;
-    font-family: inherit;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
-  select option { background: var(--surface2); }
-  textarea { resize: vertical; }
-  #script { min-height: 200px; font-size: 14px; }
-  #system_prompt { min-height: 80px; font-size: 12px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .slider-wrap { display: flex; align-items: center; gap: 12px; }
-  input[type="range"] {
-    flex: 1;
-    -webkit-appearance: none;
-    height: 4px;
-    background: var(--border);
-    border-radius: 4px;
-    outline: none;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: var(--accent2);
-    cursor: pointer;
-  }
-  .slider-val { min-width: 36px; text-align: center; font-size: 13px; color: var(--accent2); font-weight: 600; }
-  .upload-zone {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .15s, background .15s;
-    position: relative;
-  }
-  .upload-zone:hover { border-color: var(--accent); background: rgba(124,106,247,.05); }
-  .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .upload-zone .uz-icon { font-size: 24px; margin-bottom: 4px; }
-  .upload-zone .uz-label { font-size: 12px; color: var(--muted); }
-  .upload-zone .uz-file { font-size: 12px; color: var(--accent2); margin-top: 4px; }
-  .pill-group { display: flex; gap: 8px; }
-  .pill {
-    flex: 1; padding: 8px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    font-size: 12px; font-weight: 600;
-    cursor: pointer; text-align: center;
-    transition: all .15s; user-select: none;
-  }
-  .pill.active { border-color: var(--accent); color: var(--accent2); background: rgba(124,106,247,.1); }
-  .number-wrap { position: relative; }
-  .number-wrap input { padding-right: 40px; }
-  .number-wrap .unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
-  .btn-generate {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: white; border: none;
-    border-radius: var(--radius);
-    font-size: 15px; font-weight: 700;
-    cursor: pointer; letter-spacing: 0.3px;
-    transition: opacity .15s, transform .1s;
-    margin-top: 8px;
-  }
-  .btn-generate:hover { opacity: .9; }
-  .btn-generate:active { transform: scale(.98); }
-  .btn-generate:disabled { opacity: .5; cursor: not-allowed; }
-  .output-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
-  .job-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px; margin-bottom: 16px;
-  }
-  .job-stage { font-size: 13px; font-weight: 600; color: var(--accent2); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-  .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent2); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .progress-bar-wrap { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
-  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 6px; transition: width .4s ease; }
-  .log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .log-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .btn-expand-log {
-    background: none; border: 1px solid var(--border); border-radius: 6px;
-    color: var(--muted); font-size: 11px; padding: 3px 8px; cursor: pointer;
-    transition: color .15s, border-color .15s;
-  }
-  .btn-expand-log:hover { color: var(--accent2); border-color: var(--accent2); }
-  .log-box {
-    background: var(--bg); border-radius: 8px; padding: 10px 12px;
-    height: calc(100vh - 360px); min-height: 220px;
-    overflow-y: auto; font-family: monospace; font-size: 12px;
-    color: var(--muted); line-height: 1.9;
-  }
-  .log-line { color: var(--text); }
-  .log-ok { color: var(--success) !important; font-weight: 600; }
-  .log-err { color: var(--error) !important; font-weight: 600; }
-  .log-warn { color: #fbbf24 !important; }
-  /* Fullscreen log modal */
-  .log-modal {
-    display: none; position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0,0,0,.85); backdrop-filter: blur(4px);
-    padding: 24px;
-  }
-  .log-modal.open { display: flex; flex-direction: column; }
-  .log-modal-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .log-modal-title { font-size: 16px; font-weight: 700; color: var(--text); }
-  .btn-close-modal {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text); font-size: 13px;
-    padding: 6px 14px; cursor: pointer; transition: border-color .15s;
-  }
-  .btn-close-modal:hover { border-color: var(--accent2); color: var(--accent2); }
-  .log-modal-box {
-    flex: 1; background: var(--bg); border-radius: var(--radius);
-    padding: 16px 18px; overflow-y: auto;
-    font-family: monospace; font-size: 13px; line-height: 2;
-    color: var(--muted);
-  }
-  .video-wrap { background: #000; border-radius: var(--radius); overflow: hidden; margin: 16px 0 12px; aspect-ratio: 9/16; max-height: 360px; display: flex; align-items: center; justify-content: center; }
-  .video-wrap.wide { aspect-ratio: 16/9; }
-  .video-wrap.square { aspect-ratio: 1; }
-  .video-wrap video { width: 100%; height: 100%; object-fit: contain; }
-  .btn-download { width: 100%; padding: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .15s; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-  .btn-download:hover { border-color: var(--accent2); color: var(--accent2); }
-  .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
-  .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-size: 13px; line-height: 1.7; }
-  .voices-loading { color: var(--muted); font-size: 12px; padding: 8px 0; }
-  /* Toggle switch */
-  .toggle-switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-track {
-    position: absolute; inset: 0;
-    background: var(--border); border-radius: 22px;
-    cursor: pointer; transition: background .2s;
-  }
-  .toggle-track::after {
-    content: ''; position: absolute;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #fff; top: 3px; left: 3px;
-    transition: transform .2s;
-  }
-  .toggle-switch input:checked + .toggle-track { background: var(--accent); }
-  .toggle-switch input:checked + .toggle-track::after { transform: translateX(18px); }
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+:root {
+  --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c28;--border:#2a2a3a;
+  --accent:#7c6af7;--accent2:#a78bfa;--text:#e8e8f0;--muted:#6b6b80;
+  --success:#34d399;--error:#f87171;--warn:#fbbf24;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Inter',sans-serif;font-size:14px;line-height:1.5;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── Layout ── */
+.shell{display:flex;flex:1;min-height:0;overflow:hidden}
+.sidebar{width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:12px 0}
+.main{flex:1;overflow-y:auto;padding:24px}
+
+/* ── Header ── */
+header{flex-shrink:0;display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.logo{font-size:18px;font-weight:700;letter-spacing:-.5px}
+.logo span{color:var(--accent2)}
+.badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+
+/* ── Sidebar nav ── */
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;border-radius:8px;margin:1px 8px;color:var(--muted);font-size:13px;font-weight:500;transition:all .15s;user-select:none}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:rgba(124,106,247,.15);color:var(--accent2);border:1px solid rgba(124,106,247,.2)}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:8px}
+
+/* ── Tabs (pages) ── */
+.page{display:none}.page.active{display:block}
+
+/* ── Page header ── */
+.page-title{font-size:20px;font-weight:700;margin-bottom:20px}
+.page-subtitle{color:var(--muted);font-size:13px;margin-top:4px}
+
+/* ── Stats cards ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.stat-value{font-size:28px;font-weight:700;letter-spacing:-1px}
+.stat-card.success .stat-value{color:var(--success)}
+.stat-card.error .stat-value{color:var(--error)}
+.stat-card.warn .stat-value{color:var(--warn)}
+
+/* ── Chart ── */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:24px}
+.chart-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.chart-wrap{position:relative;height:180px}
+
+/* ── Table ── */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.table-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.table-title{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.empty-row td{text-align:center;color:var(--muted);padding:32px}
+
+/* ── Status badge ── */
+.badge-status{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-status.queued{background:rgba(107,107,128,.15);color:var(--muted)}
+.badge-status.running{background:rgba(124,106,247,.15);color:var(--accent2)}
+.badge-status.done{background:rgba(52,211,153,.12);color:var(--success)}
+.badge-status.error{background:rgba(248,113,113,.12);color:var(--error)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.dot.spin{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Form elements ── */
+.form-section{margin-bottom:20px}
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+label{display:block;margin-bottom:5px;font-size:13px}
+label .hint{color:var(--muted);font-size:11px;margin-left:4px}
+input[type="text"],input[type="number"],input[type="email"],input[type="password"],textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;padding:8px 12px;outline:none;transition:border-color .15s;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select option{background:var(--surface2)}
+textarea{resize:vertical}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.slider-wrap{display:flex;align-items:center;gap:10px}
+input[type="range"]{flex:1;-webkit-appearance:none;height:4px;background:var(--border);border-radius:4px;outline:none}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent2);cursor:pointer}
+.slider-val{min-width:34px;text-align:center;font-size:13px;color:var(--accent2);font-weight:600}
+.number-wrap{position:relative}
+.number-wrap input{padding-right:36px}
+.number-wrap .unit{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:11px;pointer-events:none}
+.pill-group{display:flex;gap:6px}
+.pill{flex:1;padding:7px 5px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;user-select:none}
+.pill.active{border-color:var(--accent);color:var(--accent2);background:rgba(124,106,247,.1)}
+.toggle-row{display:flex;align-items:center;gap:10px}
+.toggle-switch{position:relative;width:37px;height:21px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:22px;cursor:pointer;transition:background .2s}
+.toggle-track::after{content:'';position:absolute;width:15px;height:15px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s}
+.toggle-switch input:checked+.toggle-track{background:var(--accent)}
+.toggle-switch input:checked+.toggle-track::after{transform:translateX(16px)}
+
+/* ── Buttons ── */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:opacity .15s}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+.btn-secondary:hover{border-color:var(--accent2);color:var(--accent2)}
+.btn-generate{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:opacity .15s,transform .1s;margin-top:8px}
+.btn-generate:hover{opacity:.9}
+.btn-generate:active{transform:scale(.98)}
+.btn-generate:disabled{opacity:.5;cursor:not-allowed}
+.btn-danger{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:var(--error);padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;transition:opacity .15s}
+.btn-danger:hover{opacity:.8}
+
+/* ── 2-col factory layout ── */
+.factory-layout{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+.factory-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:sticky;top:0}
+.result-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+
+/* ── Job card (factory result) ── */
+.job-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:13px;margin-bottom:12px}
+.job-stage{font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.spinner{width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.progress-bar-wrap{height:5px;background:var(--border);border-radius:6px;overflow:hidden;margin-bottom:10px}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;transition:width .4s ease}
+.log-box{background:var(--bg);border-radius:8px;padding:9px 11px;height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:3px}
+.log-item{display:flex;align-items:flex-start;gap:7px;padding:3px 7px;border-radius:5px;background:rgba(255,255,255,.025);font-size:12px;line-height:1.4}
+.log-icon{flex-shrink:0;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;margin-top:1px}
+.log-icon.ok{background:rgba(52,211,153,.15);color:var(--success)}
+.log-icon.err{background:rgba(248,113,113,.15);color:var(--error)}
+.log-icon.warn{background:rgba(251,191,36,.15);color:var(--warn)}
+.log-icon.info{background:rgba(124,106,247,.12);color:var(--accent2)}
+.log-text{flex:1;word-break:break-word;white-space:pre-wrap;color:var(--muted)}
+.log-item.ok .log-text{color:var(--text)}
+.log-item.err .log-text{color:var(--error);font-weight:600}
+.log-item.warn .log-text{color:var(--warn)}
+.log-item.info .log-text{color:var(--text)}
+.video-wrap{background:#000;border-radius:var(--radius);overflow:hidden;margin:12px 0 8px;aspect-ratio:9/16;max-height:280px;display:flex;align-items:center;justify-content:center}
+.video-wrap.wide{aspect-ratio:16/9}
+.video-wrap.square{aspect-ratio:1}
+.video-wrap video{width:100%;height:100%;object-fit:contain}
+.btn-download{width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;transition:border-color .15s;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn-download:hover{border-color:var(--accent2);color:var(--accent2)}
+.empty-state{text-align:center;padding:32px 20px;color:var(--muted)}
+.empty-state .es-icon{font-size:36px;margin-bottom:10px}
+
+/* ── Media grid ── */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.media-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color .15s}
+.media-item:hover{border-color:var(--accent)}
+.media-thumb{aspect-ratio:9/16;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.media-thumb.wide{aspect-ratio:16/9}
+.media-thumb.square{aspect-ratio:1}
+.media-thumb video{width:100%;height:100%;object-fit:cover}
+.media-info{padding:8px 10px}
+.media-id{font-size:11px;color:var(--muted);font-family:monospace}
+.media-script{font-size:11px;color:var(--text);margin-top:2px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.media-size{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ── Filters ── */
+.filters{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.filter-pill{padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s}
+.filter-pill.active{border-color:var(--accent);color:var(--accent2);background:rgba(124,106,247,.1)}
+
+/* ── Settings ── */
+.settings-group{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px}
+.settings-group-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px}
+.settings-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.settings-row:last-child{margin-bottom:0}
+.settings-label{flex:1;font-size:13px}
+.settings-label small{color:var(--muted);font-size:11px;display:block}
+.settings-action{flex-shrink:0}
+
+/* ── Test Lab ── */
+.testlab-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.testlab-response{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-family:monospace;font-size:12px;color:var(--muted);white-space:pre-wrap;word-break:break-all;min-height:200px;max-height:400px;overflow-y:auto}
+
+/* ── Collapsible ── */
+.adv-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:7px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--muted);transition:border-color .15s}
+.adv-toggle:hover{border-color:var(--accent);color:var(--accent2)}
+.adv-arrow{transition:transform .2s;font-size:10px}
+.adv-toggle.open .adv-arrow{transform:rotate(90deg)}
+.adv-body{display:none;padding:14px 0 0 14px;border-left:2px solid var(--border);margin:10px 0 0 6px}
+.adv-body.open{display:block}
+
+/* ── API config bar ── */
+.api-config{border:1px solid rgba(99,102,241,.22);border-radius:var(--radius);padding:10px 12px;background:rgba(99,102,241,.04);margin-bottom:16px}
+.api-config-header{display:flex;align-items:center;justify-content:space-between}
+.api-config-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#818cf8}
+.api-config-fields{display:flex;flex-direction:column;gap:5px;padding-top:8px}
+.btn-sm{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#818cf8;padding:5px 11px;cursor:pointer;font-size:11px;transition:opacity .15s}
+.btn-sm:hover{opacity:.8}
+
+/* ── Queue monitor ── */
+.queue-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.queue-item-id{font-family:monospace;font-size:12px;color:var(--muted);min-width:70px}
+.queue-item-stage{flex:1;font-size:13px}
+.queue-progress{width:100px;height:4px;background:var(--border);border-radius:4px;overflow:hidden;flex-shrink:0}
+.queue-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s}
+
+/* ── Upload zone ── */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:10px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.upload-zone:hover{border-color:var(--accent);background:rgba(124,106,247,.05)}
+.upload-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.upload-zone .uz-icon{font-size:18px;margin-bottom:2px}
+.upload-zone .uz-label{font-size:11px;color:var(--muted)}
+.upload-zone .uz-file{font-size:11px;color:var(--accent2);margin-top:2px}
+
+/* ── Batch textarea ── */
+#batch-prompts{min-height:160px;font-family:monospace;font-size:12px}
+
+/* ── Log modal ── */
+.log-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);padding:24px}
+.log-modal.open{display:flex;flex-direction:column}
+.log-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.log-modal-title{font-size:15px;font-weight:700}
+.btn-close-modal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:6px 14px;cursor:pointer}
+.log-modal-box{flex:1;background:var(--bg);border-radius:var(--radius);padding:14px 16px;overflow-y:auto;font-size:12px;display:flex;flex-direction:column;gap:4px}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 </style>
 </head>
 <body>
+
 <header>
   <div class="logo">Open<span>Montage</span></div>
-  <span class="badge">AI VIDEO STUDIO</span>
+  <span class="badge">AI CONTENT FACTORY</span>
 </header>
 
-<div class="app">
-  <!-- LEFT: Form -->
-  <div class="panel-left">
-    <form id="form" enctype="multipart/form-data">
+<div class="shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>Dashboard</div>
+    <div class="nav-item" data-page="factory"><span class="nav-icon">🎬</span>Factory</div>
+    <div class="nav-item" data-page="queue"><span class="nav-icon">⚡</span>Queue</div>
+    <div class="nav-item" data-page="history"><span class="nav-icon">📋</span>History</div>
+    <div class="nav-item" data-page="media"><span class="nav-icon">🗂️</span>Media Library</div>
+    <div class="nav-item" data-page="clips"><span class="nav-icon">🎞️</span>Clip Factory</div>
+    <div class="nav-bottom">
+      <div class="nav-item" data-page="testlab"><span class="nav-icon">🧪</span>Test Lab</div>
+      <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span>Settings</div>
+    </div>
+  </nav>
 
-      <div class="section">
-        <div class="section-title">Kịch bản</div>
-        <label>Nội dung narration <span class="hint">— AI sẽ tạo video từ đây</span></label>
-        <textarea id="script" name="script" placeholder="Nhập kịch bản tiếng Việt tại đây...&#10;&#10;Ví dụ:&#10;Có bao giờ bạn tự hỏi... thiện tâm đến từ đâu?&#10;&#10;Phật A Di Đà dạy rằng: trong mỗi người đều ẩn chứa một nguồn sáng thuần khiết."></textarea>
+  <!-- Main content -->
+  <div class="main" id="main">
+
+    <!-- ──────────────── DASHBOARD ──────────────── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-label">Tổng jobs</div><div class="stat-value" id="stat-total">—</div></div>
+        <div class="stat-card success"><div class="stat-label">Thành công</div><div class="stat-value" id="stat-done">—</div></div>
+        <div class="stat-card error"><div class="stat-label">Lỗi</div><div class="stat-value" id="stat-error">—</div></div>
+        <div class="stat-card warn"><div class="stat-label">Đang chạy</div><div class="stat-value" id="stat-running">—</div></div>
       </div>
 
-      <div class="section">
-        <div class="section-title">Giọng đọc</div>
-        <label>Chọn giọng Vbee</label>
-        <div id="voices-loading" class="voices-loading">⏳ Đang tải danh sách giọng...</div>
-        <div id="voice-wrap" style="display:none">
-          <select name="voice_code" id="voice_code"></select>
+      <div class="chart-card">
+        <div class="chart-title">Jobs theo ngày (7 ngày gần nhất)</div>
+        <div class="chart-wrap"><canvas id="chart-daily"></canvas></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header"><span class="table-title">Jobs gần đây</span>
+          <button class="btn btn-secondary" onclick="loadDashboard()" style="font-size:12px;padding:5px 10px">↺ Refresh</button>
         </div>
+        <table><thead><tr><th>ID</th><th>Status</th><th>Stage</th><th>Created</th><th></th></tr></thead>
+        <tbody id="dash-jobs-body"><tr class="empty-row"><td colspan="5">Đang tải...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ──────────────── FACTORY ──────────────── -->
+    <div class="page" id="page-factory">
+      <div class="page-title">Factory <span style="font-size:14px;font-weight:400;color:var(--muted)">— Tạo job generate</span></div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="filter-pill active" id="factory-tab-single" onclick="switchFactoryTab('single')">📹 Single Job</button>
+        <button class="filter-pill" id="factory-tab-batch" onclick="switchFactoryTab('batch')">📦 Batch (CSV/JSON)</button>
       </div>
 
-      <div class="section">
-        <div class="section-title">Video</div>
-        <div class="grid-2">
-          <div>
-            <label>Thời lượng</label>
-            <div class="number-wrap">
-              <input type="number" name="duration" id="duration" value="30" min="10" max="120"/>
-              <span class="unit">giây</span>
+      <!-- Single job -->
+      <div id="factory-single">
+        <div class="factory-layout">
+          <form id="form" enctype="multipart/form-data">
+            <!-- useapi config -->
+            <div class="api-config">
+              <div class="api-config-header">
+                <span class="api-config-title">useapi.net (Veo 3.1)</span>
+                <span id="gf-status" style="font-size:11px;color:var(--muted)">⏳ Kiểm tra...</span>
+              </div>
+              <div class="api-config-fields" id="api-config-fields" style="display:none">
+                <input type="email" id="gf_email" placeholder="Google email đăng ký trên useapi.net"/>
+                <input type="password" id="gf_token" placeholder="API Token" style="font-family:monospace"/>
+                <button type="button" id="btn-save-gf" class="btn-sm">💾 Lưu token</button>
+              </div>
+              <button type="button" id="btn-toggle-api-config" class="btn-sm" style="margin-top:7px">✏️ Cấu hình</button>
             </div>
-          </div>
-          <div>
-            <label>Khung hình</label>
-            <div class="pill-group" id="aspect-pills">
-              <div class="pill active" data-val="9:16">9:16<br><small>Dọc</small></div>
-              <div class="pill" data-val="16:9">16:9<br><small>Ngang</small></div>
-              <div class="pill" data-val="1:1">1:1<br><small>Vuông</small></div>
-            </div>
-            <input type="hidden" name="aspect_ratio" id="aspect_ratio" value="9:16"/>
-          </div>
-        </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title">Tốc độ giọng</div>
-        <label>Speed rate <span class="hint">— 0.7 chậm · 1.0 bình thường · 1.3 nhanh</span></label>
-        <div class="slider-wrap">
-          <input type="range" name="speed_rate" id="speed_rate" min="0.7" max="1.3" step="0.05" value="0.9"/>
-          <span class="slider-val" id="speed-val">0.90</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">Đính kèm</div>
-        <div class="grid-2">
-          <div>
-            <label>Ảnh tham khảo <span class="hint">(scene đầu)</span></label>
-            <div class="upload-zone">
-              <input type="file" name="image" id="image-input" accept="image/*"/>
-              <div class="uz-icon">🖼️</div>
-              <div class="uz-label">Click hoặc kéo thả</div>
-              <div class="uz-file" id="image-name"></div>
+            <div class="form-section">
+              <div class="section-label">Kịch bản</div>
+              <textarea id="script" name="script" style="min-height:160px;font-size:14px" placeholder="Nhập kịch bản tiếng Việt...&#10;&#10;Phật A Di Đà dạy rằng: trong mỗi người đều ẩn chứa một nguồn sáng thuần khiết."></textarea>
             </div>
-          </div>
-          <div>
-            <label>Video tham khảo <span class="hint">(style)</span></label>
-            <div class="upload-zone">
-              <input type="file" name="video" id="video-input" accept="video/*"/>
-              <div class="uz-icon">🎬</div>
-              <div class="uz-label">Click hoặc kéo thả</div>
-              <div class="uz-file" id="video-name"></div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title">Phụ đề</div>
-        <div class="toggle-row" style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <label class="toggle-switch">
-            <input type="checkbox" name="subtitle_enabled" id="subtitle_enabled" value="true"/>
-            <span class="toggle-track"></span>
-          </label>
-          <span style="font-size:13px">Bật phụ đề tiếng Việt <span class="hint">(Whisper AI)</span></span>
-        </div>
-        <div id="subtitle-options" style="display:none">
-          <div class="grid-2" style="margin-bottom:10px">
-            <div>
-              <label>Cỡ chữ</label>
-              <div class="slider-wrap">
-                <input type="range" name="subtitle_fontsize" id="subtitle_fontsize" min="16" max="48" step="2" value="24"/>
-                <span class="slider-val" id="subtitle-size-val">24</span>
+            <div class="form-section">
+              <div class="section-label">Giọng đọc</div>
+              <div id="voices-loading" style="color:var(--muted);font-size:12px;padding:5px 0">⏳ Đang tải...</div>
+              <div id="voice-wrap" style="display:none"><select name="voice_code" id="voice_code"></select></div>
+            </div>
+
+            <div class="form-section">
+              <div class="section-label">Video</div>
+              <div class="grid-2">
+                <div>
+                  <label>Thời lượng</label>
+                  <div class="number-wrap"><input type="number" name="duration" id="duration" value="30" min="10" max="120"/><span class="unit">giây</span></div>
+                </div>
+                <div>
+                  <label>Khung hình</label>
+                  <div class="pill-group" id="aspect-pills">
+                    <div class="pill active" data-val="9:16">9:16</div>
+                    <div class="pill" data-val="16:9">16:9</div>
+                    <div class="pill" data-val="1:1">1:1</div>
+                  </div>
+                  <input type="hidden" name="aspect_ratio" id="aspect_ratio" value="9:16"/>
+                </div>
               </div>
             </div>
-            <div>
-              <label>Màu chữ</label>
-              <select name="subtitle_color" id="subtitle_color">
-                <option value="white" selected>Trắng</option>
-                <option value="yellow">Vàng</option>
-                <option value="cyan">Xanh lam</option>
-                <option value="orange">Cam</option>
-              </select>
+
+            <div class="form-section">
+              <div class="section-label">Nhạc nền</div>
+              <div class="toggle-row" style="margin-bottom:8px">
+                <label class="toggle-switch"><input type="checkbox" name="enable_music" id="enable_music" value="true" checked/><span class="toggle-track"></span></label>
+                <span style="font-size:13px">Bật nhạc nền</span>
+              </div>
+              <div id="music-picker" style="display:flex;gap:8px;align-items:center">
+                <select name="music_file" id="music_file" style="flex:1"><option value="">⏳ Đang tải...</option></select>
+                <button type="button" id="btn-preview-music" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0">▶</button>
+              </div>
+              <audio id="audio-preview" style="display:none;width:100%;margin-top:6px" controls preload="none"></audio>
+            </div>
+
+            <!-- Advanced -->
+            <div class="form-section">
+              <div class="adv-toggle" id="adv-toggle"><span class="adv-arrow">▶</span><span>Nâng cao — prompt, phụ đề, watermark, đính kèm</span></div>
+              <div class="adv-body" id="adv-body">
+                <div class="form-section">
+                  <div class="section-label">Prompt tùy chỉnh</div>
+                  <label>LLM System Prompt <span class="hint">(gửi Claude để lên cảnh)</span></label>
+                  <textarea id="llm_system_prompt" name="llm_system_prompt" style="min-height:70px;font-size:12px" placeholder="Ví dụ: Bạn là đạo diễn video Phật giáo..."></textarea>
+                  <label style="margin-top:8px">Veo Style Seed <span class="hint">(append vào mọi Veo prompt)</span></label>
+                  <textarea id="veo_style_seed" name="veo_style_seed" style="min-height:50px;font-size:12px" placeholder="Ví dụ: cinematic, golden hour, slow motion, 4K"></textarea>
+                </div>
+                <div class="form-section">
+                  <div class="section-label">Tốc độ giọng</div>
+                  <div class="slider-wrap"><input type="range" name="speed_rate" id="speed_rate" min="0.7" max="1.3" step="0.05" value="0.85"/><span class="slider-val" id="speed-val">0.85</span></div>
+                </div>
+                <div class="form-section">
+                  <div class="section-label">Phụ đề</div>
+                  <div class="toggle-row" style="margin-bottom:10px">
+                    <label class="toggle-switch"><input type="checkbox" name="subtitle_enabled" id="subtitle_enabled" value="true" checked/><span class="toggle-track"></span></label>
+                    <span style="font-size:13px">Bật phụ đề <span class="hint">(Whisper AI)</span></span>
+                  </div>
+                  <div id="subtitle-options">
+                    <div class="grid-2" style="margin-bottom:8px">
+                      <div><label>Cỡ chữ</label><div class="slider-wrap"><input type="range" name="subtitle_fontsize" id="subtitle_fontsize" min="8" max="48" step="2" value="12"/><span class="slider-val" id="subtitle-size-val">12</span></div></div>
+                      <div><label>Màu chữ</label><select name="subtitle_color" id="subtitle_color"><option value="white" selected>Trắng</option><option value="yellow">Vàng</option><option value="cyan">Xanh lam</option><option value="orange">Cam</option></select></div>
+                    </div>
+                    <label>Vị trí</label>
+                    <div class="pill-group" id="sub-pos-pills"><div class="pill active" data-val="bottom">Dưới</div><div class="pill" data-val="top">Trên</div></div>
+                    <input type="hidden" name="subtitle_position" id="subtitle_position" value="bottom"/>
+                  </div>
+                </div>
+                <div class="form-section">
+                  <div class="section-label">Watermark</div>
+                  <div class="grid-2" style="margin-bottom:8px">
+                    <div><label>Chữ watermark</label><input type="text" name="watermark_text" id="watermark_text" placeholder="© OpenMontage"/></div>
+                    <div><label>Vị trí</label><select name="watermark_position" id="watermark_position"><option value="top_left" selected>Trên trái</option><option value="top_right">Trên phải</option><option value="bottom_left">Dưới trái</option><option value="bottom_right">Dưới phải</option><option value="bottom_center">Dưới giữa</option><option value="center">Giữa</option></select></div>
+                  </div>
+                  <div class="upload-zone"><input type="file" name="watermark_image" id="wm-input" accept="image/*"/><div class="uz-icon">🔖</div><div class="uz-label">Ảnh watermark (PNG)</div><div class="uz-file" id="wm-name"></div></div>
+                </div>
+                <div class="form-section">
+                  <div class="section-label">Đính kèm</div>
+                  <div class="grid-2">
+                    <div><label>Ảnh tham khảo <span class="hint">(scene đầu)</span></label><div class="upload-zone"><input type="file" name="image" id="image-input" accept="image/*"/><div class="uz-icon">🖼️</div><div class="uz-label">Click hoặc kéo thả</div><div class="uz-file" id="image-name"></div></div></div>
+                    <div><label>Video tham khảo <span class="hint">(style)</span></label><div class="upload-zone"><input type="file" name="video" id="video-input" accept="video/*"/><div class="uz-icon">🎬</div><div class="uz-label">Click hoặc kéo thả</div><div class="uz-file" id="video-name"></div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-generate" id="btn-generate">✨ Tạo Video</button>
+          </form>
+
+          <!-- Result panel -->
+          <div class="factory-result" id="factory-result-panel">
+            <div class="result-title"><span>Kết quả</span></div>
+            <div id="output-area">
+              <div class="empty-state"><div class="es-icon">🎬</div><p>Nhấn <strong>Tạo Video</strong><br/>để bắt đầu.</p></div>
             </div>
           </div>
-          <label>Vị trí</label>
-          <div class="pill-group" id="sub-pos-pills">
-            <div class="pill active" data-val="bottom">Dưới</div>
-            <div class="pill" data-val="top">Trên</div>
-          </div>
-          <input type="hidden" name="subtitle_position" id="subtitle_position" value="bottom"/>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-title">Watermark</div>
-        <div class="grid-2" style="margin-bottom:10px">
-          <div>
-            <label>Chữ watermark <span class="hint">(tùy chọn)</span></label>
-            <input type="text" name="watermark_text" id="watermark_text" placeholder="© OpenMontage"/>
-          </div>
-          <div>
-            <label>Vị trí</label>
-            <select name="watermark_position" id="watermark_position">
-              <option value="bottom_right" selected>Dưới phải</option>
-              <option value="bottom_left">Dưới trái</option>
-              <option value="bottom_center">Dưới giữa</option>
-              <option value="top_right">Trên phải</option>
-              <option value="top_left">Trên trái</option>
-              <option value="center">Giữa</option>
-            </select>
+      <!-- Batch job -->
+      <div id="factory-batch" style="display:none">
+        <div class="settings-group">
+          <div class="settings-group-title">Batch từ JSON</div>
+          <div style="color:var(--muted);font-size:12px;margin-bottom:10px">Nhập danh sách JSON, mỗi item là một job. Tối đa 20 jobs/batch.</div>
+          <label style="margin-bottom:6px">JSON prompts (array)</label>
+          <textarea id="batch-prompts" placeholder='[&#10;  {"script":"Kịch bản 1...","duration":30,"aspect_ratio":"9:16"},&#10;  {"script":"Kịch bản 2...","duration":30,"aspect_ratio":"9:16"}&#10;]'></textarea>
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+            <button class="btn btn-primary" onclick="submitBatch()">📦 Submit Batch</button>
+            <span id="batch-status" style="font-size:12px;color:var(--muted)"></span>
           </div>
         </div>
-        <label>Ảnh watermark <span class="hint">(PNG có nền trong tốt nhất)</span></label>
-        <div class="upload-zone">
-          <input type="file" name="watermark_image" id="wm-input" accept="image/*"/>
-          <div class="uz-icon">🔖</div>
-          <div class="uz-label">Click hoặc kéo thả</div>
-          <div class="uz-file" id="wm-name"></div>
+        <div class="settings-group">
+          <div class="settings-group-title">Ví dụ JSON</div>
+          <pre style="font-family:monospace;font-size:12px;color:var(--muted);white-space:pre-wrap">[
+  {
+    "script": "Phật A Di Đà dạy rằng...",
+    "voice_code": "s_sg_male_thientam_ytstable_vc",
+    "duration": 30,
+    "aspect_ratio": "9:16",
+    "speed_rate": 0.85,
+    "enable_music": true,
+    "music_file": "bamboo-breath_bKoDGfET.wav"
+  }
+]</pre>
         </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title">System Prompt</div>
-        <label>Hướng dẫn thêm cho AI <span class="hint">(tùy chọn)</span></label>
-        <textarea id="system_prompt" name="system_prompt" placeholder="Ví dụ: Tạo video phong cách điện ảnh, màu sắc ấm vàng..."></textarea>
-      </div>
-
-      <div class="section" style="background:rgba(124,106,247,.07);border:1px solid rgba(124,106,247,.25);border-radius:var(--radius);padding:14px;">
-        <div class="section-title" style="color:var(--accent2)">Tốc độ tạo video</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div class="toggle-row" style="display:flex;align-items:center;gap:10px">
-            <label class="toggle-switch">
-              <input type="checkbox" name="enable_music" id="enable_music" value="true" checked/>
-              <span class="toggle-track"></span>
-            </label>
-            <span style="font-size:13px">Nhạc nền <span class="hint">(MusicGen ~2.5 phút, Suno ~3-5 phút)</span></span>
-          </div>
-          <div style="font-size:11px;color:var(--muted);padding-left:2px;line-height:1.6">
-            ⚡ <strong>Tắt nhạc</strong>: tiết kiệm ~2.5 phút — chỉ có narration + video clips<br>
-            🎬 <strong>2 clips/video</strong> (loop tự động) — tiết kiệm 3 phút so với 4 clips<br>
-            🔄 Veo rate limit: 2 req/phút · 10 req/ngày (Paid Tier 1)
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-generate" id="btn-generate">✨ Tạo Video</button>
-    </form>
-  </div>
-
-  <!-- RIGHT: Output -->
-  <div class="panel-right">
-    <div class="output-title">
-      <span>Kết quả</span>
-      <button class="btn-expand-log" id="btn-fullscreen-log" style="display:none" onclick="openLogModal()">⛶ Toàn màn hình</button>
-    </div>
-    <div id="output-area">
-      <div class="empty-state">
-        <div class="es-icon">🎬</div>
-        <p>Điền kịch bản và nhấn<br/><strong>Tạo Video</strong> để bắt đầu.</p>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Fullscreen log modal -->
+    <!-- ──────────────── QUEUE ──────────────── -->
+    <div class="page" id="page-queue">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div class="page-title" style="margin-bottom:0">Queue Monitor</div>
+        <span style="font-size:12px;color:var(--muted)" id="queue-last-update">—</span>
+      </div>
+      <div id="queue-list"><div style="color:var(--muted);font-size:13px">Đang tải...</div></div>
+    </div>
+
+    <!-- ──────────────── HISTORY ──────────────── -->
+    <div class="page" id="page-history">
+      <div class="page-title">History</div>
+      <div class="filters" id="history-filters">
+        <button class="filter-pill active" data-status="">Tất cả</button>
+        <button class="filter-pill" data-status="done">✅ Thành công</button>
+        <button class="filter-pill" data-status="error">❌ Lỗi</button>
+        <button class="filter-pill" data-status="running">⚡ Đang chạy</button>
+        <button class="filter-pill" data-status="queued">⏳ Xếp hàng</button>
+        <button class="btn btn-secondary" onclick="loadHistory()" style="font-size:12px;padding:5px 10px;margin-left:auto">↺ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>ID</th><th>Status</th><th>Script</th><th>Duration</th><th>Created</th><th></th></tr></thead>
+        <tbody id="history-body"><tr class="empty-row"><td colspan="6">Đang tải...</td></tr></tbody></table>
+      </div>
+    </div>
+
+    <!-- ──────────────── MEDIA LIBRARY ──────────────── -->
+    <div class="page" id="page-media">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div class="page-title" style="margin-bottom:0">Media Library</div>
+        <button class="btn btn-secondary" onclick="loadMedia()" style="font-size:12px;padding:5px 10px">↺ Refresh</button>
+      </div>
+      <div class="media-grid" id="media-grid"><div style="color:var(--muted);font-size:13px">Đang tải...</div></div>
+    </div>
+
+    <!-- ──────────────── CLIP FACTORY ──────────────── -->
+    <div class="page" id="page-clips">
+      <div class="page-title">Clip Factory <span style="font-size:13px;font-weight:400;color:var(--muted)">— Generate hàng loạt từ Google Sheet</span></div>
+
+      <div style="display:grid;grid-template-columns:420px 1fr;gap:20px;align-items:start">
+
+        <!-- Left: config -->
+        <div>
+          <div class="settings-group">
+            <div class="settings-group-title">Google Sheet</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div>
+                <label>Sheet URL <span class="hint">(public hoặc shared với service account)</span></label>
+                <input type="text" id="cl-sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..."/>
+              </div>
+              <div>
+                <label>Folder name <span class="hint">(tên thư mục lưu clips)</span></label>
+                <input type="text" id="cl-folder-name" placeholder="Tự động lấy từ sheet nếu để trống"/>
+              </div>
+              <div class="grid-2">
+                <div>
+                  <label>Cột PROMPT <span class="hint">(A=0, B=1, C=2...)</span></label>
+                  <input type="number" id="cl-prompt-col" value="1" min="0" max="26"/>
+                </div>
+                <div>
+                  <label>Header rows <span class="hint">(dòng tiêu đề)</span></label>
+                  <input type="number" id="cl-header-rows" value="1" min="0" max="5"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-title">Cột ghi kết quả</div>
+            <div class="grid-3">
+              <div><label>LINK FILE</label><input type="text" id="cl-col-link" value="C" maxlength="2" style="text-transform:uppercase"/></div>
+              <div><label>UPDATED</label><input type="text" id="cl-col-updated" value="D" maxlength="2" style="text-transform:uppercase"/></div>
+              <div><label>STATUS</label><input type="text" id="cl-col-status" value="E" maxlength="2" style="text-transform:uppercase"/></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:8px">⚠️ Cần <strong>GOOGLE_SHEETS_CREDENTIALS</strong> trong .env để ghi lên sheet. Không có sẽ chỉ lưu local.</div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-title">Veo settings</div>
+            <div class="grid-2">
+              <div>
+                <label>Model</label>
+                <select id="cl-model">
+                  <option value="veo-3.1-fast" selected>veo-3.1-fast (5¢)</option>
+                  <option value="veo-3.1-lite">veo-3.1-lite (2.5¢)</option>
+                  <option value="veo-3.1-quality">veo-3.1-quality (50¢)</option>
+                  <option value="veo-3.1-fast-relaxed">veo-3.1-fast-relaxed (free)</option>
+                </select>
+              </div>
+              <div>
+                <label>Aspect ratio</label>
+                <select id="cl-aspect">
+                  <option value="9:16" selected>9:16 (Portrait)</option>
+                  <option value="16:9">16:9 (Landscape)</option>
+                  <option value="1:1">1:1 (Square)</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top:10px">
+              <div><label>Max rows</label><input type="number" id="cl-max-rows" value="50" min="1" max="200"/></div>
+              <div><label>Concurrency <span class="hint">(1-4)</span></label><input type="number" id="cl-concurrency" value="2" min="1" max="4"/></div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startClipSession()">🎞️ Bắt đầu Generate</button>
+          <div id="cl-start-status" style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center"></div>
+        </div>
+
+        <!-- Right: sessions -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:13px;font-weight:600">Sessions</span>
+            <button class="btn btn-secondary" onclick="loadClipSessions()" style="font-size:12px;padding:5px 10px">↺ Refresh</button>
+          </div>
+          <div id="clip-sessions-list"><div style="color:var(--muted);font-size:13px">Chưa có session nào.</div></div>
+        </div>
+      </div>
+
+      <!-- Session detail modal -->
+      <div id="clip-detail-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);z-index:9998;padding:24px;overflow-y:auto">
+        <div style="max-width:900px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <span style="font-size:16px;font-weight:700" id="clip-detail-title">Session</span>
+            <button class="btn btn-secondary" onclick="closeClipDetail()">✕ Đóng</button>
+          </div>
+          <div id="clip-detail-progress" style="margin-bottom:14px">
+            <div class="progress-bar-wrap" style="height:8px"><div class="progress-bar" id="clip-detail-bar" style="width:0%"></div></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:5px" id="clip-detail-stats">—</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border)">Row</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border)">Status</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border)">Prompt</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border)">Clip</th>
+            </tr></thead>
+            <tbody id="clip-detail-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──────────────── TEST LAB ──────────────── -->
+    <div class="page" id="page-testlab">
+      <div class="page-title">Test Lab</div>
+      <div class="testlab-layout">
+        <div>
+          <div class="settings-group">
+            <div class="settings-group-title">Test Generate Video</div>
+            <div class="form-section">
+              <label>Prompt / Script</label>
+              <textarea id="tl-prompt" style="min-height:120px;font-size:13px" placeholder="Nhập kịch bản test..."></textarea>
+            </div>
+            <div class="grid-2" style="margin-bottom:12px">
+              <div><label>Duration</label><div class="number-wrap"><input type="number" id="tl-duration" value="30" min="10" max="120"/><span class="unit">s</span></div></div>
+              <div><label>Aspect</label>
+                <div class="pill-group" id="tl-aspect-pills">
+                  <div class="pill active" data-val="9:16">9:16</div>
+                  <div class="pill" data-val="16:9">16:9</div>
+                </div>
+                <input type="hidden" id="tl-aspect" value="9:16"/>
+              </div>
+            </div>
+            <div class="form-section">
+              <label>Veo Style Seed</label>
+              <input type="text" id="tl-seed" placeholder="cinematic, 4K, golden hour..."/>
+            </div>
+            <button class="btn btn-primary" onclick="submitTestLab()">🧪 Test Generate</button>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-group-title">Check API endpoints</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button class="btn btn-secondary" onclick="testEndpoint('/api/useapi/config')">GET /api/useapi/config</button>
+              <button class="btn btn-secondary" onclick="testEndpoint('/api/stats')">GET /api/stats</button>
+              <button class="btn btn-secondary" onclick="testEndpoint('/api/jobs?limit=5')">GET /api/jobs</button>
+              <button class="btn btn-secondary" onclick="testEndpoint('/api/audio/list')">GET /api/audio/list</button>
+              <button class="btn btn-secondary" onclick="testEndpoint('/api/media')">GET /api/media</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="settings-group" style="height:100%">
+            <div class="settings-group-title" style="display:flex;align-items:center;justify-content:space-between">
+              <span>Response</span>
+              <button class="btn btn-secondary" onclick="document.getElementById('tl-response').textContent=''" style="font-size:11px;padding:3px 8px">Clear</button>
+            </div>
+            <div class="testlab-response" id="tl-response">Kết quả sẽ hiển thị tại đây...</div>
+            <div id="tl-job-progress" style="margin-top:10px;display:none">
+              <div style="font-size:12px;color:var(--accent2);margin-bottom:6px" id="tl-stage">—</div>
+              <div class="progress-bar-wrap"><div class="progress-bar" id="tl-bar" style="width:0%"></div></div>
+              <div class="log-box" id="tl-log" style="height:160px;margin-top:8px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──────────────── SETTINGS ──────────────── -->
+    <div class="page" id="page-settings">
+      <div class="page-title">Settings</div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">useapi.net (Veo 3.1)</div>
+        <div id="settings-gf-status" style="font-size:12px;color:var(--muted);margin-bottom:12px">⏳ Kiểm tra...</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <input type="email" id="settings-gf-email" placeholder="Google email đăng ký trên useapi.net"/>
+          <input type="password" id="settings-gf-token" placeholder="API Token" style="font-family:monospace"/>
+          <div style="font-size:11px;color:var(--muted)">Đăng ký tại <strong style="color:#818cf8">useapi.net</strong> ($15/tháng) — Không cần cookies</div>
+          <button class="btn btn-primary" onclick="saveSettingsToken()" style="width:fit-content">💾 Lưu token</button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">Opera CDP (Fallback)</div>
+        <div id="opera-status" style="font-size:12px;color:var(--muted);margin-bottom:12px">⏳ Kiểm tra...</div>
+        <button class="btn btn-secondary" onclick="launchOpera()">🚀 Launch Opera với CDP</button>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px">Opera phải mở trước khi generate video. Chỉ cần một lần mỗi lần khởi động máy.</div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-title">Nhạc nền</div>
+        <div id="audio-list-settings" style="margin-bottom:12px;font-size:13px;color:var(--muted)">Đang tải...</div>
+        <label style="margin-bottom:6px">Upload nhạc mới</label>
+        <div class="upload-zone" style="max-width:360px">
+          <input type="file" id="audio-upload-input" accept=".mp3,.wav,.ogg,.m4a,.flac" onchange="uploadAudio(this)"/>
+          <div class="uz-icon">🎵</div>
+          <div class="uz-label">MP3 / WAV / OGG / M4A / FLAC (tối đa 50MB)</div>
+          <div class="uz-file" id="audio-upload-status"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- Log modal -->
 <div class="log-modal" id="log-modal">
   <div class="log-modal-header">
     <span class="log-modal-title">📋 Log đầy đủ</span>
@@ -430,322 +687,809 @@
 
 <script>
 'use strict';
-
 const API = '';
 let pollTimer = null;
+let _currentJobId = null;
+let _queueTimer = null;
+let _dailyChart = null;
+let _currentHistoryFilter = '';
 
-// ── Load voices ───────────────────────────────────────────────────────────────
+// ── Navigation ────────────────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+  item.addEventListener('click', () => {
+    const page = item.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    onPageSwitch(page);
+  });
+});
+
+function onPageSwitch(page) {
+  if (page === 'dashboard') loadDashboard();
+  if (page === 'queue') startQueueMonitor();
+  if (page === 'history') loadHistory();
+  if (page === 'media') loadMedia();
+  if (page === 'clips') loadClipSessions();
+  if (page === 'settings') loadSettings();
+  if (page !== 'queue' && _queueTimer) { clearInterval(_queueTimer); _queueTimer = null; }
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const [statsRes, jobsRes] = await Promise.all([
+      fetch(`${API}/api/stats`),
+      fetch(`${API}/api/jobs?limit=8`),
+    ]);
+    const stats = await statsRes.json();
+    const jobsData = await jobsRes.json();
+
+    document.getElementById('stat-total').textContent = stats.total ?? 0;
+    document.getElementById('stat-done').textContent = stats.done ?? 0;
+    document.getElementById('stat-error').textContent = stats.error ?? 0;
+    document.getElementById('stat-running').textContent = (stats.running ?? 0) + (stats.queued ?? 0);
+
+    // Chart
+    const daily = stats.daily || {};
+    const labels = Object.keys(daily);
+    const values = Object.values(daily);
+    if (_dailyChart) _dailyChart.destroy();
+    const ctx = document.getElementById('chart-daily').getContext('2d');
+    _dailyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: 'rgba(124,106,247,.6)',
+          borderColor: 'rgba(167,139,250,.8)',
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#6b6b80', font: { size: 11 } } },
+          y: { grid: { color: 'rgba(255,255,255,.05)' }, ticks: { color: '#6b6b80', font: { size: 11 }, stepSize: 1 }, beginAtZero: true },
+        }
+      }
+    });
+
+    // Recent jobs table
+    const tbody = document.getElementById('dash-jobs-body');
+    const jobs = jobsData.jobs || [];
+    if (!jobs.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Chưa có jobs nào</td></tr>';
+      return;
+    }
+    tbody.innerHTML = jobs.map(job => `
+      <tr>
+        <td><code style="font-size:12px">${job.id}</code></td>
+        <td>${statusBadge(job.status)}</td>
+        <td style="color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(job.stage||'').substring(0,40)}</td>
+        <td style="color:var(--muted);font-size:12px">${fmtTime(job.created_at)}</td>
+        <td>${job.output ? `<a href="/${job.output}" target="_blank" style="color:var(--accent2);font-size:12px">▶ xem</a>` : ''}</td>
+      </tr>`).join('');
+  } catch (e) {
+    console.warn('Dashboard error:', e);
+  }
+}
+
+// ── Queue Monitor ─────────────────────────────────────────────────────────────
+function startQueueMonitor() {
+  renderQueue();
+  if (_queueTimer) clearInterval(_queueTimer);
+  _queueTimer = setInterval(renderQueue, 3000);
+}
+
+async function renderQueue() {
+  try {
+    const res = await fetch(`${API}/api/jobs`);
+    const data = await res.json();
+    const active = (data.jobs || []).filter(j => j.status === 'running' || j.status === 'queued');
+    document.getElementById('queue-last-update').textContent = 'Cập nhật: ' + new Date().toLocaleTimeString('vi-VN');
+    const container = document.getElementById('queue-list');
+    if (!active.length) {
+      container.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0">Không có job nào đang chạy.</div>';
+      return;
+    }
+    container.innerHTML = active.map(job => `
+      <div class="queue-item">
+        <span class="queue-item-id">${job.id}</span>
+        ${statusBadge(job.status)}
+        <span class="queue-item-stage">${job.stage || '—'}</span>
+        <div class="queue-progress"><div class="queue-progress-bar" style="width:${job.progress||0}%"></div></div>
+        <span style="font-size:12px;color:var(--muted)">${job.progress||0}%</span>
+      </div>`).join('');
+  } catch (e) {}
+}
+
+// ── History ───────────────────────────────────────────────────────────────────
+async function loadHistory(status) {
+  if (status !== undefined) _currentHistoryFilter = status;
+  const url = `${API}/api/jobs?limit=100${_currentHistoryFilter ? '&status=' + _currentHistoryFilter : ''}`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const jobs = data.jobs || [];
+    const tbody = document.getElementById('history-body');
+    if (!jobs.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Không có jobs nào</td></tr>';
+      return;
+    }
+    tbody.innerHTML = jobs.map(job => {
+      const script = (job.params?.script || '').substring(0, 60);
+      const dur = job.params?.duration ? `${job.params.duration}s` : '—';
+      return `<tr>
+        <td><code style="font-size:12px">${job.id}</code></td>
+        <td>${statusBadge(job.status)}</td>
+        <td style="color:var(--muted);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${script || '—'}</td>
+        <td style="color:var(--muted);font-size:12px">${dur}</td>
+        <td style="color:var(--muted);font-size:12px">${fmtTime(job.created_at)}</td>
+        <td style="display:flex;gap:6px;align-items:center">
+          ${job.output ? `<a href="/${job.output}" target="_blank" style="color:var(--accent2);font-size:12px">▶</a>` : ''}
+          <button class="btn-danger" onclick="deleteJob('${job.id}')">✕</button>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) { console.warn(e); }
+}
+
+document.getElementById('history-filters').addEventListener('click', e => {
+  const pill = e.target.closest('[data-status]');
+  if (!pill) return;
+  document.querySelectorAll('#history-filters [data-status]').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  loadHistory(pill.dataset.status);
+});
+
+async function deleteJob(jobId) {
+  if (!confirm(`Xoá job ${jobId}?`)) return;
+  try {
+    await fetch(`${API}/api/jobs/${jobId}`, { method: 'DELETE' });
+    loadHistory();
+  } catch (e) {}
+}
+
+// ── Media Library ─────────────────────────────────────────────────────────────
+async function loadMedia() {
+  try {
+    const res = await fetch(`${API}/api/media`);
+    const data = await res.json();
+    const items = data.items || [];
+    const grid = document.getElementById('media-grid');
+    if (!items.length) {
+      grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0">Chưa có video nào được tạo.</div>';
+      return;
+    }
+    grid.innerHTML = items.map(item => {
+      const ar = item.aspect_ratio || '9:16';
+      const thumbClass = ar === '16:9' ? 'wide' : ar === '1:1' ? 'square' : '';
+      return `<div class="media-item">
+        <div class="media-thumb ${thumbClass}">
+          <video src="${item.url}" muted preload="none" onmouseenter="this.play()" onmouseleave="this.pause();this.currentTime=0"></video>
+        </div>
+        <div class="media-info">
+          <div class="media-id">${item.job_id}</div>
+          <div class="media-script">${item.script_preview || '—'}</div>
+          <div class="media-size">${item.size_mb} MB · ${fmtTime(item.created_at)}</div>
+          <a href="${item.url}" download="openmontage_${item.job_id}.mp4" style="color:var(--accent2);font-size:11px">⬇ Download</a>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn(e); }
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+async function loadSettings() {
+  // useapi status
+  try {
+    const res = await fetch(`${API}/api/useapi/config`);
+    const d = await res.json();
+    const el = document.getElementById('settings-gf-status');
+    if (d.token_set) { el.textContent = `✅ Token đã cấu hình${d.email ? ' — ' + d.email : ''}`; el.style.color = 'var(--success)'; }
+    else { el.textContent = '⚠️ Chưa có token'; el.style.color = 'var(--warn)'; }
+    if (d.email) document.getElementById('settings-gf-email').value = d.email;
+  } catch {}
+
+  // Opera status
+  try {
+    const res = await fetch(`${API}/api/opera/status`);
+    const d = await res.json();
+    const el = document.getElementById('opera-status');
+    el.textContent = d.running ? `✅ Opera đang chạy (port ${d.port})` : `⚠️ Opera chưa chạy với debug port`;
+    el.style.color = d.running ? 'var(--success)' : 'var(--muted)';
+  } catch {}
+
+  // Audio list
+  loadAudioList();
+  const res2 = await fetch(`${API}/api/audio/list`).catch(() => null);
+  if (res2) {
+    const d = await res2.json();
+    const el = document.getElementById('audio-list-settings');
+    if (!d.files?.length) { el.textContent = 'Không có file nhạc nào.'; return; }
+    el.innerHTML = d.files.map(f => `
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
+        <span style="flex:1;font-size:13px">${f.filename}</span>
+        <span style="color:var(--muted);font-size:12px">${f.size_mb} MB</span>
+        <button class="btn-danger" onclick="deleteAudio('${f.filename}')">✕</button>
+      </div>`).join('');
+  }
+}
+
+async function saveSettingsToken() {
+  const email = document.getElementById('settings-gf-email').value.trim();
+  const token = document.getElementById('settings-gf-token').value.trim();
+  if (!email || !token) { alert('Cần nhập cả email và token'); return; }
+  try {
+    const res = await fetch(`${API}/api/useapi/config`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,token}) });
+    const d = await res.json();
+    if (d.ok) { document.getElementById('settings-gf-status').textContent = `✅ Đã lưu (${email})`; document.getElementById('settings-gf-token').value = ''; }
+    else alert('Lỗi: ' + (d.error||'unknown'));
+  } catch (e) { alert(e.message); }
+}
+
+async function launchOpera() {
+  const el = document.getElementById('opera-status');
+  el.textContent = '⏳ Đang launch...'; el.style.color = 'var(--muted)';
+  try {
+    const res = await fetch(`${API}/api/opera/launch`, { method:'POST' });
+    const d = await res.json();
+    el.textContent = d.message; el.style.color = d.ok ? 'var(--success)' : 'var(--error)';
+  } catch (e) { el.textContent = '❌ ' + e.message; el.style.color = 'var(--error)'; }
+}
+
+async function deleteAudio(filename) {
+  if (!confirm(`Xoá ${filename}?`)) return;
+  try {
+    await fetch(`${API}/api/audio/${encodeURIComponent(filename)}`, { method:'DELETE' });
+    loadSettings();
+  } catch (e) {}
+}
+
+async function uploadAudio(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  const statusEl = document.getElementById('audio-upload-status');
+  statusEl.textContent = '⏳ Đang upload...';
+  const form = new FormData(); form.append('file', file);
+  try {
+    const res = await fetch(`${API}/api/audio/upload`, { method:'POST', body:form });
+    const d = await res.json();
+    if (d.ok) { statusEl.textContent = `✅ ${d.filename} (${d.size_mb} MB)`; loadSettings(); }
+    else { statusEl.textContent = '❌ ' + (d.error||'Lỗi'); }
+  } catch (e) { statusEl.textContent = '❌ ' + e.message; }
+  input.value = '';
+}
+
+// ── Test Lab ──────────────────────────────────────────────────────────────────
+async function testEndpoint(url) {
+  const el = document.getElementById('tl-response');
+  el.textContent = '⏳ Loading ' + url + '...';
+  try {
+    const res = await fetch(API + url);
+    const data = await res.json();
+    el.textContent = JSON.stringify(data, null, 2);
+  } catch (e) { el.textContent = '❌ ' + e.message; }
+}
+
+let _tlPollTimer = null;
+async function submitTestLab() {
+  const script = document.getElementById('tl-prompt').value.trim();
+  if (!script) { alert('Nhập prompt trước'); return; }
+  const formData = new FormData();
+  formData.append('script', script);
+  formData.append('duration', document.getElementById('tl-duration').value);
+  formData.append('aspect_ratio', document.getElementById('tl-aspect').value);
+  formData.append('veo_style_seed', document.getElementById('tl-seed').value);
+  const el = document.getElementById('tl-response');
+  el.textContent = '⏳ Submitting...';
+  document.getElementById('tl-job-progress').style.display = 'none';
+  try {
+    const res = await fetch(`${API}/api/generate`, { method:'POST', body:formData });
+    const d = await res.json();
+    el.textContent = JSON.stringify(d, null, 2);
+    if (d.job_id) {
+      document.getElementById('tl-job-progress').style.display = 'block';
+      if (_tlPollTimer) clearInterval(_tlPollTimer);
+      _tlPollTimer = setInterval(() => pollTestLab(d.job_id), 3000);
+    }
+  } catch (e) { el.textContent = '❌ ' + e.message; }
+}
+
+async function pollTestLab(jobId) {
+  try {
+    const res = await fetch(`${API}/api/jobs/${jobId}`);
+    const job = await res.json();
+    document.getElementById('tl-stage').textContent = job.stage || '...';
+    document.getElementById('tl-bar').style.width = (job.progress||0) + '%';
+    renderLogLines(document.getElementById('tl-log'), job.log || [], true);
+    if (job.status === 'done' || job.status === 'error') {
+      clearInterval(_tlPollTimer);
+      document.getElementById('tl-response').textContent = JSON.stringify({status:job.status, output:job.output, error:job.error}, null, 2);
+    }
+  } catch {}
+}
+
+document.getElementById('tl-aspect-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  document.querySelectorAll('#tl-aspect-pills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('tl-aspect').value = pill.dataset.val;
+});
+
+// ── Factory tab switch ────────────────────────────────────────────────────────
+function switchFactoryTab(tab) {
+  document.getElementById('factory-single').style.display = tab === 'single' ? 'block' : 'none';
+  document.getElementById('factory-batch').style.display = tab === 'batch' ? 'block' : 'none';
+  document.getElementById('factory-tab-single').classList.toggle('active', tab === 'single');
+  document.getElementById('factory-tab-batch').classList.toggle('active', tab === 'batch');
+}
+
+async function submitBatch() {
+  const raw = document.getElementById('batch-prompts').value.trim();
+  const statusEl = document.getElementById('batch-status');
+  if (!raw) { statusEl.textContent = '⚠️ Nhập JSON'; return; }
+  let prompts;
+  try { prompts = JSON.parse(raw); } catch (e) { statusEl.textContent = '❌ JSON không hợp lệ: ' + e.message; return; }
+  if (!Array.isArray(prompts)) { statusEl.textContent = '❌ Cần là array []'; return; }
+  statusEl.textContent = '⏳ Đang submit...';
+  try {
+    const res = await fetch(`${API}/api/generate/batch`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompts}) });
+    const d = await res.json();
+    if (d.batch_id) { statusEl.textContent = `✅ Batch ${d.batch_id} — ${d.count} jobs đã tạo`; }
+    else { statusEl.textContent = '❌ ' + (d.error || 'Lỗi'); }
+  } catch (e) { statusEl.textContent = '❌ ' + e.message; }
+}
+
+// ── Factory form (Single) ─────────────────────────────────────────────────────
+document.getElementById('adv-toggle').addEventListener('click', () => {
+  document.getElementById('adv-toggle').classList.toggle('open');
+  document.getElementById('adv-body').classList.toggle('open');
+});
+document.getElementById('btn-toggle-api-config').addEventListener('click', () => {
+  const f = document.getElementById('api-config-fields');
+  const btn = document.getElementById('btn-toggle-api-config');
+  const vis = f.style.display !== 'none';
+  f.style.display = vis ? 'none' : 'flex';
+  btn.textContent = vis ? '✏️ Cấu hình' : '✕ Đóng';
+});
+
 async function loadVoices() {
   const loadingEl = document.getElementById('voices-loading');
   const wrapEl = document.getElementById('voice-wrap');
   const sel = document.getElementById('voice_code');
-
   try {
     const res = await fetch(API + '/api/voices');
     const data = await res.json();
     const voices = Array.isArray(data.voices) ? data.voices : [];
-
-    sel.textContent = ''; // clear safely
-    voices.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = String(v.code || '');
-      opt.textContent = String(v.name || v.code || '');
-      if (v.code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
-      sel.appendChild(opt);
-    });
-
-    loadingEl.style.display = 'none';
-    wrapEl.style.display = 'block';
-  } catch (_) {
-    loadingEl.textContent = '⚠️ Dùng giọng mặc định';
-    const defaults = [
-      ['s_sg_male_thientam_ytstable_vc', 'Thiện Tâm (Sài Gòn Nam) — mặc định'],
-      ['hn_male_manhdung_news_48k-fhg',  'Mạnh Dũng (Hà Nội Nam)'],
-      ['hn_female_ngochuyen_full_48k-fhg','Ngọc Huyền (Hà Nội Nữ)'],
-      ['sg_male_trungkien_vdts_48k-fhg',  'Trung Kiên (Sài Gòn Nam)'],
-      ['sg_female_lantrinh_vdts_48k-fhg', 'Lan Trinh (Sài Gòn Nữ)'],
-    ];
     sel.textContent = '';
-    defaults.forEach(([code, name]) => {
-      const opt = document.createElement('option');
-      opt.value = code;
-      opt.textContent = name;
-      if (code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
-      sel.appendChild(opt);
-    });
-    wrapEl.style.display = 'block';
+    voices.forEach(v => { const opt = document.createElement('option'); opt.value = String(v.code||''); opt.textContent = String(v.name||v.code||''); if (v.code==='s_sg_male_thientam_ytstable_vc') opt.selected=true; sel.appendChild(opt); });
+    let cache; try{cache=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');}catch(_){}
+    if(cache&&cache.voice_code) sel.value=cache.voice_code;
+    loadingEl.style.display='none'; wrapEl.style.display='block';
+  } catch {
+    loadingEl.textContent='⚠️ Dùng giọng mặc định';
+    const defaults=[['s_sg_male_thientam_ytstable_vc','Thiện Tâm (Sài Gòn Nam)'],['hn_male_manhdung_news_48k-fhg','Mạnh Dũng (Hà Nội Nam)'],['sg_female_lantrinh_vdts_48k-fhg','Lan Trinh (Sài Gòn Nữ)']];
+    sel.textContent=''; defaults.forEach(([code,name])=>{const opt=document.createElement('option');opt.value=code;opt.textContent=name;if(code==='s_sg_male_thientam_ytstable_vc')opt.selected=true;sel.appendChild(opt);});
+    wrapEl.style.display='block';
   }
 }
 
-// ── Aspect ratio pills ────────────────────────────────────────────────────────
+const DEFAULT_MUSIC = 'bamboo-breath_bKoDGfET.wav';
+async function loadAudioList() {
+  const sel = document.getElementById('music_file');
+  try {
+    const res = await fetch(`${API}/api/audio/list`);
+    const data = await res.json();
+    sel.innerHTML = '';
+    if (!data.files?.length) { sel.innerHTML='<option value="">— Không có file —</option>'; return; }
+    data.files.forEach(f => { const opt=document.createElement('option'); opt.value=f.filename; opt.textContent=`${f.filename} (${f.size_mb} MB)`; if(f.filename===DEFAULT_MUSIC) opt.selected=true; sel.appendChild(opt); });
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY)||'{}');
+    if(cached.music_file){const found=[...sel.options].find(o=>o.value===cached.music_file);if(found)sel.value=cached.music_file;}
+  } catch { sel.innerHTML=`<option value="${DEFAULT_MUSIC}">${DEFAULT_MUSIC}</option>`; }
+}
+
 document.getElementById('aspect-pills').addEventListener('click', e => {
-  const pill = e.target.closest('.pill');
-  if (!pill) return;
-  document.querySelectorAll('#aspect-pills .pill').forEach(p => p.classList.remove('active'));
+  const pill = e.target.closest('.pill'); if(!pill) return;
+  document.querySelectorAll('#aspect-pills .pill').forEach(p=>p.classList.remove('active'));
   pill.classList.add('active');
   document.getElementById('aspect_ratio').value = pill.dataset.val;
 });
-
-// ── Speed slider ──────────────────────────────────────────────────────────────
-document.getElementById('speed_rate').addEventListener('input', e => {
-  document.getElementById('speed-val').textContent = parseFloat(e.target.value).toFixed(2);
-});
-
-// ── Subtitle toggle ───────────────────────────────────────────────────────────
-document.getElementById('subtitle_enabled').addEventListener('change', e => {
-  document.getElementById('subtitle-options').style.display = e.target.checked ? 'block' : 'none';
-});
-
-// ── Subtitle font size slider ─────────────────────────────────────────────────
-document.getElementById('subtitle_fontsize').addEventListener('input', e => {
-  document.getElementById('subtitle-size-val').textContent = e.target.value;
-});
-
-// ── Subtitle position pills ───────────────────────────────────────────────────
+document.getElementById('speed_rate').addEventListener('input', e => { document.getElementById('speed-val').textContent = parseFloat(e.target.value).toFixed(2); });
+document.getElementById('subtitle_fontsize').addEventListener('input', e => { document.getElementById('subtitle-size-val').textContent = e.target.value; });
+document.getElementById('subtitle_enabled').addEventListener('change', e => { document.getElementById('subtitle-options').style.display = e.target.checked ? 'block' : 'none'; });
 document.getElementById('sub-pos-pills').addEventListener('click', e => {
-  const pill = e.target.closest('.pill');
-  if (!pill) return;
-  document.querySelectorAll('#sub-pos-pills .pill').forEach(p => p.classList.remove('active'));
-  pill.classList.add('active');
-  document.getElementById('subtitle_position').value = pill.dataset.val;
+  const pill = e.target.closest('.pill'); if(!pill) return;
+  document.querySelectorAll('#sub-pos-pills .pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active'); document.getElementById('subtitle_position').value = pill.dataset.val;
+});
+document.getElementById('enable_music').addEventListener('change', e => { document.getElementById('music-picker').style.display = e.target.checked ? 'flex' : 'none'; });
+document.getElementById('btn-preview-music').addEventListener('click', () => {
+  const sel = document.getElementById('music_file');
+  const audio = document.getElementById('audio-preview');
+  const btn = document.getElementById('btn-preview-music');
+  if(!sel.value) return;
+  if(!audio.paused && audio.src.endsWith(encodeURIComponent(sel.value).replace(/%20/g,'%20'))){ audio.pause(); btn.textContent='▶'; return; }
+  audio.src=`/audio/${sel.value}`; audio.style.display='block'; audio.play(); btn.textContent='⏹'; audio.onended=()=>{btn.textContent='▶';};
+});
+document.getElementById('music_file').addEventListener('change', ()=>{const a=document.getElementById('audio-preview');a.pause();a.style.display='none';document.getElementById('btn-preview-music').textContent='▶';saveFormCache();});
+['image-input','video-input','wm-input'].forEach(id=>{
+  document.getElementById(id).addEventListener('change', e=>{
+    const nameId = id==='image-input'?'image-name':id==='video-input'?'video-name':'wm-name';
+    document.getElementById(nameId).textContent = e.target.files?.[0]?.name||'';
+  });
 });
 
-// ── File labels ───────────────────────────────────────────────────────────────
-document.getElementById('image-input').addEventListener('change', e => {
-  const f = e.target.files && e.target.files[0];
-  document.getElementById('image-name').textContent = f ? f.name : '';
-});
-document.getElementById('video-input').addEventListener('change', e => {
-  const f = e.target.files && e.target.files[0];
-  document.getElementById('video-name').textContent = f ? f.name : '';
-});
-document.getElementById('wm-input').addEventListener('change', e => {
-  const f = e.target.files && e.target.files[0];
-  document.getElementById('wm-name').textContent = f ? f.name : '';
-});
-
-// ── Submit ────────────────────────────────────────────────────────────────────
+// ── Submit single job ─────────────────────────────────────────────────────────
 document.getElementById('form').addEventListener('submit', async e => {
   e.preventDefault();
   const btn = document.getElementById('btn-generate');
-  btn.disabled = true;
-  btn.textContent = '⏳ Đang xử lý...';
-
+  btn.disabled=true; btn.textContent='⏳ Đang xử lý...';
   try {
-    const res = await fetch(API + '/api/generate', {
-      method: 'POST',
-      body: new FormData(e.target),
-    });
+    const res = await fetch(API+'/api/generate', {method:'POST', body:new FormData(e.target)});
     const data = await res.json();
-
-    if (data.job_id) {
-      buildJobCard(data.job_id);
-      startPolling(data.job_id);
-    } else {
-      alert('Lỗi server');
-      btn.disabled = false;
-      btn.textContent = '✨ Tạo Video';
-    }
-  } catch (err) {
-    alert('Lỗi kết nối: ' + err.message);
-    btn.disabled = false;
-    btn.textContent = '✨ Tạo Video';
-  }
+    if(data.job_id){ buildJobCard(data.job_id); startPolling(data.job_id); }
+    else { alert('Lỗi server'); btn.disabled=false; btn.textContent='✨ Tạo Video'; }
+  } catch(err){ alert('Lỗi kết nối: '+err.message); btn.disabled=false; btn.textContent='✨ Tạo Video'; }
 });
 
-// ── Job card (safe DOM construction) ─────────────────────────────────────────
 function buildJobCard(jobId) {
   const area = document.getElementById('output-area');
   area.textContent = '';
-
-  const card = document.createElement('div');
-  card.className = 'job-card';
-  card.id = 'job-card-' + jobId;
-
-  const stageRow = document.createElement('div');
-  stageRow.className = 'job-stage';
-  stageRow.id = 'stage-' + jobId;
-  const spinner = document.createElement('div');
-  spinner.className = 'spinner';
-  const stageText = document.createElement('span');
-  stageText.id = 'stage-text-' + jobId;
-  stageText.textContent = 'Đang khởi động...';
-  stageRow.appendChild(spinner);
-  stageRow.appendChild(stageText);
-
-  const barWrap = document.createElement('div');
-  barWrap.className = 'progress-bar-wrap';
-  const bar = document.createElement('div');
-  bar.className = 'progress-bar';
-  bar.id = 'progress-' + jobId;
-  bar.style.width = '0%';
+  const card = document.createElement('div'); card.className='job-card'; card.id='job-card-'+jobId;
+  const stageRow = document.createElement('div'); stageRow.className='job-stage'; stageRow.id='stage-'+jobId;
+  const spinner = document.createElement('div'); spinner.className='spinner';
+  const stageText = document.createElement('span'); stageText.id='stage-text-'+jobId; stageText.textContent='Đang khởi động...';
+  stageRow.appendChild(spinner); stageRow.appendChild(stageText);
+  const barWrap = document.createElement('div'); barWrap.className='progress-bar-wrap';
+  const bar = document.createElement('div'); bar.className='progress-bar'; bar.id='progress-'+jobId; bar.style.width='0%';
   barWrap.appendChild(bar);
-
-  // Log header with expand button
-  const logHeader = document.createElement('div');
-  logHeader.className = 'log-header';
-  const logLabel = document.createElement('span');
-  logLabel.className = 'log-label';
-  logLabel.textContent = 'Log';
-  const btnExpand = document.createElement('button');
-  btnExpand.className = 'btn-expand-log';
-  btnExpand.textContent = '⛶ Toàn màn hình';
-  btnExpand.addEventListener('click', openLogModal);
-  logHeader.appendChild(logLabel);
-  logHeader.appendChild(btnExpand);
-
-  const logBox = document.createElement('div');
-  logBox.className = 'log-box';
-  logBox.id = 'log-' + jobId;
-
-  card.appendChild(stageRow);
-  card.appendChild(barWrap);
-  card.appendChild(logHeader);
-  card.appendChild(logBox);
-
-  const videoArea = document.createElement('div');
-  videoArea.id = 'video-area-' + jobId;
-
-  area.appendChild(card);
-  area.appendChild(videoArea);
-
-  // Show fullscreen button in header
-  document.getElementById('btn-fullscreen-log').style.display = '';
+  const logHeader = document.createElement('div'); logHeader.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:5px';
+  const logLabel = document.createElement('span'); logLabel.style.cssText='font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px'; logLabel.textContent='Log';
+  const btnExp = document.createElement('button'); btnExp.style.cssText='background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;padding:3px 8px;cursor:pointer'; btnExp.textContent='⛶ Full'; btnExp.addEventListener('click', openLogModal);
+  logHeader.appendChild(logLabel); logHeader.appendChild(btnExp);
+  const logBox = document.createElement('div'); logBox.className='log-box'; logBox.id='log-'+jobId;
+  card.appendChild(stageRow); card.appendChild(barWrap); card.appendChild(logHeader); card.appendChild(logBox);
+  const videoArea = document.createElement('div'); videoArea.id='video-area-'+jobId;
+  area.appendChild(card); area.appendChild(videoArea);
+  _currentJobId = jobId;
 }
 
 function startPolling(jobId) {
-  _currentJobId = jobId;
-  if (pollTimer) clearInterval(pollTimer);
-  pollTimer = setInterval(() => pollJob(jobId), 3000);
+  if(pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(()=>pollJob(jobId), 3000);
 }
 
 async function pollJob(jobId) {
   try {
-    const res = await fetch(API + '/api/jobs/' + jobId);
+    const res = await fetch(API+'/api/jobs/'+jobId);
     const job = await res.json();
-
-    const bar = document.getElementById('progress-' + jobId);
-    if (bar) bar.style.width = (job.progress || 0) + '%';
-
-    const stageText = document.getElementById('stage-text-' + jobId);
-    if (stageText) stageText.textContent = job.stage || '...';
-
-    const logBox = document.getElementById('log-' + jobId);
-    if (logBox && Array.isArray(job.log)) {
-      renderLogLines(logBox, job.log, true);
-      // Sync modal if open
-      const modal = document.getElementById('log-modal');
-      if (modal.classList.contains('open')) {
-        renderLogLines(document.getElementById('log-modal-box'), job.log, true);
-      }
-    }
-
-    if (job.status === 'done') {
-      clearInterval(pollTimer);
-      showVideoResult(jobId, job.output, job.params);
-    } else if (job.status === 'error') {
-      clearInterval(pollTimer);
-      showError(jobId, job.error);
-    }
-  } catch (err) {
-    console.warn('Poll error:', err);
-  }
+    const bar = document.getElementById('progress-'+jobId); if(bar) bar.style.width=(job.progress||0)+'%';
+    const stageText = document.getElementById('stage-text-'+jobId); if(stageText) stageText.textContent=job.stage||'...';
+    const logBox = document.getElementById('log-'+jobId);
+    if(logBox && Array.isArray(job.log)){ renderLogLines(logBox, job.log, true); if(document.getElementById('log-modal').classList.contains('open')) renderLogLines(document.getElementById('log-modal-box'), job.log, true); }
+    if(job.status==='done'){ clearInterval(pollTimer); showVideoResult(jobId,job.output,job.params); }
+    else if(job.status==='error'){ clearInterval(pollTimer); showError(jobId,job.error); }
+  } catch(err){ console.warn('Poll error:',err); }
 }
 
 function showVideoResult(jobId, outputPath, params) {
-  const stageEl = document.getElementById('stage-' + jobId);
-  if (stageEl) {
-    stageEl.textContent = '';
-    const ok = document.createElement('span');
-    ok.style.color = 'var(--success)';
-    ok.textContent = '✅ Hoàn thành!';
-    stageEl.appendChild(ok);
-  }
-
-  const btn = document.getElementById('btn-generate');
-  btn.disabled = false;
-  btn.textContent = '✨ Tạo Video Mới';
-
-  const ar = (params && params.aspect_ratio) || '9:16';
-  const videoAreaEl = document.getElementById('video-area-' + jobId);
-  if (!videoAreaEl) return;
-
-  videoAreaEl.textContent = '';
-
-  const wrap = document.createElement('div');
-  wrap.className = 'video-wrap' +
-    (ar === '16:9' ? ' wide' : ar === '1:1' ? ' square' : '');
-
-  const vid = document.createElement('video');
-  vid.controls = true;
-  vid.autoplay = true;
-  vid.loop = true;
-  vid.src = '/' + String(outputPath);
-  wrap.appendChild(vid);
-
-  const dlLink = document.createElement('a');
-  dlLink.className = 'btn-download';
-  // Use static file path directly — works even after API restart
-  dlLink.href = '/' + String(outputPath);
-  dlLink.download = 'openmontage_' + jobId + '.mp4';
-  dlLink.textContent = '⬇️ Tải video MP4';
-
-  videoAreaEl.appendChild(wrap);
-  videoAreaEl.appendChild(dlLink);
+  const stageEl = document.getElementById('stage-'+jobId);
+  if(stageEl){ stageEl.textContent=''; const ok=document.createElement('span'); ok.style.color='var(--success)'; ok.textContent='✅ Hoàn thành!'; stageEl.appendChild(ok); }
+  const btn = document.getElementById('btn-generate'); btn.disabled=false; btn.textContent='✨ Tạo Video Mới';
+  const ar = (params&&params.aspect_ratio)||'9:16';
+  const videoAreaEl = document.getElementById('video-area-'+jobId); if(!videoAreaEl) return;
+  videoAreaEl.textContent='';
+  const wrap = document.createElement('div'); wrap.className='video-wrap'+(ar==='16:9'?' wide':ar==='1:1'?' square':'');
+  const vid = document.createElement('video'); vid.controls=true; vid.autoplay=true; vid.loop=true; vid.src='/'+String(outputPath); wrap.appendChild(vid);
+  const dlLink = document.createElement('a'); dlLink.className='btn-download'; dlLink.href='/'+String(outputPath); dlLink.download='openmontage_'+jobId+'.mp4'; dlLink.textContent='⬇️ Tải video MP4';
+  videoAreaEl.appendChild(wrap); videoAreaEl.appendChild(dlLink);
 }
 
 function showError(jobId, error) {
-  const stageEl = document.getElementById('stage-' + jobId);
-  if (stageEl) {
-    stageEl.textContent = '';
-    const errSpan = document.createElement('span');
-    errSpan.style.color = 'var(--error)';
-    errSpan.textContent = '❌ Lỗi: ' + String(error || 'Unknown');
-    stageEl.appendChild(errSpan);
-  }
-  const btn = document.getElementById('btn-generate');
-  btn.disabled = false;
-  btn.textContent = '✨ Tạo Video';
+  const stageEl = document.getElementById('stage-'+jobId);
+  if(stageEl){ stageEl.textContent=''; const e=document.createElement('span'); e.style.color='var(--error)'; e.textContent='❌ Lỗi: '+String(error||'Unknown'); stageEl.appendChild(e); }
+  const btn = document.getElementById('btn-generate'); btn.disabled=false; btn.textContent='✨ Tạo Video';
 }
 
 // ── Log rendering ─────────────────────────────────────────────────────────────
 function renderLogLines(container, lines, autoScroll) {
   container.textContent = '';
   lines.forEach(line => {
-    const div = document.createElement('div');
-    div.className = 'log-line';
     const s = String(line);
-    if (s.startsWith('✅')) div.classList.add('log-ok');
-    else if (s.startsWith('❌')) div.classList.add('log-err');
-    else if (s.startsWith('⚠️')) div.classList.add('log-warn');
-    div.textContent = s;
-    container.appendChild(div);
+    let type='info', icon='›';
+    if(s.startsWith('✅')){type='ok';icon='✓';}
+    else if(s.startsWith('❌')){type='err';icon='✕';}
+    else if(s.startsWith('⚠️')){type='warn';icon='!';}
+    const item=document.createElement('div'); item.className='log-item '+type;
+    const ic=document.createElement('div'); ic.className='log-icon '+type; ic.textContent=icon;
+    const tx=document.createElement('div'); tx.className='log-text'; tx.textContent=s.replace(/^[✅❌⚠️]\s*/,'');
+    item.appendChild(ic); item.appendChild(tx); container.appendChild(item);
   });
-  if (autoScroll) container.scrollTop = container.scrollHeight;
+  if(autoScroll) container.scrollTop=container.scrollHeight;
 }
-
-// ── Fullscreen log modal ───────────────────────────────────────────────────────
-let _currentJobId = null;
 
 function openLogModal() {
-  const modal = document.getElementById('log-modal');
-  modal.classList.add('open');
-  // Sync current log content
-  const logBox = _currentJobId ? document.getElementById('log-' + _currentJobId) : null;
-  const lines = logBox ? Array.from(logBox.querySelectorAll('.log-line')).map(d => d.textContent) : [];
+  const modal = document.getElementById('log-modal'); modal.classList.add('open');
+  const logBox = _currentJobId?document.getElementById('log-'+_currentJobId):null;
+  const lines = logBox?Array.from(logBox.querySelectorAll('.log-item')).map(item=>{
+    const type=item.classList.contains('ok')?'✅ ':item.classList.contains('err')?'❌ ':item.classList.contains('warn')?'⚠️ ':'';
+    const text=item.querySelector('.log-text'); return type+(text?text.textContent:'');
+  }):[];
   renderLogLines(document.getElementById('log-modal-box'), lines, true);
 }
+function closeLogModal(){ document.getElementById('log-modal').classList.remove('open'); }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLogModal(); });
 
-function closeLogModal() {
-  document.getElementById('log-modal').classList.remove('open');
+// ── useapi.net config ─────────────────────────────────────────────────────────
+function gfSetStatus(msg, color){ const el=document.getElementById('gf-status'); el.textContent=msg; el.style.color=color||'var(--muted)'; }
+async function checkGFStatus(){
+  try{ const res=await fetch(`${API}/api/useapi/config`); const d=await res.json();
+    if(d.token_set) gfSetStatus(`✅ Đã cấu hình${d.email?' ('+d.email+')':''}`, 'var(--success)');
+    else gfSetStatus('⚠️ Chưa có token','#818cf8');
+  }catch{}
 }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLogModal();
+checkGFStatus();
+document.getElementById('btn-save-gf').addEventListener('click', async ()=>{
+  const btn=document.getElementById('btn-save-gf');
+  const email=document.getElementById('gf_email').value.trim();
+  const token=document.getElementById('gf_token').value.trim();
+  if(!email||!token){ gfSetStatus('⚠️ Cần nhập cả email và token','var(--error)'); return; }
+  btn.disabled=true; btn.textContent='⏳ Đang lưu...';
+  try{
+    const res=await fetch(`${API}/api/useapi/config`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,token})});
+    const d=await res.json();
+    if(res.ok&&d.ok){ gfSetStatus(`✅ Đã lưu (${email})`,'var(--success)'); document.getElementById('gf_token').value=''; document.getElementById('api-config-fields').style.display='none'; document.getElementById('btn-toggle-api-config').textContent='✏️ Cấu hình'; }
+    else gfSetStatus(`❌ ${d.error||'Lỗi'}`,'var(--error)');
+  }catch(e){ gfSetStatus(`❌ ${e.message}`,'var(--error)'); }
+  btn.disabled=false; btn.textContent='💾 Lưu token';
 });
 
+// ── LocalStorage cache ────────────────────────────────────────────────────────
+const CACHE_KEY = 'om_form_v1';
+const CACHED_FIELDS = ['script','duration','aspect_ratio','speed_rate','subtitle_enabled','subtitle_fontsize','subtitle_color','subtitle_position','watermark_text','watermark_position','enable_music','music_file','llm_system_prompt','veo_style_seed'];
+function saveFormCache(){
+  const cache={};
+  CACHED_FIELDS.forEach(name=>{const el=document.querySelector(`[name="${name}"]`);if(!el)return;cache[name]=el.type==='checkbox'?el.checked:el.value;});
+  const vs=document.getElementById('voice_code'); if(vs&&vs.value) cache['voice_code']=vs.value;
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(cache));}catch(_){}
+}
+function restoreFormCache(){
+  let cache; try{cache=JSON.parse(localStorage.getItem(CACHE_KEY)||'null');}catch(_){}
+  if(!cache) return;
+  CACHED_FIELDS.forEach(name=>{const el=document.querySelector(`[name="${name}"]`);if(!el||cache[name]===undefined)return;if(el.type==='checkbox')el.checked=!!cache[name];else el.value=cache[name];});
+  const ar=cache['aspect_ratio']||'9:16'; document.getElementById('aspect_ratio').value=ar;
+  document.querySelectorAll('#aspect-pills .pill').forEach(p=>p.classList.toggle('active',p.dataset.val===ar));
+  const sp=cache['subtitle_position']||'bottom'; document.getElementById('subtitle_position').value=sp;
+  document.querySelectorAll('#sub-pos-pills .pill').forEach(p=>p.classList.toggle('active',p.dataset.val===sp));
+  const sr=cache['speed_rate']; if(sr) document.getElementById('speed-val').textContent=parseFloat(sr).toFixed(2);
+  const sf=cache['subtitle_fontsize']; if(sf) document.getElementById('subtitle-size-val').textContent=sf;
+  if(cache['subtitle_enabled']) document.getElementById('subtitle-options').style.display='block';
+}
+document.getElementById('form').addEventListener('input', saveFormCache);
+document.getElementById('form').addEventListener('change', saveFormCache);
+
+// ── Clip Factory ─────────────────────────────────────────────────────────────
+let _clipDetailTimer = null;
+let _clipDetailId = null;
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function startClipSession() {
+  const sheetUrl = document.getElementById('cl-sheet-url').value.trim();
+  if (!sheetUrl) { document.getElementById('cl-start-status').textContent = '⚠️ Nhập sheet URL'; return; }
+  const body = {
+    sheet_url: sheetUrl,
+    folder_name: document.getElementById('cl-folder-name').value.trim(),
+    prompt_col: parseInt(document.getElementById('cl-prompt-col').value),
+    header_rows: parseInt(document.getElementById('cl-header-rows').value),
+    col_link: document.getElementById('cl-col-link').value.toUpperCase(),
+    col_updated: document.getElementById('cl-col-updated').value.toUpperCase(),
+    col_status: document.getElementById('cl-col-status').value.toUpperCase(),
+    model: document.getElementById('cl-model').value,
+    aspect_ratio: document.getElementById('cl-aspect').value,
+    max_rows: parseInt(document.getElementById('cl-max-rows').value),
+    concurrency: parseInt(document.getElementById('cl-concurrency').value),
+  };
+  const statusEl = document.getElementById('cl-start-status');
+  statusEl.textContent = '⏳ Đang đọc sheet...';
+  statusEl.style.color = 'var(--muted)';
+  try {
+    const res = await fetch(`${API}/api/clips/start`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const d = await res.json();
+    if (res.ok && d.session_id) {
+      statusEl.textContent = `✅ Session ${d.session_id} — ${d.total} prompts đang chạy`;
+      statusEl.style.color = 'var(--success)';
+      loadClipSessions();
+      openClipDetail(d.session_id);
+    } else {
+      statusEl.textContent = '❌ ' + (d.error || 'Lỗi');
+      statusEl.style.color = 'var(--error)';
+    }
+  } catch (e) {
+    statusEl.textContent = '❌ ' + e.message;
+    statusEl.style.color = 'var(--error)';
+  }
+}
+
+async function loadClipSessions() {
+  try {
+    const res = await fetch(`${API}/api/clips`);
+    const data = await res.json();
+    const list = document.getElementById('clip-sessions-list');
+    const sessions = data.sessions || [];
+    if (!sessions.length) {
+      list.textContent = '';
+      const msg = document.createElement('div');
+      msg.style.cssText = 'color:var(--muted);font-size:13px';
+      msg.textContent = 'Chưa có session nào.';
+      list.appendChild(msg);
+      return;
+    }
+    list.textContent = '';
+    sessions.forEach(s => {
+      const pct = s.total ? Math.round(((s.done||0) + (s.failed||0)) / s.total * 100) : 0;
+      const statusColor = s.status === 'done' ? 'var(--success)' : s.status === 'error' ? 'var(--error)' : s.status === 'running' ? 'var(--accent2)' : 'var(--muted)';
+      const card = document.createElement('div');
+      card.className = 'settings-group';
+      card.style.cssText = 'cursor:pointer;margin-bottom:10px';
+      card.addEventListener('click', () => openClipDetail(s.id));
+
+      // Header row
+      const hdr = document.createElement('div');
+      hdr.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:8px';
+      const idSpan = document.createElement('span');
+      idSpan.style.cssText = 'font-family:monospace;font-size:12px;color:var(--muted)';
+      idSpan.textContent = s.id;
+      const statusSpan = document.createElement('span');
+      statusSpan.style.cssText = `font-size:12px;font-weight:600;color:${statusColor};margin-left:8px`;
+      statusSpan.textContent = s.status || '—';
+      const left = document.createElement('div');
+      left.appendChild(idSpan); left.appendChild(statusSpan);
+      const right = document.createElement('div');
+      right.style.cssText = 'display:flex;gap:6px;align-items:center';
+      const tsSpan = document.createElement('span');
+      tsSpan.style.cssText = 'font-size:11px;color:var(--muted)';
+      tsSpan.textContent = fmtTime(s.created_at);
+      const delBtn = document.createElement('button');
+      delBtn.className = 'btn-danger';
+      delBtn.textContent = '✕';
+      delBtn.addEventListener('click', e => { e.stopPropagation(); deleteClipSession(s.id); });
+      right.appendChild(tsSpan); right.appendChild(delBtn);
+      hdr.appendChild(left); hdr.appendChild(right);
+
+      // Info line
+      const info = document.createElement('div');
+      info.style.cssText = 'font-size:12px;color:var(--muted);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      info.textContent = `${s.folder_name || '—'} · ${s.row_count || 0} clips`;
+
+      // Progress bar
+      const barWrap = document.createElement('div'); barWrap.className = 'progress-bar-wrap';
+      const bar = document.createElement('div'); bar.className = 'progress-bar'; bar.style.width = pct + '%';
+      barWrap.appendChild(bar);
+
+      // Counts
+      const counts = document.createElement('div');
+      counts.style.cssText = 'font-size:11px;color:var(--muted);margin-top:3px';
+      counts.textContent = `✅ ${s.done||0} · ❌ ${s.failed||0} · 📋 ${s.total||0}`;
+
+      card.appendChild(hdr); card.appendChild(info); card.appendChild(barWrap); card.appendChild(counts);
+      list.appendChild(card);
+    });
+  } catch (e) { console.warn(e); }
+}
+
+async function openClipDetail(sessionId) {
+  _clipDetailId = sessionId;
+  document.getElementById('clip-detail-overlay').style.display = 'block';
+  await refreshClipDetail();
+  if (_clipDetailTimer) clearInterval(_clipDetailTimer);
+  _clipDetailTimer = setInterval(async () => {
+    const sess = await refreshClipDetail();
+    if (sess && (sess.status === 'done' || sess.status === 'error' || sess.status === 'partial')) {
+      clearInterval(_clipDetailTimer); _clipDetailTimer = null;
+    }
+  }, 4000);
+}
+
+async function refreshClipDetail() {
+  if (!_clipDetailId) return null;
+  try {
+    const res = await fetch(`${API}/api/clips/${_clipDetailId}`);
+    const sess = await res.json();
+    if (!sess.id) return null;
+
+    const titleEl = document.getElementById('clip-detail-title');
+    titleEl.textContent = `Session ${sess.id} — ${sess.folder_name || ''}`;
+    const pct = sess.total ? Math.round(((sess.done||0) + (sess.failed||0)) / sess.total * 100) : 0;
+    document.getElementById('clip-detail-bar').style.width = pct + '%';
+    const statsEl = document.getElementById('clip-detail-stats');
+    statsEl.textContent = `✅ ${sess.done||0} done · ❌ ${sess.failed||0} failed · 📋 ${sess.total||0} total · ${pct}%`;
+
+    const tbody = document.getElementById('clip-detail-rows');
+    tbody.textContent = '';
+    (sess.rows || []).forEach(row => {
+      const tr = document.createElement('tr');
+      const sc = row.status==='done'?'var(--success)':row.status==='error'?'var(--error)':row.status==='running'?'var(--accent2)':'var(--muted)';
+      const icon = row.status==='done'?'✅':row.status==='error'?'❌':row.status==='running'?'⚡':'⏳';
+      const rowNumTd = document.createElement('td');
+      rowNumTd.style.cssText = 'padding:8px 12px;font-size:12px;color:var(--muted)';
+      rowNumTd.textContent = row.row_num;
+      const statusTd = document.createElement('td');
+      statusTd.style.padding = '8px 12px';
+      const statusSpan = document.createElement('span');
+      statusSpan.style.cssText = `color:${sc};font-size:12px`;
+      statusSpan.textContent = `${icon} ${row.status}`;
+      statusTd.appendChild(statusSpan);
+      const promptTd = document.createElement('td');
+      promptTd.style.cssText = 'padding:8px 12px;font-size:12px;color:var(--text);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      promptTd.textContent = (row.prompt || '').substring(0, 120);
+      const clipTd = document.createElement('td');
+      clipTd.style.padding = '8px 12px';
+      if (row.clip_url) {
+        const viewLink = document.createElement('a');
+        viewLink.href = row.clip_url; viewLink.target = '_blank';
+        viewLink.style.cssText = 'color:var(--accent2);font-size:12px';
+        viewLink.textContent = '▶ xem';
+        const dlLink = document.createElement('a');
+        dlLink.href = row.clip_url; dlLink.download = `row_${row.row_num}.mp4`;
+        dlLink.style.cssText = 'color:var(--muted);font-size:12px;margin-left:8px';
+        dlLink.textContent = '⬇';
+        clipTd.appendChild(viewLink); clipTd.appendChild(dlLink);
+      } else if (row.error) {
+        const errSpan = document.createElement('span');
+        errSpan.style.cssText = 'color:var(--error);font-size:11px';
+        errSpan.textContent = row.error.substring(0, 50);
+        clipTd.appendChild(errSpan);
+      } else {
+        clipTd.textContent = '—';
+      }
+      tr.appendChild(rowNumTd); tr.appendChild(statusTd); tr.appendChild(promptTd); tr.appendChild(clipTd);
+      tbody.appendChild(tr);
+    });
+    return sess;
+  } catch (e) { return null; }
+}
+
+function closeClipDetail() {
+  document.getElementById('clip-detail-overlay').style.display = 'none';
+  if (_clipDetailTimer) { clearInterval(_clipDetailTimer); _clipDetailTimer = null; }
+  _clipDetailId = null;
+}
+
+async function deleteClipSession(sessionId) {
+  if (!confirm(`Xoá session ${sessionId} và tất cả clips?`)) return;
+  try {
+    await fetch(`${API}/api/clips/${sessionId}`, { method:'DELETE' });
+    loadClipSessions();
+  } catch (e) {}
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function statusBadge(status) {
+  const map={queued:'⏳ Queued',running:'⚡ Running',done:'✅ Done',error:'❌ Error'};
+  const cls=status==='done'?'done':status==='error'?'error':status==='running'?'running':'queued';
+  return `<span class="badge-status ${cls}"><span class="dot${status==='running'?' spin':''}"></span>${map[status]||status}</span>`;
+}
+function fmtTime(ts) {
+  if(!ts) return '—';
+  const d = new Date(ts * 1000);
+  return d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
+restoreFormCache();
 loadVoices();
+loadAudioList();
+loadDashboard();
 </script>
 </body>
 </html>

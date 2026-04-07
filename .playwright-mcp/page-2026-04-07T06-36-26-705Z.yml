@@ -1,0 +1,505 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Experimental API for AI services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Experimental API for AI services" [ref=e6]: Experimental API
+    - navigation "Main" [ref=e7]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e11]:
+          - link "Model Matrix" [ref=e12] [cursor=pointer]:
+            - /url: /model-matrix
+        - listitem [ref=e13]:
+          - link "Subscription" [ref=e14] [cursor=pointer]:
+            - /url: /docs/subscription.html
+        - listitem [ref=e15]:
+          - button "toggle items in Start Here category" [ref=e16]:
+            - img [ref=e17]
+          - link "Start Here" [ref=e19] [cursor=pointer]:
+            - /url: /docs/start-here
+        - listitem [ref=e20]:
+          - button "toggle items in Account Management category" [ref=e21]:
+            - img [ref=e22]
+          - link "Account Management" [ref=e24] [cursor=pointer]:
+            - /url: /docs/account-management
+        - listitem [ref=e25]:
+          - button "toggle items in Midjourney API v3 category" [ref=e26]:
+            - img [ref=e27]
+          - link "Midjourney API v3" [ref=e29] [cursor=pointer]:
+            - /url: /docs/api-midjourney-v3
+        - listitem [ref=e30]:
+          - button "toggle items in Google Flow API v1 category" [pressed] [ref=e31]:
+            - img [ref=e32]
+          - link "Google Flow API v1" [ref=e34] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - link "POST accounts" [ref=e37] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-accounts.html
+                - code [ref=e38]: POST
+                - text: accounts
+            - listitem [ref=e39]:
+              - link "GET accounts" [ref=e40] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts.html
+                - code [ref=e41]: GET
+                - text: accounts
+            - listitem [ref=e42]:
+              - link "GET accounts/email" [ref=e43] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-email.html
+                - code [ref=e44]: GET
+                - text: accounts/
+                - code [ref=e45]: email
+            - listitem [ref=e46]:
+              - link "DELETE accounts/email" [ref=e47] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/delete-google-flow-accounts-email.html
+                - code [ref=e48]: DELETE
+                - text: accounts/
+                - code [ref=e49]: email
+            - listitem [ref=e50]:
+              - link "POST …/captcha-providers" [ref=e51] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-accounts-captcha-providers.html
+                - code [ref=e52]: POST
+                - text: …/captcha-providers
+            - listitem [ref=e53]:
+              - link "GET …/captcha-providers" [ref=e54] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-providers.html
+                - code [ref=e55]: GET
+                - text: …/captcha-providers
+            - listitem [ref=e56]:
+              - link "GET …/captcha-stats" [ref=e57] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-stats.html
+                - code [ref=e58]: GET
+                - text: …/captcha-stats
+            - listitem [ref=e59]:
+              - link "POST assets/email" [ref=e60] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-assets-email.html
+                - code [ref=e61]: POST
+                - text: assets/
+                - code [ref=e62]: email
+            - listitem [ref=e63]:
+              - link "POST images" [ref=e64] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-images.html
+                - code [ref=e65]: POST
+                - text: images
+            - listitem [ref=e66]:
+              - link "POST images/upscale" [ref=e67] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-images-upscale.html
+                - code [ref=e68]: POST
+                - text: images/upscale
+            - listitem [ref=e69]:
+              - link "POST videos" [ref=e70] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos.html
+                - code [ref=e71]: POST
+                - text: videos
+            - listitem [ref=e72]:
+              - link "POST videos/upscale" [ref=e73] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-upscale.html
+                - code [ref=e74]: POST
+                - text: videos/upscale
+            - listitem [ref=e75]:
+              - link "POST videos/gif" [ref=e76] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-gif.html
+                - code [ref=e77]: POST
+                - text: videos/gif
+            - listitem [ref=e78]:
+              - link "POST videos/extend" [ref=e79] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-extend.html
+                - code [ref=e80]: POST
+                - text: videos/extend
+            - listitem [ref=e81]:
+              - link "POST videos/concatenate" [ref=e82] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-concatenate.html
+                - code [ref=e83]: POST
+                - text: videos/concatenate
+            - listitem [ref=e84]:
+              - link "GET jobs/jobid" [ref=e85] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-jobs-jobid.html
+                - code [ref=e86]: GET
+                - text: jobs/
+                - code [ref=e87]: jobid
+            - listitem [ref=e88]:
+              - link "GET jobs" [ref=e89] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-jobs.html
+                - code [ref=e90]: GET
+                - text: jobs
+        - listitem [ref=e91]:
+          - button "toggle items in Dreamina API v1 category" [ref=e92]:
+            - img [ref=e93]
+          - link "Dreamina API v1" [ref=e95] [cursor=pointer]:
+            - /url: /docs/api-dreamina-v1
+        - listitem [ref=e96]:
+          - button "toggle items in MiniMax API v1 category" [ref=e97]:
+            - img [ref=e98]
+          - link "MiniMax API v1" [ref=e100] [cursor=pointer]:
+            - /url: /docs/api-minimax-v1
+        - listitem [ref=e101]:
+          - button "toggle items in Kling API v1 category" [ref=e102]:
+            - img [ref=e103]
+          - link "Kling API v1" [ref=e105] [cursor=pointer]:
+            - /url: /docs/api-kling-v1
+        - listitem [ref=e106]:
+          - button "toggle items in Runway API v1 category" [ref=e107]:
+            - img [ref=e108]
+          - link "Runway API v1" [ref=e110] [cursor=pointer]:
+            - /url: /docs/api-runwayml-v1
+        - listitem [ref=e111]:
+          - button "toggle items in PixVerse API v2 category" [ref=e112]:
+            - img [ref=e113]
+          - link "PixVerse API v2" [ref=e115] [cursor=pointer]:
+            - /url: /docs/api-pixverse-v2
+        - listitem [ref=e116]:
+          - button "toggle items in Mureka API v1 category" [ref=e117]:
+            - img [ref=e118]
+          - link "Mureka API v1" [ref=e120] [cursor=pointer]:
+            - /url: /docs/api-mureka-v1
+        - listitem [ref=e121]:
+          - button "toggle items in TemPolor API v1 category" [ref=e122]:
+            - img [ref=e123]
+          - link "TemPolor API v1" [ref=e125] [cursor=pointer]:
+            - /url: /docs/api-tempolor-v1
+        - listitem [ref=e126]:
+          - button "toggle items in InsightFaceSwap API v1 category" [ref=e127]:
+            - img [ref=e128]
+          - link "InsightFaceSwap API v1" [ref=e130] [cursor=pointer]:
+            - /url: /docs/api-faceswap-v1
+        - listitem [ref=e131]:
+          - button "toggle items in Midjourney API v2 category" [ref=e132]:
+            - img [ref=e133]
+          - link "Midjourney API v2" [ref=e135] [cursor=pointer]:
+            - /url: /docs/api-v2
+        - listitem [ref=e136]:
+          - button "toggle items in Articles category" [ref=e137]:
+            - img [ref=e138]
+          - link "Articles" [ref=e140] [cursor=pointer]:
+            - /url: /docs/articles
+        - listitem [ref=e141]:
+          - button "toggle items in Blog category" [ref=e142]:
+            - img [ref=e143]
+          - link "Blog" [ref=e145] [cursor=pointer]:
+            - /url: /blog
+        - listitem [ref=e146]:
+          - link "Postman" [ref=e147] [cursor=pointer]:
+            - /url: /docs/postman-swagger.html
+        - listitem [ref=e148]:
+          - link "Support" [ref=e149] [cursor=pointer]:
+            - /url: /docs/support.html
+        - listitem [ref=e150]:
+          - link "Changelog" [ref=e151] [cursor=pointer]:
+            - /url: /docs/changelog.html
+        - listitem [ref=e152]:
+          - link "Q&A" [ref=e153] [cursor=pointer]:
+            - /url: /docs/questions-and-answers.html
+        - listitem [ref=e154]:
+          - link "Legal" [ref=e155] [cursor=pointer]:
+            - /url: /docs/legal.html
+  - generic [ref=e156]:
+    - generic [ref=e157]:
+      - search [ref=e158]:
+        - generic [ref=e159]:
+          - textbox "Search Experimental API for AI services" [ref=e160]
+          - img [ref=e162]
+      - navigation "Auxiliary" [ref=e164]:
+        - list
+    - main [ref=e167]:
+      - heading "Google Flow API v1" [level=1] [ref=e168]:
+        - link "Google Flow API v1" [ref=e169] [cursor=pointer]:
+          - /url: "#-google-flow-api-v1"
+        - img [ref=e170]
+        - text: Google Flow API v1
+      - paragraph [ref=e171]: November 17, 2025 (April 3, 2026)
+      - paragraph [ref=e172]:
+        - text: This is the
+        - link "experimental" [ref=e173] [cursor=pointer]:
+          - /url: ../../docs/legal
+        - text: API for
+        - link "Google Flow" [ref=e174] [cursor=pointer]:
+          - /url: https://labs.google/fx/tools/flow
+        - text: by
+        - link "Google Labs" [ref=e175] [cursor=pointer]:
+          - /url: https://labs.google
+        - text: .
+      - paragraph [ref=e176]:
+        - link "Google Flow" [ref=e177] [cursor=pointer]:
+          - /url: https://labs.google/fx/tools/flow
+        - text: creates cinematic AI clips with
+        - link "Veo" [ref=e178] [cursor=pointer]:
+          - /url: https://aistudio.google.com/models/veo-3
+        - text: ", images with"
+        - link "Imagen 4" [ref=e179] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/imagen-3/
+        - text: ","
+        - link "Nano Banana / Gemini 2.5 Flash Image" [ref=e180] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/gemini/flash/
+        - text: ","
+        - link "Nano Banana 2 / Gemini 2.5 Pro Image" [ref=e181] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/gemini/
+        - text: ", and"
+        - link "Nano Banana Pro / Gemini 3 Pro Image" [ref=e182] [cursor=pointer]:
+          - /url: https://deepmind.google/models/gemini-image/pro/
+        - text: .
+      - paragraph [ref=e183]:
+        - strong [ref=e184]: "Image generation:"
+        - text: Works with any
+        - link "Google AI" [ref=e185] [cursor=pointer]:
+          - /url: https://one.google.com/ai
+        - text: subscription or
+        - strong [ref=e186]: free
+        - text: account.
+      - paragraph [ref=e187]:
+        - strong [ref=e188]: "Video generation:"
+        - text: Requires
+        - link "Google AI Pro" [ref=e189] [cursor=pointer]:
+          - /url: https://one.google.com/ai
+        - text: ($20/month) or
+        - link "Ultra" [ref=e190] [cursor=pointer]:
+          - /url: https://one.google.com/ai
+        - text: "($125/month):"
+      - list [ref=e191]:
+        - listitem [ref=e192]:
+          - text: •
+          - code [ref=e193]: Veo 3.1 Lite
+          - text: — 2.5¢ per video (5 credits)
+        - listitem [ref=e194]:
+          - text: •
+          - code [ref=e195]: Veo 3.1 Fast
+          - text: — 5¢ per video (10 credits)
+        - listitem [ref=e196]:
+          - text: •
+          - code [ref=e197]: Veo 3.1 Quality
+          - text: — 50¢ per video (100 credits)
+        - listitem [ref=e198]:
+          - text: •
+          - code [ref=e199]: Veo 3.1 Fast Relaxed
+          - text: — free, Ultra only (lower priority)
+        - listitem [ref=e200]:
+          - text: •
+          - strong [ref=e201]: Voice narration
+          - text: — 30 AI voice presets for spoken dialogue (works with R2V mode)
+      - paragraph [ref=e202]:
+        - text: Official Google AI Pro and Google AI Ultra
+        - link "credits table" [ref=e203] [cursor=pointer]:
+          - /url: https://support.google.com/googleone/answer/16287445
+        - text: .
+      - paragraph [ref=e204]:
+        - strong [ref=e205]: "Captcha:"
+        - text: Image and video generation (
+        - link "POST /images" [ref=e206] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-images
+        - text: ","
+        - link "POST /images/upscale" [ref=e207] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-images-upscale
+        - text: ","
+        - link "POST /videos" [ref=e208] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-videos
+        - text: ","
+        - link "POST /videos/upscale" [ref=e209] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-videos-upscale
+        - text: ","
+        - link "POST /videos/extend" [ref=e210] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-videos-extend
+        - text: ) requires reCAPTCHA solving.
+        - link "POST /videos/gif" [ref=e211] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-videos-gif
+        - text: and
+        - link "POST /videos/concatenate" [ref=e212] [cursor=pointer]:
+          - /url: /docs/api-google-flow-v1/post-google-flow-videos-concatenate
+        - text: do not require captcha.
+      - list [ref=e213]:
+        - listitem [ref=e214]:
+          - text: •
+          - strong [ref=e215]: Users receive 100 free captcha credits
+          - text: (powered by
+          - link "CapSolver" [ref=e216] [cursor=pointer]:
+            - /url: https://www.capsolver.com/
+          - text: ) when adding their first Google Flow account
+        - listitem [ref=e217]:
+          - text: • After free credits are exhausted, configure provider API keys via
+          - link "POST /accounts/captcha-providers" [ref=e218] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-accounts-captcha-providers
+        - listitem [ref=e219]: "• Cost: ~$0.80-$3.00 per 1,000 solves depending on provider"
+        - listitem [ref=e220]:
+          - text: • Compare provider success rates with
+          - link "GET /accounts/captcha-stats?anonymized=true" [ref=e221] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-stats
+        - listitem [ref=e222]:
+          - text: • See
+          - link "Setup Google Flow - Captcha Providers" [ref=e223] [cursor=pointer]:
+            - /url: /docs/start-here/setup-google-flow#configure-captcha-providers
+          - text: for details
+      - paragraph [ref=e224]:
+        - text: ⚙️
+        - link "Setup Google Flow" [ref=e225] [cursor=pointer]:
+          - /url: ../../docs/start-here/setup-google-flow
+      - paragraph [ref=e226]:
+        - text: 📦
+        - link "Postman collection" [ref=e227] [cursor=pointer]:
+          - /url: https://www.postman.com/useapinet/useapi-net/collection
+        - text: (April 3, 2026)
+        - text: 🤖
+        - link "LLM-friendly API spec" [ref=e228] [cursor=pointer]:
+          - /url: https://useapi.net/assets/aibot/api-google-flow-v1.txt
+        - text: Feed this to your LLM to build integrations
+      - paragraph [ref=e229]: "Examples:"
+      - list [ref=e230]:
+        - listitem [ref=e231]:
+          - text: •
+          - link "Veo 3.1 Lite & Voice Narration" [ref=e232] [cursor=pointer]:
+            - /url: /blog/260403
+        - listitem [ref=e233]:
+          - text: •
+          - 'link "16+ AI Image Models: The Showdown" [ref=e234] [cursor=pointer]':
+            - /url: /blog/260309i
+        - listitem [ref=e235]:
+          - text: •
+          - link "Video Extend and Concatenate" [ref=e236] [cursor=pointer]:
+            - /url: /blog/260129
+        - listitem [ref=e237]:
+          - text: •
+          - link "Video Upscale and GIF" [ref=e238] [cursor=pointer]:
+            - /url: /blog/260120
+        - listitem [ref=e239]:
+          - text: •
+          - link "Nano Banana Pro with 5 references" [ref=e240] [cursor=pointer]:
+            - /url: /blog/251201
+        - listitem [ref=e241]:
+          - text: •
+          - link "Nano Banana Pro" [ref=e242] [cursor=pointer]:
+            - /url: /blog/251120
+        - listitem [ref=e243]:
+          - text: •
+          - link "Imagen 4, Nano Banana and Veo 3.1 Fast" [ref=e244] [cursor=pointer]:
+            - /url: /blog/251117
+      - paragraph [ref=e245]: "Developer Community:"
+      - list [ref=e246]:
+        - listitem [ref=e247]:
+          - text: •
+          - link "Discord Server" [ref=e248] [cursor=pointer]:
+            - /url: https://discord.gg/w28uK3cnmF
+            - img [ref=e249]
+            - text: Discord Server
+        - listitem [ref=e250]:
+          - text: •
+          - link "Telegram Channel" [ref=e251] [cursor=pointer]:
+            - /url: https://t.me/use_api
+            - img [ref=e252]
+            - text: Telegram Channel
+        - listitem [ref=e253]:
+          - text: •
+          - link "r/GoogleFlowAPI" [ref=e254] [cursor=pointer]:
+            - /url: https://www.reddit.com/r/GoogleFlowAPI/
+            - img [ref=e255]
+            - text: r/GoogleFlowAPI
+      - separator [ref=e256]
+      - heading "Table of contents" [level=2] [ref=e257]
+      - list [ref=e258]:
+        - listitem [ref=e259]:
+          - text: •
+          - link "POST accounts" [ref=e260] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-accounts.html
+            - code [ref=e261]: POST
+            - text: accounts
+        - listitem [ref=e262]:
+          - text: •
+          - link "GET accounts" [ref=e263] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-accounts.html
+            - code [ref=e264]: GET
+            - text: accounts
+        - listitem [ref=e265]:
+          - text: •
+          - link "GET accounts/email" [ref=e266] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-accounts-email.html
+            - code [ref=e267]: GET
+            - text: accounts/
+            - code [ref=e268]: email
+        - listitem [ref=e269]:
+          - text: •
+          - link "DELETE accounts/email" [ref=e270] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/delete-google-flow-accounts-email.html
+            - code [ref=e271]: DELETE
+            - text: accounts/
+            - code [ref=e272]: email
+        - listitem [ref=e273]:
+          - text: •
+          - link "POST …/captcha-providers" [ref=e274] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-accounts-captcha-providers.html
+            - code [ref=e275]: POST
+            - text: …/captcha-providers
+        - listitem [ref=e276]:
+          - text: •
+          - link "GET …/captcha-providers" [ref=e277] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-providers.html
+            - code [ref=e278]: GET
+            - text: …/captcha-providers
+        - listitem [ref=e279]:
+          - text: •
+          - link "GET …/captcha-stats" [ref=e280] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-stats.html
+            - code [ref=e281]: GET
+            - text: …/captcha-stats
+        - listitem [ref=e282]:
+          - text: •
+          - link "POST assets/email" [ref=e283] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-assets-email.html
+            - code [ref=e284]: POST
+            - text: assets/
+            - code [ref=e285]: email
+        - listitem [ref=e286]:
+          - text: •
+          - link "POST images" [ref=e287] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-images.html
+            - code [ref=e288]: POST
+            - text: images
+        - listitem [ref=e289]:
+          - text: •
+          - link "POST images/upscale" [ref=e290] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-images-upscale.html
+            - code [ref=e291]: POST
+            - text: images/upscale
+        - listitem [ref=e292]:
+          - text: •
+          - link "POST videos" [ref=e293] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-videos.html
+            - code [ref=e294]: POST
+            - text: videos
+        - listitem [ref=e295]:
+          - text: •
+          - link "POST videos/upscale" [ref=e296] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-videos-upscale.html
+            - code [ref=e297]: POST
+            - text: videos/upscale
+        - listitem [ref=e298]:
+          - text: •
+          - link "POST videos/gif" [ref=e299] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-videos-gif.html
+            - code [ref=e300]: POST
+            - text: videos/gif
+        - listitem [ref=e301]:
+          - text: •
+          - link "POST videos/extend" [ref=e302] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-videos-extend.html
+            - code [ref=e303]: POST
+            - text: videos/extend
+        - listitem [ref=e304]:
+          - text: •
+          - link "POST videos/concatenate" [ref=e305] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/post-google-flow-videos-concatenate.html
+            - code [ref=e306]: POST
+            - text: videos/concatenate
+        - listitem [ref=e307]:
+          - text: •
+          - link "GET jobs/jobid" [ref=e308] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-jobs-jobid.html
+            - code [ref=e309]: GET
+            - text: jobs/
+            - code [ref=e310]: jobid
+        - listitem [ref=e311]:
+          - text: •
+          - link "GET jobs" [ref=e312] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1/get-google-flow-jobs.html
+            - code [ref=e313]: GET
+            - text: jobs

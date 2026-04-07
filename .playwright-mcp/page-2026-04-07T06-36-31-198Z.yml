@@ -1,0 +1,518 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Experimental API for AI services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Experimental API for AI services" [ref=e6]: Experimental API
+    - navigation "Main" [ref=e7]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e11]:
+          - link "Model Matrix" [ref=e12] [cursor=pointer]:
+            - /url: /model-matrix
+        - listitem [ref=e13]:
+          - link "Subscription" [ref=e14] [cursor=pointer]:
+            - /url: /docs/subscription.html
+        - listitem [ref=e15]:
+          - button "toggle items in Start Here category" [ref=e16]:
+            - img [ref=e17]
+          - link "Start Here" [ref=e19] [cursor=pointer]:
+            - /url: /docs/start-here
+        - listitem [ref=e20]:
+          - button "toggle items in Account Management category" [ref=e21]:
+            - img [ref=e22]
+          - link "Account Management" [ref=e24] [cursor=pointer]:
+            - /url: /docs/account-management
+        - listitem [ref=e25]:
+          - button "toggle items in Midjourney API v3 category" [ref=e26]:
+            - img [ref=e27]
+          - link "Midjourney API v3" [ref=e29] [cursor=pointer]:
+            - /url: /docs/api-midjourney-v3
+        - listitem [ref=e30]:
+          - button "toggle items in Google Flow API v1 category" [ref=e31]:
+            - img [ref=e32]
+          - link "Google Flow API v1" [ref=e34] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1
+        - listitem [ref=e35]:
+          - button "toggle items in Dreamina API v1 category" [ref=e36]:
+            - img [ref=e37]
+          - link "Dreamina API v1" [ref=e39] [cursor=pointer]:
+            - /url: /docs/api-dreamina-v1
+        - listitem [ref=e40]:
+          - button "toggle items in MiniMax API v1 category" [ref=e41]:
+            - img [ref=e42]
+          - link "MiniMax API v1" [ref=e44] [cursor=pointer]:
+            - /url: /docs/api-minimax-v1
+        - listitem [ref=e45]:
+          - button "toggle items in Kling API v1 category" [ref=e46]:
+            - img [ref=e47]
+          - link "Kling API v1" [ref=e49] [cursor=pointer]:
+            - /url: /docs/api-kling-v1
+        - listitem [ref=e50]:
+          - button "toggle items in Runway API v1 category" [ref=e51]:
+            - img [ref=e52]
+          - link "Runway API v1" [ref=e54] [cursor=pointer]:
+            - /url: /docs/api-runwayml-v1
+        - listitem [ref=e55]:
+          - button "toggle items in PixVerse API v2 category" [ref=e56]:
+            - img [ref=e57]
+          - link "PixVerse API v2" [ref=e59] [cursor=pointer]:
+            - /url: /docs/api-pixverse-v2
+        - listitem [ref=e60]:
+          - button "toggle items in Mureka API v1 category" [ref=e61]:
+            - img [ref=e62]
+          - link "Mureka API v1" [ref=e64] [cursor=pointer]:
+            - /url: /docs/api-mureka-v1
+        - listitem [ref=e65]:
+          - button "toggle items in TemPolor API v1 category" [ref=e66]:
+            - img [ref=e67]
+          - link "TemPolor API v1" [ref=e69] [cursor=pointer]:
+            - /url: /docs/api-tempolor-v1
+        - listitem [ref=e70]:
+          - button "toggle items in InsightFaceSwap API v1 category" [ref=e71]:
+            - img [ref=e72]
+          - link "InsightFaceSwap API v1" [ref=e74] [cursor=pointer]:
+            - /url: /docs/api-faceswap-v1
+        - listitem [ref=e75]:
+          - button "toggle items in Midjourney API v2 category" [ref=e76]:
+            - img [ref=e77]
+          - link "Midjourney API v2" [ref=e79] [cursor=pointer]:
+            - /url: /docs/api-v2
+        - listitem [ref=e80]:
+          - button "toggle items in Articles category" [ref=e81]:
+            - img [ref=e82]
+          - link "Articles" [ref=e84] [cursor=pointer]:
+            - /url: /docs/articles
+        - listitem [ref=e85]:
+          - button "toggle items in Blog category" [ref=e86]:
+            - img [ref=e87]
+          - link "Blog" [ref=e89] [cursor=pointer]:
+            - /url: /blog
+        - listitem [ref=e90]:
+          - link "Postman" [ref=e91] [cursor=pointer]:
+            - /url: /docs/postman-swagger.html
+        - listitem [ref=e92]:
+          - link "Support" [ref=e93] [cursor=pointer]:
+            - /url: /docs/support.html
+        - listitem [ref=e94]:
+          - link "Changelog" [ref=e95] [cursor=pointer]:
+            - /url: /docs/changelog.html
+        - listitem [ref=e96]:
+          - link "Q&A" [ref=e97] [cursor=pointer]:
+            - /url: /docs/questions-and-answers.html
+        - listitem [ref=e98]:
+          - link "Legal" [ref=e99] [cursor=pointer]:
+            - /url: /docs/legal.html
+  - generic [ref=e100]:
+    - generic [ref=e101]:
+      - search [ref=e102]:
+        - generic [ref=e103]:
+          - textbox "Search Experimental API for AI services" [ref=e104]
+          - img [ref=e106]
+      - navigation "Auxiliary" [ref=e108]:
+        - list
+    - main [ref=e111]:
+      - paragraph [ref=e112]:
+        - link "$15 monthly subscription" [ref=e113] [cursor=pointer]:
+          - /url: docs/subscription
+          - strong [ref=e114]: $15 monthly subscription
+        - text: gives you full access to
+        - strong [ref=e115]: all
+        - text: experimental APIs listed below.
+      - paragraph [ref=e116]: Our experimental API connects your AI website accounts to a fully-featured REST API, letting you automate all supported services at website subscription prices—significantly cheaper than official API rates. Use multiple accounts per service with automated load balancing included.
+      - paragraph [ref=e117]:
+        - text: "Supported services:"
+        - link "Midjourney" [ref=e118] [cursor=pointer]:
+          - /url: docs/api-midjourney-v3/
+        - text: ","
+        - link "Google Flow" [ref=e119] [cursor=pointer]:
+          - /url: docs/api-google-flow-v1/
+        - text: ","
+        - link "Dreamina" [ref=e120] [cursor=pointer]:
+          - /url: docs/api-dreamina-v1/
+        - text: ","
+        - link "Kling" [ref=e121] [cursor=pointer]:
+          - /url: docs/api-kling-v1/
+        - text: ","
+        - link "Mureka" [ref=e122] [cursor=pointer]:
+          - /url: docs/api-mureka-v1/
+        - text: ","
+        - link "Runway" [ref=e123] [cursor=pointer]:
+          - /url: docs/api-runwayml-v1/
+        - text: ","
+        - link "MiniMax" [ref=e124] [cursor=pointer]:
+          - /url: docs/api-minimax-v1/
+        - text: ","
+        - link "PixVerse" [ref=e125] [cursor=pointer]:
+          - /url: docs/api-pixverse-v2/
+        - text: ","
+        - link "TemPolor" [ref=e126] [cursor=pointer]:
+          - /url: docs/api-tempolor-v1/
+        - text: and
+        - link "InsightFaceSwap" [ref=e127] [cursor=pointer]:
+          - /url: docs/api-faceswap-v1/
+        - text: .
+      - heading "Midjourney" [level=1] [ref=e128]:
+        - link "Midjourney" [ref=e129] [cursor=pointer]:
+          - /url: "#midjourney"
+        - img [ref=e130]
+        - text: Midjourney
+      - paragraph [ref=e131]:
+        - text: Since early 2023
+        - link "useapi.net" [ref=e132] [cursor=pointer]:
+          - /url: https://useapi.net
+        - text: has provided a simple, reliable and affordable way to use
+        - link "Midjourney" [ref=e133] [cursor=pointer]:
+          - /url: https://midjourney.com
+        - text: via
+        - link "Midjourney API" [ref=e134] [cursor=pointer]:
+          - /url: ./docs/api-midjourney-v3
+        - text: .
+      - paragraph [ref=e135]:
+        - text: Connect your Midjourney Discord account(s) to our experimental API following
+        - link "simple instructions" [ref=e136] [cursor=pointer]:
+          - /url: ./docs/start-here/setup-midjourney
+        - text: and start using it immediately in your production environment. There are no other requirements needed to start besides having a
+        - link "Midjourney subscription" [ref=e137] [cursor=pointer]:
+          - /url: https://docs.midjourney.com/docs/plans
+        - text: .
+      - paragraph [ref=e138]:
+        - text: The
+        - strong [ref=e139]: entire
+        - text: Midjourney Discord Bot functionality, including
+        - strong [ref=e140]: video generation
+        - text: ", is supported. Our experimental"
+        - link "Midjourney API" [ref=e141] [cursor=pointer]:
+          - /url: ./docs/api-midjourney-v3/
+        - text: uses intelligent logic to prevent potential issues with Discord and Midjourney, such as bans, CAPTCHA challenges or excessive requests.
+        - link "CAPTCHA solver" [ref=e142] [cursor=pointer]:
+          - /url: ./docs/api-midjourney-v3/captcha-solver
+        - text: included at no additional cost.
+      - heading "Google Flow" [level=1] [ref=e143]:
+        - link "Google Flow" [ref=e144] [cursor=pointer]:
+          - /url: "#-google-flow"
+        - img [ref=e145]
+        - text: Google Flow
+      - paragraph [ref=e146]:
+        - link "Google Flow API" [ref=e147] [cursor=pointer]:
+          - /url: ./docs/api-google-flow-v1/
+        - text: provides access to Google’s AI models including
+        - link "Veo" [ref=e148] [cursor=pointer]:
+          - /url: https://aistudio.google.com/models/veo-3
+        - text: ","
+        - link "Imagen 4" [ref=e149] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/imagen-3/
+        - text: ","
+        - link "Nano Banana / Gemini 2.5 Flash Image" [ref=e150] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/gemini/flash/
+        - text: ","
+        - link "Nano Banana 2 / Gemini 2.5 Pro Image" [ref=e151] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/gemini/
+        - text: ", and"
+        - link "Nano Banana Pro / Gemini 3 Pro Image" [ref=e152] [cursor=pointer]:
+          - /url: https://deepmind.google/models/gemini-image/pro/
+        - text: .
+      - heading "Dreamina" [level=1] [ref=e153]:
+        - link "Dreamina" [ref=e154] [cursor=pointer]:
+          - /url: "#-dreamina"
+        - img [ref=e155]
+        - text: Dreamina
+      - paragraph [ref=e156]:
+        - link "Dreamina API" [ref=e157] [cursor=pointer]:
+          - /url: ./docs/api-dreamina-v1/
+        - text: provides access to
+        - link "Dreamina" [ref=e158] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: by
+        - link "ByteDance" [ref=e159] [cursor=pointer]:
+          - /url: https://www.bytedance.com/
+        - text: ", offering AI video generation with"
+        - link "Seedance 2.0" [ref=e160] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Seedance 1.5 Pro" [ref=e161] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ", and"
+        - link "Seedance 1.0 Mini" [ref=e162] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: models, and AI image generation with
+        - link "Seedream 5.0 Lite" [ref=e163] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Seedream 4.6" [ref=e164] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Seedream 4.5" [ref=e165] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Seedream 4.1" [ref=e166] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Seedream 4.0" [ref=e167] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ","
+        - link "Nano Banana" [ref=e168] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: ", and"
+        - link "Seedream 3.0" [ref=e169] [cursor=pointer]:
+          - /url: https://dreamina.capcut.com/
+        - text: models.
+      - heading "MiniMax | Hailuo AI" [level=1] [ref=e170]:
+        - link "MiniMax | Hailuo AI" [ref=e171] [cursor=pointer]:
+          - /url: "#-minimax--hailuo-ai"
+        - img [ref=e172]
+        - text: MiniMax | Hailuo AI
+      - paragraph [ref=e173]:
+        - link "MiniMax API" [ref=e174] [cursor=pointer]:
+          - /url: ./docs/api-minimax-v1/
+        - text: for
+        - link "MiniMax AI" [ref=e175] [cursor=pointer]:
+          - /url: https://www.minimaxi.com
+        - text: via
+        - link "Hailuo AI" [ref=e176] [cursor=pointer]:
+          - /url: https://hailuoai.video
+        - text: . Unified
+        - link "Videos" [ref=e177] [cursor=pointer]:
+          - /url: ./docs/api-minimax-v1/post-minimax-videos-create
+        - text: and
+        - link "Images" [ref=e178] [cursor=pointer]:
+          - /url: ./docs/api-minimax-v1/post-minimax-images-create
+        - text: endpoints with MiniMax’s own
+        - link "Hailuo" [ref=e179] [cursor=pointer]:
+          - /url: https://hailuoai.video
+        - text: models plus
+        - link "Veo" [ref=e180] [cursor=pointer]:
+          - /url: https://deepmind.google/models/veo/
+        - text: ","
+        - link "Sora" [ref=e181] [cursor=pointer]:
+          - /url: https://openai.com/sora/
+        - text: ","
+        - link "Midjourney" [ref=e182] [cursor=pointer]:
+          - /url: https://www.midjourney.com/
+        - text: ","
+        - link "Gemini" [ref=e183] [cursor=pointer]:
+          - /url: https://deepmind.google/models/gemini/flash/
+        - text: ","
+        - link "GPT Image" [ref=e184] [cursor=pointer]:
+          - /url: https://openai.com/index/introducing-4o-image-generation/
+        - text: ", and"
+        - link "Seedream" [ref=e185] [cursor=pointer]:
+          - /url: https://seed.bytedance.com/en/seedream4_5
+        - text: models. Also includes
+        - link "Speech 2.5" [ref=e186] [cursor=pointer]:
+          - /url: https://minimax-ai.chat/models/minimax-speech-25/
+        - text: and
+        - link "Music 2.0" [ref=e187] [cursor=pointer]:
+          - /url: https://www.minimax.io/news/minimax-music-20
+        - text: .
+      - heading "Kling" [level=1] [ref=e188]:
+        - link "Kling" [ref=e189] [cursor=pointer]:
+          - /url: "#-kling"
+        - img [ref=e190]
+        - text: Kling
+      - paragraph [ref=e191]:
+        - link "Kling API" [ref=e192] [cursor=pointer]:
+          - /url: ./docs/api-kling-v1/
+        - text: for
+        - link "Kling AI" [ref=e193] [cursor=pointer]:
+          - /url: https://app.klingai.com/global
+        - text: ", a generative artificial intelligence service developed by Chinese short video giant"
+        - link "Kuaishou Technology" [ref=e194] [cursor=pointer]:
+          - /url: https://www.kuaishou.com/en
+        - text: . Kling AI is considered by many to be the
+        - link "best AI model" [ref=e195] [cursor=pointer]:
+          - /url: https://artificialanalysis.ai/text-to-video/arena?tab=leaderboard&input=image
+        - text: ", leading the pack with prompt adherence, video quality and unmatched consistency."
+      - heading "Runway" [level=1] [ref=e196]:
+        - link "Runway" [ref=e197] [cursor=pointer]:
+          - /url: "#-runway"
+        - img [ref=e198]
+        - text: Runway
+      - paragraph [ref=e199]:
+        - link "Runway API" [ref=e200] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/
+        - text: for
+        - link "Runway AI" [ref=e201] [cursor=pointer]:
+          - /url: https://runwayml.com
+        - text: . Unified
+        - link "Videos" [ref=e202] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/post-runwayml-videos-create
+        - text: and
+        - link "Images" [ref=e203] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/post-runwayml-images-create
+        - text: endpoints with Runway’s own
+        - link "Gen-4.x" [ref=e204] [cursor=pointer]:
+          - /url: https://runwayml.com
+        - text: models plus
+        - link "Kling" [ref=e205] [cursor=pointer]:
+          - /url: https://klingai.com
+        - text: ","
+        - link "Veo" [ref=e206] [cursor=pointer]:
+          - /url: https://deepmind.google/models/veo/
+        - text: ","
+        - link "Sora" [ref=e207] [cursor=pointer]:
+          - /url: https://openai.com/index/sora/
+        - text: ","
+        - link "Wan" [ref=e208] [cursor=pointer]:
+          - /url: https://wan.video/
+        - text: ","
+        - link "Gemini" [ref=e209] [cursor=pointer]:
+          - /url: https://deepmind.google/models/gemini/flash/
+        - text: ","
+        - link "GPT Image" [ref=e210] [cursor=pointer]:
+          - /url: https://platform.openai.com/docs/models/gpt-image-1
+        - text: ", and"
+        - link "Seedream" [ref=e211] [cursor=pointer]:
+          - /url: https://www.volcengine.com/product/seedream
+        - text: models. Also includes
+        - link "Act Two" [ref=e212] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/post-runwayml-gen4-act-two
+        - text: ","
+        - link "Lip Sync" [ref=e213] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/post-runwayml-lipsync-create
+        - text: ", and"
+        - link "Frames" [ref=e214] [cursor=pointer]:
+          - /url: ./docs/api-runwayml-v1/post-runwayml-frames-create
+        - text: . Accounts with a Runway
+        - link "Unlimited plan" [ref=e215] [cursor=pointer]:
+          - /url: https://help.runwayml.com/hc/en-us/articles/18053095835795-Unlimited-plan-details
+        - text: can use
+        - code [ref=e216]: exploreMode
+        - text: for credit-free generation on all image and most video models.
+      - heading "PixVerse" [level=1] [ref=e217]:
+        - link "PixVerse" [ref=e218] [cursor=pointer]:
+          - /url: "#-pixverse"
+        - img [ref=e219]
+        - text: PixVerse
+      - paragraph [ref=e220]:
+        - link "PixVerse API" [ref=e221] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/
+        - text: for
+        - link "PixVerse.ai" [ref=e222] [cursor=pointer]:
+          - /url: https://pixverse.ai/
+        - text: .
+        - link "Videos" [ref=e223] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-videos-create-v4
+        - text: with models
+        - code [ref=e224]: v5.6
+        - text: ","
+        - code [ref=e225]: v5.5
+        - text: ","
+        - code [ref=e226]: v5
+        - text: ", and"
+        - code [ref=e227]: v5-fast
+        - text: .
+        - link "Images" [ref=e228] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-images-create
+        - text: with 7 models including
+        - link "Seedream" [ref=e229] [cursor=pointer]:
+          - /url: https://seed.bytedance.com/en/seedream
+        - text: ","
+        - link "Nano Banana" [ref=e230] [cursor=pointer]:
+          - /url: https://deepmind.google/technologies/gemini/flash/
+        - text: ", and"
+        - link "Qwen Image" [ref=e231] [cursor=pointer]:
+          - /url: https://github.com/QwenLM/Qwen2.5-VL
+        - text: . Also includes
+        - link "Extend" [ref=e232] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-videos-extend-v4
+        - text: ","
+        - link "Upscale" [ref=e233] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-videos-upscale
+        - text: ","
+        - link "Lip Sync" [ref=e234] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-videos-lipsync
+        - text: ","
+        - link "Modify" [ref=e235] [cursor=pointer]:
+          - /url: ./docs/api-pixverse-v2/post-pixverse-videos-modify
+        - text: ", and 150+ video effects. Pro+ plans include"
+        - strong [ref=e236]: unlimited image generation
+        - text: in Relax Mode (generation time ~3s to ~60s based on the model).
+      - heading "Mureka" [level=1] [ref=e237]:
+        - link "Mureka" [ref=e238] [cursor=pointer]:
+          - /url: "#-mureka"
+        - img [ref=e239]
+        - text: Mureka
+      - paragraph [ref=e240]:
+        - link "Mureka API" [ref=e241] [cursor=pointer]:
+          - /url: ./docs/api-mureka-v1/
+        - text: provides access to
+        - link "Mureka AI" [ref=e242] [cursor=pointer]:
+          - /url: https://www.mureka.ai
+        - text: ", a"
+        - strong [ref=e243]: music generation
+        - text: service featuring proprietary SkyMusic 2.0 model, positioned to compete with
+        - link "Suno" [ref=e244] [cursor=pointer]:
+          - /url: https://www.suno.com
+        - text: and
+        - link "Udio" [ref=e245] [cursor=pointer]:
+          - /url: https://www.udio.com
+        - text: . Also includes
+        - strong [ref=e246]: speech generation
+        - text: with voice cloning and multi-speaker conversations.
+      - heading "TemPolor" [level=1] [ref=e247]:
+        - link "TemPolor" [ref=e248] [cursor=pointer]:
+          - /url: "#-tempolor"
+        - img [ref=e249]
+        - text: TemPolor
+      - paragraph [ref=e250]:
+        - link "TemPolor API" [ref=e251] [cursor=pointer]:
+          - /url: ./docs/api-tempolor-v1/
+        - text: provides access to
+        - link "TemPolor" [ref=e252] [cursor=pointer]:
+          - /url: https://www.tempolor.com
+        - text: ", a royalty-free"
+        - strong [ref=e253]: music generation
+        - text: service that creates soundtracks from text prompts, custom lyrics, and MIDI. Supports voice cloning, extensive customization (chords, BPM), and export in mp3, wav, and stems.
+      - heading "InsightFaceSwap" [level=1] [ref=e254]:
+        - link "InsightFaceSwap" [ref=e255] [cursor=pointer]:
+          - /url: "#-insightfaceswap"
+        - img [ref=e256]
+        - text: InsightFaceSwap
+      - paragraph [ref=e257]:
+        - link "InsightFaceSwap API" [ref=e258] [cursor=pointer]:
+          - /url: ./docs/api-faceswap-v1/
+        - text: for the
+        - link "InsightFaceSwap Discord Bot" [ref=e259] [cursor=pointer]:
+          - /url: https://discord.gg/Ym3X8U59ZN
+        - text: by
+        - link "Picsi.Ai" [ref=e260] [cursor=pointer]:
+          - /url: https://www.picsi.ai/
+        - text: . Swap faces from source images onto target images. Free and
+        - link "paid tiers" [ref=e261] [cursor=pointer]:
+          - /url: https://www.patreon.com/picsi
+        - text: available with extra features like HiFidelity Mode, ARTIFY, and multi-face morphing.
+      - heading "Useapi.net" [level=1] [ref=e262]:
+        - link "Useapi.net" [ref=e263] [cursor=pointer]:
+          - /url: "#-useapinet"
+        - img [ref=e264]
+        - text: Useapi.net
+      - paragraph [ref=e265]:
+        - text: Visit our
+        - link "Discord Server" [ref=e266] [cursor=pointer]:
+          - /url: https://discord.gg/w28uK3cnmF
+          - img [ref=e267]
+          - text: Discord Server
+        - text: or
+        - link "Telegram Channel" [ref=e268] [cursor=pointer]:
+          - /url: https://t.me/use_api
+          - img [ref=e269]
+          - text: Telegram Channel
+        - text: for any support questions and concerns.
+      - paragraph [ref=e270]:
+        - text: We regularly post guides and tutorials on the
+        - link "YouTube Channel" [ref=e271] [cursor=pointer]:
+          - /url: https://www.youtube.com/@midjourneyapi
+          - img [ref=e272]
+          - text: YouTube Channel
+        - text: .
+      - paragraph [ref=e273]:
+        - text: Feed our
+        - link "complete API spec" [ref=e274] [cursor=pointer]:
+          - /url: assets/aibot/all.txt
+        - text: to your LLM to build integrations.
+      - paragraph [ref=e275]

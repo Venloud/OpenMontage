@@ -1,0 +1,518 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Experimental API for AI services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Experimental API for AI services" [ref=e6]: Experimental API
+    - navigation "Main" [ref=e7]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e11]:
+          - link "Model Matrix" [ref=e12] [cursor=pointer]:
+            - /url: /model-matrix
+        - listitem [ref=e13]:
+          - link "Subscription" [ref=e14] [cursor=pointer]:
+            - /url: /docs/subscription.html
+        - listitem [ref=e15]:
+          - button "toggle items in Start Here category" [pressed] [ref=e16]:
+            - img [ref=e17]
+          - link "Start Here" [ref=e19] [cursor=pointer]:
+            - /url: /docs/start-here
+          - list [ref=e20]:
+            - listitem [ref=e21]:
+              - link "Setup useapi.net" [ref=e22] [cursor=pointer]:
+                - /url: /docs/start-here/setup-useapi.html
+            - listitem [ref=e23]:
+              - link "Setup Midjourney" [ref=e24] [cursor=pointer]:
+                - /url: /docs/start-here/setup-midjourney.html
+            - listitem [ref=e25]:
+              - link "Setup Google Flow" [ref=e26] [cursor=pointer]:
+                - /url: /docs/start-here/setup-google-flow.html
+            - listitem [ref=e27]:
+              - link "Setup Dreamina" [ref=e28] [cursor=pointer]:
+                - /url: /docs/start-here/setup-dreamina.html
+            - listitem [ref=e29]:
+              - link "Setup Kling" [ref=e30] [cursor=pointer]:
+                - /url: /docs/start-here/setup-kling.html
+            - listitem [ref=e31]:
+              - link "Setup Mureka" [ref=e32] [cursor=pointer]:
+                - /url: /docs/start-here/setup-mureka.html
+            - listitem [ref=e33]:
+              - link "Setup TemPolor" [ref=e34] [cursor=pointer]:
+                - /url: /docs/start-here/setup-tempolor.html
+            - listitem [ref=e35]:
+              - link "Setup Runway" [ref=e36] [cursor=pointer]:
+                - /url: /docs/start-here/setup-runwayml.html
+            - listitem [ref=e37]:
+              - link "Setup MiniMax" [ref=e38] [cursor=pointer]:
+                - /url: /docs/start-here/setup-minimax.html
+            - listitem [ref=e39]:
+              - link "Setup PixVerse" [ref=e40] [cursor=pointer]:
+                - /url: /docs/start-here/setup-pixverse.html
+            - listitem [ref=e41]:
+              - link "Setup InsightFaceSwap" [ref=e42] [cursor=pointer]:
+                - /url: /docs/start-here/setup-faceswap.html
+        - listitem [ref=e43]:
+          - button "toggle items in Account Management category" [ref=e44]:
+            - img [ref=e45]
+          - link "Account Management" [ref=e47] [cursor=pointer]:
+            - /url: /docs/account-management
+        - listitem [ref=e48]:
+          - button "toggle items in Midjourney API v3 category" [ref=e49]:
+            - img [ref=e50]
+          - link "Midjourney API v3" [ref=e52] [cursor=pointer]:
+            - /url: /docs/api-midjourney-v3
+        - listitem [ref=e53]:
+          - button "toggle items in Google Flow API v1 category" [ref=e54]:
+            - img [ref=e55]
+          - link "Google Flow API v1" [ref=e57] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1
+        - listitem [ref=e58]:
+          - button "toggle items in Dreamina API v1 category" [ref=e59]:
+            - img [ref=e60]
+          - link "Dreamina API v1" [ref=e62] [cursor=pointer]:
+            - /url: /docs/api-dreamina-v1
+        - listitem [ref=e63]:
+          - button "toggle items in MiniMax API v1 category" [ref=e64]:
+            - img [ref=e65]
+          - link "MiniMax API v1" [ref=e67] [cursor=pointer]:
+            - /url: /docs/api-minimax-v1
+        - listitem [ref=e68]:
+          - button "toggle items in Kling API v1 category" [ref=e69]:
+            - img [ref=e70]
+          - link "Kling API v1" [ref=e72] [cursor=pointer]:
+            - /url: /docs/api-kling-v1
+        - listitem [ref=e73]:
+          - button "toggle items in Runway API v1 category" [ref=e74]:
+            - img [ref=e75]
+          - link "Runway API v1" [ref=e77] [cursor=pointer]:
+            - /url: /docs/api-runwayml-v1
+        - listitem [ref=e78]:
+          - button "toggle items in PixVerse API v2 category" [ref=e79]:
+            - img [ref=e80]
+          - link "PixVerse API v2" [ref=e82] [cursor=pointer]:
+            - /url: /docs/api-pixverse-v2
+        - listitem [ref=e83]:
+          - button "toggle items in Mureka API v1 category" [ref=e84]:
+            - img [ref=e85]
+          - link "Mureka API v1" [ref=e87] [cursor=pointer]:
+            - /url: /docs/api-mureka-v1
+        - listitem [ref=e88]:
+          - button "toggle items in TemPolor API v1 category" [ref=e89]:
+            - img [ref=e90]
+          - link "TemPolor API v1" [ref=e92] [cursor=pointer]:
+            - /url: /docs/api-tempolor-v1
+        - listitem [ref=e93]:
+          - button "toggle items in InsightFaceSwap API v1 category" [ref=e94]:
+            - img [ref=e95]
+          - link "InsightFaceSwap API v1" [ref=e97] [cursor=pointer]:
+            - /url: /docs/api-faceswap-v1
+        - listitem [ref=e98]:
+          - button "toggle items in Midjourney API v2 category" [ref=e99]:
+            - img [ref=e100]
+          - link "Midjourney API v2" [ref=e102] [cursor=pointer]:
+            - /url: /docs/api-v2
+        - listitem [ref=e103]:
+          - button "toggle items in Articles category" [ref=e104]:
+            - img [ref=e105]
+          - link "Articles" [ref=e107] [cursor=pointer]:
+            - /url: /docs/articles
+        - listitem [ref=e108]:
+          - button "toggle items in Blog category" [ref=e109]:
+            - img [ref=e110]
+          - link "Blog" [ref=e112] [cursor=pointer]:
+            - /url: /blog
+        - listitem [ref=e113]:
+          - link "Postman" [ref=e114] [cursor=pointer]:
+            - /url: /docs/postman-swagger.html
+        - listitem [ref=e115]:
+          - link "Support" [ref=e116] [cursor=pointer]:
+            - /url: /docs/support.html
+        - listitem [ref=e117]:
+          - link "Changelog" [ref=e118] [cursor=pointer]:
+            - /url: /docs/changelog.html
+        - listitem [ref=e119]:
+          - link "Q&A" [ref=e120] [cursor=pointer]:
+            - /url: /docs/questions-and-answers.html
+        - listitem [ref=e121]:
+          - link "Legal" [ref=e122] [cursor=pointer]:
+            - /url: /docs/legal.html
+  - generic [ref=e123]:
+    - generic [ref=e124]:
+      - search [ref=e125]:
+        - generic [ref=e126]:
+          - textbox "Search Experimental API for AI services" [ref=e127]
+          - img [ref=e129]
+      - navigation "Auxiliary" [ref=e131]:
+        - list
+    - generic [ref=e132]:
+      - navigation "Breadcrumb" [ref=e133]:
+        - list [ref=e134]:
+          - listitem [ref=e135]:
+            - link "Start Here" [ref=e136] [cursor=pointer]:
+              - /url: /docs/start-here
+            - text: »
+          - listitem [ref=e137]: Setup Google Flow
+      - main [ref=e139]:
+        - heading "Google Flow" [level=1] [ref=e140]:
+          - link "Google Flow" [ref=e141] [cursor=pointer]:
+            - /url: "#-google-flow"
+          - img [ref=e142]
+          - text: Google Flow
+        - paragraph [ref=e143]: November 17, 2025 (February 11, 2026)
+        - heading "Table of contents" [level=2] [ref=e144]:
+          - link "Table of contents" [ref=e145] [cursor=pointer]:
+            - /url: "#table-of-contents"
+          - text: Table of contents
+        - list [ref=e146]:
+          - listitem [ref=e147]:
+            - link "Create a dedicated Gmail account" [ref=e148] [cursor=pointer]:
+              - /url: "#create-a-dedicated-gmail-account"
+          - listitem [ref=e149]:
+            - link "Clear all browser cookies" [ref=e150] [cursor=pointer]:
+              - /url: "#clear-all-browser-cookies"
+          - listitem [ref=e151]:
+            - link "Navigate to Google Flow and login with your Gmail account" [ref=e152] [cursor=pointer]:
+              - /url: "#navigate-to-google-flow-and-login-with-your-gmail-account"
+          - listitem [ref=e153]:
+            - link "Navigate to Google Account" [ref=e154] [cursor=pointer]:
+              - /url: "#navigate-to-google-account"
+          - listitem [ref=e155]:
+            - link "Copy https://accounts.google.com/ cookies" [ref=e156] [cursor=pointer]:
+              - /url: "#copy-httpsaccountsgooglecom-cookies"
+              - text: Copy
+              - code [ref=e157]: https://accounts.google.com/
+              - text: cookies
+          - listitem [ref=e158]:
+            - link "Verify and add account" [ref=e159] [cursor=pointer]:
+              - /url: "#verify-and-add-account"
+          - listitem [ref=e160]:
+            - link "Configure Captcha Providers" [ref=e161] [cursor=pointer]:
+              - /url: "#configure-captcha-providers"
+        - paragraph [ref=e162]: Approximately 15 minutes to complete setup steps.
+        - separator [ref=e163]
+        - blockquote [ref=e164]:
+          - paragraph [ref=e165]:
+            - text: This is the setup guide for
+            - link "Google Flow API" [ref=e166] [cursor=pointer]:
+              - /url: ../api-google-flow-v1
+            - text: . An active
+            - link "Google" [ref=e167] [cursor=pointer]:
+              - /url: https://accounts.google.com
+            - text: account and a
+            - link "useapi.net subscription" [ref=e168] [cursor=pointer]:
+              - /url: ../subscription
+            - text: are required for the API to work.
+        - paragraph [ref=e169]:
+          - link "Google Flow" [ref=e170] [cursor=pointer]:
+            - /url: https://labs.google/fx/tools/flow
+          - text: creates cinematic AI clips with
+          - link "Veo" [ref=e171] [cursor=pointer]:
+            - /url: https://aistudio.google.com/models/veo-3
+          - text: ", images with"
+          - link "Imagen 4" [ref=e172] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/imagen-3/
+          - text: and
+          - link "Nano Banana / Gemini 2.5 Flash Image" [ref=e173] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/gemini/flash/
+          - text: .
+        - heading "Create a dedicated Gmail account" [level=3] [ref=e174]:
+          - link "Create a dedicated Gmail account" [ref=e175] [cursor=pointer]:
+            - /url: "#create-a-dedicated-gmail-account"
+          - text: Create a dedicated Gmail account
+        - paragraph [ref=e176]:
+          - text: ⚠️
+          - strong [ref=e177]: Use a dedicated Gmail account for this API - do NOT use your personal Gmail account.
+        - paragraph [ref=e178]: If you already have a dedicated Gmail account for AI/API services, you can use that. Otherwise, create a new one.
+        - paragraph [ref=e179]: "When creating a new account:"
+        - list [ref=e180]:
+          - listitem [ref=e181]:
+            - text: Enable
+            - link "2-Step Verification" [ref=e182] [cursor=pointer]:
+              - /url: https://support.google.com/accounts/answer/185839
+          - listitem [ref=e183]:
+            - text: Use
+            - link "Google Authenticator" [ref=e184] [cursor=pointer]:
+              - /url: https://support.google.com/accounts/answer/1066447
+            - text: for verification codes
+        - heading "Clear all browser cookies" [level=3] [ref=e185]:
+          - link "Clear all browser cookies" [ref=e186] [cursor=pointer]:
+            - /url: "#clear-all-browser-cookies"
+          - text: Clear all browser cookies
+        - paragraph [ref=e187]:
+          - text: ⚠️
+          - strong [ref=e188]: Do NOT use Google Chrome.
+          - text: Google’s integration with Chrome will interfere with cookie extraction.
+        - paragraph [ref=e189]:
+          - strong [ref=e190]: "Use one of these browsers instead:"
+        - list [ref=e191]:
+          - listitem [ref=e192]:
+            - text: •
+            - link "Opera" [ref=e193] [cursor=pointer]:
+              - /url: https://www.opera.com/
+            - text: ← Recommended (has built-in VPN)
+          - listitem [ref=e194]:
+            - text: •
+            - link "Brave" [ref=e195] [cursor=pointer]:
+              - /url: https://brave.com/
+          - listitem [ref=e196]:
+            - text: •
+            - link "Ungoogled Chromium" [ref=e197] [cursor=pointer]:
+              - /url: https://github.com/ungoogled-software/ungoogled-chromium
+        - paragraph [ref=e198]: If using Opera, enable VPN and set region to Americas.
+        - paragraph [ref=e199]:
+          - strong [ref=e200]: You must clear ALL cookies before proceeding
+          - text: to start with a fresh session.
+        - paragraph [ref=e201]:
+          - text: Open browser settings and select
+          - code [ref=e202]: Delete browsing data...
+          - code [ref=e204]: "1"
+        - paragraph [ref=e205]
+        - paragraph [ref=e206]:
+          - text: Select time range to be
+          - code [ref=e207]: All time
+          - code [ref=e209]: "1"
+          - text: and check
+          - code [ref=e210]: Cookies and other site data
+          - code [ref=e212]: "2"
+          - text: ", click"
+          - code [ref=e213]: Delete data
+          - code [ref=e215]: "3"
+        - paragraph [ref=e216]
+        - heading "Navigate to Google Flow and login with your Gmail account" [level=3] [ref=e217]:
+          - link "Navigate to Google Flow and login with your Gmail account" [ref=e218] [cursor=pointer]:
+            - /url: "#navigate-to-google-flow-and-login-with-your-gmail-account"
+          - text: Navigate to Google Flow and login with your Gmail account
+        - paragraph [ref=e219]:
+          - text: Navigate to
+          - link "https://labs.google/fx/tools/flow" [ref=e220] [cursor=pointer]:
+            - /url: https://labs.google/fx/tools/flow
+          - text: and click on
+          - code [ref=e221]: Sign in with Google
+          - text: button
+          - code [ref=e223]: "1"
+        - paragraph [ref=e224]
+        - paragraph [ref=e225]:
+          - text: Enter your Google email created earlier
+          - code [ref=e227]: "1"
+        - paragraph [ref=e228]
+        - paragraph [ref=e229]:
+          - text: Enter 2-Step Verification code
+          - code [ref=e231]: "1"
+        - paragraph [ref=e232]:
+          - text: ⚠️
+          - strong [ref=e233]:
+            - text: You MUST check
+            - code [ref=e234]: Don't ask again on this device
+          - code [ref=e236]: "2"
+          - text: "- skipping this will break the API session."
+        - paragraph [ref=e237]
+        - paragraph [ref=e238]:
+          - text: Once successfully logged in you should see
+          - code [ref=e239]: New project
+          - text: button
+        - paragraph [ref=e240]
+        - heading "Navigate to Google Account" [level=3] [ref=e241]:
+          - link "Navigate to Google Account" [ref=e242] [cursor=pointer]:
+            - /url: "#navigate-to-google-account"
+          - text: Navigate to Google Account
+        - paragraph [ref=e243]:
+          - text: Navigate to
+          - link "https://myaccount.google.com/" [ref=e244] [cursor=pointer]:
+            - /url: https://myaccount.google.com/
+        - paragraph [ref=e245]
+        - heading "Copy https://accounts.google.com/ cookies" [level=3] [ref=e246]:
+          - link "Copy https://accounts.google.com/ cookies" [ref=e247] [cursor=pointer]:
+            - /url: "#copy-httpsaccountsgooglecom-cookies"
+          - text: Copy
+          - code [ref=e248]: https://accounts.google.com/
+          - text: cookies
+        - list [ref=e249]:
+          - listitem [ref=e250]:
+            - strong [ref=e251]: "Open Developer Tools:"
+            - text: right-click anywhere on page → select
+            - code [ref=e252]: Inspect
+            - text: (or press
+            - code [ref=e253]: F12
+            - text: )
+        - paragraph [ref=e254]
+        - list [ref=e255]:
+          - listitem [ref=e256]:
+            - strong [ref=e257]: Go to Application tab
+            - code [ref=e259]: "1"
+          - listitem [ref=e260]:
+            - strong [ref=e261]: Select Cookies
+            - text: →
+            - code [ref=e262]: https://accounts.google.com/
+            - code [ref=e264]: "2"
+          - listitem [ref=e265]:
+            - strong [ref=e266]: Select all cookies
+            - text: in the right panel (
+            - code [ref=e267]: Ctrl+A
+            - text: ) and
+            - strong [ref=e268]: copy
+            - text: (
+            - code [ref=e269]: Ctrl+C
+            - text: )
+            - code [ref=e271]: "3"
+        - paragraph [ref=e272]
+        - paragraph [ref=e273]: "Your copied cookies will look similar to this (values redacted):"
+        - paragraph [ref=e274]
+        - heading "Verify and add account" [level=3] [ref=e275]:
+          - link "Verify and add account" [ref=e276] [cursor=pointer]:
+            - /url: "#verify-and-add-account"
+          - text: Verify and add account
+        - paragraph [ref=e277]: Use the form below to verify your cookies and add your Google Flow account.
+        - paragraph [ref=e278]:
+          - text: Select
+          - strong [ref=e279]: Add Account
+          - text: to complete setup, or
+          - strong [ref=e280]: Verify
+          - text: to test your cookies first. You should receive response
+          - code [ref=e281]: "200"
+          - text: if successful. You can also use
+          - link "POST /accounts" [ref=e282] [cursor=pointer]:
+            - /url: ../api-google-flow-v1/post-google-flow-accounts
+          - text: directly.
+        - paragraph [ref=e283]:
+          - text: ⚠️
+          - strong [ref=e284]: "CRITICAL — Do this immediately after adding your account:"
+        - list [ref=e285]:
+          - listitem [ref=e286]: Open a new empty tab
+          - listitem [ref=e287]: Close all other tabs
+          - listitem [ref=e288]:
+            - link "Clear all browser cookies" [ref=e289] [cursor=pointer]:
+              - /url: "#clear-all-browser-cookies"
+          - listitem [ref=e290]:
+            - strong [ref=e291]: Do NOT restart the browser
+        - paragraph [ref=e292]:
+          - text: ⚠️
+          - strong [ref=e293]: The API now manages this Google account session.
+        - paragraph [ref=e294]: Do NOT access this Google account via AI Studio or Google Flow directly (browser or any other means). Using the same account through both the API and direct access will break the session and require you to redo this entire setup.
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]:
+                - text: API Token
+                - generic [ref=e300]:
+                  - text: (see
+                  - link "Setup useapi.net" [ref=e301] [cursor=pointer]:
+                    - /url: ./setup-useapi
+                  - text: )
+              - textbox "API Token (see Setup useapi.net)" [ref=e302]:
+                - /placeholder: user:12345-abc…xyz
+            - generic [ref=e303]:
+              - text: cookies
+              - textbox "cookies" [ref=e304]
+            - generic [ref=e305]:
+              - text: action
+              - combobox "action" [ref=e306]:
+                - option "Verify — test cookies only" [selected]
+                - option "Add Account — required to complete setup"
+          - button "Go" [ref=e307] [cursor=pointer]
+        - heading "Configure Captcha Providers" [level=3] [ref=e308]:
+          - link "Configure Captcha Providers" [ref=e309] [cursor=pointer]:
+            - /url: "#configure-captcha-providers"
+          - text: Configure Captcha Providers
+        - paragraph [ref=e310]: Image and video generation requires reCAPTCHA v3 Enterprise solving.
+        - paragraph [ref=e311]:
+          - strong [ref=e312]: Users receive 100 free captcha credits
+          - text: when adding their first Google Flow account. These credits are used automatically, so you can start generating images and videos right away without configuring any provider. Check your remaining credits via
+          - link "GET /accounts/captcha-providers" [ref=e313] [cursor=pointer]:
+            - /url: ../api-google-flow-v1/get-google-flow-accounts-captcha-providers
+          - text: .
+        - paragraph [ref=e314]:
+          - text: After free credits are exhausted, you must configure at least one provider’s API key before using
+          - link "POST /images" [ref=e315] [cursor=pointer]:
+            - /url: ../api-google-flow-v1/post-google-flow-images
+          - text: ","
+          - link "POST /images/upscale" [ref=e316] [cursor=pointer]:
+            - /url: ../api-google-flow-v1/post-google-flow-images-upscale
+          - text: ", or"
+          - link "POST /videos" [ref=e317] [cursor=pointer]:
+            - /url: ../api-google-flow-v1/post-google-flow-videos
+          - text: .
+        - paragraph [ref=e318]:
+          - strong [ref=e319]: "Supported Providers:"
+        - table [ref=e321]:
+          - rowgroup [ref=e322]:
+            - row "Provider Cost per 1K Avg Solve Time Website" [ref=e323]:
+              - columnheader "Provider" [ref=e324]
+              - columnheader "Cost per 1K" [ref=e325]
+              - columnheader "Avg Solve Time" [ref=e326]
+              - columnheader "Website" [ref=e327]
+          - rowgroup [ref=e328]:
+            - row "AntiCaptcha ~$2.00 ~8-12s anti-captcha.com" [ref=e329]:
+              - cell "AntiCaptcha" [ref=e330]:
+                - strong [ref=e331]: AntiCaptcha
+              - cell "~$2.00" [ref=e332]
+              - cell "~8-12s" [ref=e333]
+              - cell "anti-captcha.com" [ref=e334]:
+                - link "anti-captcha.com" [ref=e335] [cursor=pointer]:
+                  - /url: https://anti-captcha.com/
+            - row "EzCaptcha ~$2.50 ~8-12s ez-captcha.com" [ref=e336]:
+              - cell "EzCaptcha" [ref=e337]:
+                - strong [ref=e338]: EzCaptcha
+              - cell "~$2.50" [ref=e339]
+              - cell "~8-12s" [ref=e340]
+              - cell "ez-captcha.com" [ref=e341]:
+                - link "ez-captcha.com" [ref=e342] [cursor=pointer]:
+                  - /url: https://www.ez-captcha.com/
+            - row "CapSolver ~$3.00 ~8-12s capsolver.com — use promo code useapi for 8% discount" [ref=e343]:
+              - cell "CapSolver" [ref=e344]:
+                - strong [ref=e345]: CapSolver
+              - cell "~$3.00" [ref=e346]
+              - cell "~8-12s" [ref=e347]
+              - cell "capsolver.com — use promo code useapi for 8% discount" [ref=e348]:
+                - link "capsolver.com" [ref=e349] [cursor=pointer]:
+                  - /url: https://www.capsolver.com/
+                - text: — use promo code
+                - code [ref=e350]: useapi
+                - text: for 8% discount
+            - row "YesCaptcha varies ~8-12s yescaptcha.com" [ref=e351]:
+              - cell "YesCaptcha" [ref=e352]:
+                - strong [ref=e353]: YesCaptcha
+              - cell "varies" [ref=e354]
+              - cell "~8-12s" [ref=e355]
+              - cell "yescaptcha.com" [ref=e356]:
+                - link "yescaptcha.com" [ref=e357] [cursor=pointer]:
+                  - /url: https://yescaptcha.com/
+            - row "SolveCaptcha ~$0.80 ~30-60s solvecaptcha.com" [ref=e358]:
+              - cell "SolveCaptcha" [ref=e359]:
+                - strong [ref=e360]: SolveCaptcha
+              - cell "~$0.80" [ref=e361]
+              - cell "~30-60s" [ref=e362]
+              - cell "solvecaptcha.com" [ref=e363]:
+                - link "solvecaptcha.com" [ref=e364] [cursor=pointer]:
+                  - /url: https://solvecaptcha.com/
+            - row "2Captcha ~$2.99 ~30-60s 2captcha.com" [ref=e365]:
+              - cell "2Captcha" [ref=e366]:
+                - strong [ref=e367]: 2Captcha
+              - cell "~$2.99" [ref=e368]
+              - cell "~30-60s" [ref=e369]
+              - cell "2captcha.com" [ref=e370]:
+                - link "2captcha.com" [ref=e371] [cursor=pointer]:
+                  - /url: https://2captcha.com/
+        - paragraph [ref=e372]:
+          - strong [ref=e373]: "Setup Steps:"
+        - list [ref=e374]:
+          - listitem [ref=e375]: Create an account with one or more providers above
+          - listitem [ref=e376]: Purchase credits and obtain your API key from the provider’s dashboard
+          - listitem [ref=e377]:
+            - text: Configure your API key(s) using
+            - link "POST /accounts/captcha-providers" [ref=e378] [cursor=pointer]:
+              - /url: ../api-google-flow-v1/post-google-flow-accounts-captcha-providers
+        - paragraph [ref=e379]:
+          - strong [ref=e380]: "Tips:"
+        - list [ref=e381]:
+          - listitem [ref=e382]:
+            - text: • Use
+            - link "GET /accounts/captcha-stats?anonymized=true" [ref=e383] [cursor=pointer]:
+              - /url: ../api-google-flow-v1/get-google-flow-accounts-captcha-stats
+            - text: to compare success rates across providers and choose the best one for your needs. Note that provider performance may vary over time.
+          - listitem [ref=e384]: • Configure multiple providers for redundancy (if one fails or returns rejected tokens, the API automatically retries with the next provider)
+          - listitem [ref=e385]: • Each image/video generation attempt requires one captcha solve (~$0.80-$3.00 per 1,000 generations)

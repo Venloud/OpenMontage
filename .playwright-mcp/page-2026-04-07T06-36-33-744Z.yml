@@ -1,0 +1,810 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - link "Experimental API for AI services" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Experimental API for AI services" [ref=e6]: Experimental API
+    - navigation "Main" [ref=e7]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e11]:
+          - link "Model Matrix" [ref=e12] [cursor=pointer]:
+            - /url: /model-matrix
+        - listitem [ref=e13]:
+          - link "Subscription" [ref=e14] [cursor=pointer]:
+            - /url: /docs/subscription.html
+        - listitem [ref=e15]:
+          - button "toggle items in Start Here category" [ref=e16]:
+            - img [ref=e17]
+          - link "Start Here" [ref=e19] [cursor=pointer]:
+            - /url: /docs/start-here
+        - listitem [ref=e20]:
+          - button "toggle items in Account Management category" [ref=e21]:
+            - img [ref=e22]
+          - link "Account Management" [ref=e24] [cursor=pointer]:
+            - /url: /docs/account-management
+        - listitem [ref=e25]:
+          - button "toggle items in Midjourney API v3 category" [ref=e26]:
+            - img [ref=e27]
+          - link "Midjourney API v3" [ref=e29] [cursor=pointer]:
+            - /url: /docs/api-midjourney-v3
+        - listitem [ref=e30]:
+          - button "toggle items in Google Flow API v1 category" [pressed] [ref=e31]:
+            - img [ref=e32]
+          - link "Google Flow API v1" [ref=e34] [cursor=pointer]:
+            - /url: /docs/api-google-flow-v1
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - link "POST accounts" [ref=e37] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-accounts.html
+                - code [ref=e38]: POST
+                - text: accounts
+            - listitem [ref=e39]:
+              - link "GET accounts" [ref=e40] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts.html
+                - code [ref=e41]: GET
+                - text: accounts
+            - listitem [ref=e42]:
+              - link "GET accounts/email" [ref=e43] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-email.html
+                - code [ref=e44]: GET
+                - text: accounts/
+                - code [ref=e45]: email
+            - listitem [ref=e46]:
+              - link "DELETE accounts/email" [ref=e47] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/delete-google-flow-accounts-email.html
+                - code [ref=e48]: DELETE
+                - text: accounts/
+                - code [ref=e49]: email
+            - listitem [ref=e50]:
+              - link "POST …/captcha-providers" [ref=e51] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-accounts-captcha-providers.html
+                - code [ref=e52]: POST
+                - text: …/captcha-providers
+            - listitem [ref=e53]:
+              - link "GET …/captcha-providers" [ref=e54] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-providers.html
+                - code [ref=e55]: GET
+                - text: …/captcha-providers
+            - listitem [ref=e56]:
+              - link "GET …/captcha-stats" [ref=e57] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-accounts-captcha-stats.html
+                - code [ref=e58]: GET
+                - text: …/captcha-stats
+            - listitem [ref=e59]:
+              - link "POST assets/email" [ref=e60] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-assets-email.html
+                - code [ref=e61]: POST
+                - text: assets/
+                - code [ref=e62]: email
+            - listitem [ref=e63]:
+              - link "POST images" [ref=e64] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-images.html
+                - code [ref=e65]: POST
+                - text: images
+            - listitem [ref=e66]:
+              - link "POST images/upscale" [ref=e67] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-images-upscale.html
+                - code [ref=e68]: POST
+                - text: images/upscale
+            - listitem [ref=e69]:
+              - link "POST videos" [ref=e70] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos.html
+                - code [ref=e71]: POST
+                - text: videos
+            - listitem [ref=e72]:
+              - link "POST videos/upscale" [ref=e73] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-upscale.html
+                - code [ref=e74]: POST
+                - text: videos/upscale
+            - listitem [ref=e75]:
+              - link "POST videos/gif" [ref=e76] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-gif.html
+                - code [ref=e77]: POST
+                - text: videos/gif
+            - listitem [ref=e78]:
+              - link "POST videos/extend" [ref=e79] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-extend.html
+                - code [ref=e80]: POST
+                - text: videos/extend
+            - listitem [ref=e81]:
+              - link "POST videos/concatenate" [ref=e82] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/post-google-flow-videos-concatenate.html
+                - code [ref=e83]: POST
+                - text: videos/concatenate
+            - listitem [ref=e84]:
+              - link "GET jobs/jobid" [ref=e85] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-jobs-jobid.html
+                - code [ref=e86]: GET
+                - text: jobs/
+                - code [ref=e87]: jobid
+            - listitem [ref=e88]:
+              - link "GET jobs" [ref=e89] [cursor=pointer]:
+                - /url: /docs/api-google-flow-v1/get-google-flow-jobs.html
+                - code [ref=e90]: GET
+                - text: jobs
+        - listitem [ref=e91]:
+          - button "toggle items in Dreamina API v1 category" [ref=e92]:
+            - img [ref=e93]
+          - link "Dreamina API v1" [ref=e95] [cursor=pointer]:
+            - /url: /docs/api-dreamina-v1
+        - listitem [ref=e96]:
+          - button "toggle items in MiniMax API v1 category" [ref=e97]:
+            - img [ref=e98]
+          - link "MiniMax API v1" [ref=e100] [cursor=pointer]:
+            - /url: /docs/api-minimax-v1
+        - listitem [ref=e101]:
+          - button "toggle items in Kling API v1 category" [ref=e102]:
+            - img [ref=e103]
+          - link "Kling API v1" [ref=e105] [cursor=pointer]:
+            - /url: /docs/api-kling-v1
+        - listitem [ref=e106]:
+          - button "toggle items in Runway API v1 category" [ref=e107]:
+            - img [ref=e108]
+          - link "Runway API v1" [ref=e110] [cursor=pointer]:
+            - /url: /docs/api-runwayml-v1
+        - listitem [ref=e111]:
+          - button "toggle items in PixVerse API v2 category" [ref=e112]:
+            - img [ref=e113]
+          - link "PixVerse API v2" [ref=e115] [cursor=pointer]:
+            - /url: /docs/api-pixverse-v2
+        - listitem [ref=e116]:
+          - button "toggle items in Mureka API v1 category" [ref=e117]:
+            - img [ref=e118]
+          - link "Mureka API v1" [ref=e120] [cursor=pointer]:
+            - /url: /docs/api-mureka-v1
+        - listitem [ref=e121]:
+          - button "toggle items in TemPolor API v1 category" [ref=e122]:
+            - img [ref=e123]
+          - link "TemPolor API v1" [ref=e125] [cursor=pointer]:
+            - /url: /docs/api-tempolor-v1
+        - listitem [ref=e126]:
+          - button "toggle items in InsightFaceSwap API v1 category" [ref=e127]:
+            - img [ref=e128]
+          - link "InsightFaceSwap API v1" [ref=e130] [cursor=pointer]:
+            - /url: /docs/api-faceswap-v1
+        - listitem [ref=e131]:
+          - button "toggle items in Midjourney API v2 category" [ref=e132]:
+            - img [ref=e133]
+          - link "Midjourney API v2" [ref=e135] [cursor=pointer]:
+            - /url: /docs/api-v2
+        - listitem [ref=e136]:
+          - button "toggle items in Articles category" [ref=e137]:
+            - img [ref=e138]
+          - link "Articles" [ref=e140] [cursor=pointer]:
+            - /url: /docs/articles
+        - listitem [ref=e141]:
+          - button "toggle items in Blog category" [ref=e142]:
+            - img [ref=e143]
+          - link "Blog" [ref=e145] [cursor=pointer]:
+            - /url: /blog
+        - listitem [ref=e146]:
+          - link "Postman" [ref=e147] [cursor=pointer]:
+            - /url: /docs/postman-swagger.html
+        - listitem [ref=e148]:
+          - link "Support" [ref=e149] [cursor=pointer]:
+            - /url: /docs/support.html
+        - listitem [ref=e150]:
+          - link "Changelog" [ref=e151] [cursor=pointer]:
+            - /url: /docs/changelog.html
+        - listitem [ref=e152]:
+          - link "Q&A" [ref=e153] [cursor=pointer]:
+            - /url: /docs/questions-and-answers.html
+        - listitem [ref=e154]:
+          - link "Legal" [ref=e155] [cursor=pointer]:
+            - /url: /docs/legal.html
+  - generic [ref=e156]:
+    - generic [ref=e157]:
+      - search [ref=e158]:
+        - generic [ref=e159]:
+          - textbox "Search Experimental API for AI services" [ref=e160]
+          - img [ref=e162]
+      - navigation "Auxiliary" [ref=e164]:
+        - list
+    - generic [ref=e165]:
+      - navigation "Breadcrumb" [ref=e166]:
+        - list [ref=e167]:
+          - listitem [ref=e168]:
+            - link "Google Flow API v1" [ref=e169] [cursor=pointer]:
+              - /url: /docs/api-google-flow-v1
+            - text: »
+          - listitem [ref=e170]:
+            - generic [ref=e171]:
+              - code [ref=e172]: POST
+              - text: videos
+      - main [ref=e174]:
+        - heading "Generate Videos" [level=2] [ref=e175]:
+          - link "Generate Videos" [ref=e176] [cursor=pointer]:
+            - /url: "#generate-videos"
+          - text: Generate Videos
+        - paragraph [ref=e177]: November 17, 2025 (April 3, 2026)
+        - heading "Table of contents" [level=2] [ref=e178]:
+          - link "Table of contents" [ref=e179] [cursor=pointer]:
+            - /url: "#table-of-contents"
+          - text: Table of contents
+        - list [ref=e180]:
+          - listitem [ref=e181]:
+            - link "Model Capabilities" [ref=e182] [cursor=pointer]:
+              - /url: "#model-capabilities"
+          - listitem [ref=e183]:
+            - link "Request Headers" [ref=e184] [cursor=pointer]:
+              - /url: "#request-headers"
+          - listitem [ref=e185]:
+            - link "Request Body" [ref=e186] [cursor=pointer]:
+              - /url: "#request-body"
+          - listitem [ref=e187]:
+            - link "Responses" [ref=e188] [cursor=pointer]:
+              - /url: "#responses"
+          - listitem [ref=e189]:
+            - link "Model" [ref=e190] [cursor=pointer]:
+              - /url: "#model"
+          - listitem [ref=e191]:
+            - link "Examples" [ref=e192] [cursor=pointer]:
+              - /url: "#examples"
+          - listitem [ref=e193]:
+            - link "Try It" [ref=e194] [cursor=pointer]:
+              - /url: "#try-it"
+        - separator [ref=e195]
+        - paragraph [ref=e196]:
+          - text: Generate videos using Google Flow AI models (
+          - link "Veo 3.1 Quality" [ref=e197] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/veo/
+          - text: ","
+          - link "Veo 3.1 Fast" [ref=e198] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/veo/
+          - text: ","
+          - link "Veo 3.1 Fast Relaxed" [ref=e199] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/veo/
+          - text: ","
+          - link "Veo 3.1 Lite" [ref=e200] [cursor=pointer]:
+            - /url: https://deepmind.google/technologies/veo/
+          - text: ) from text prompts with optional start/end frames, reference images, or voice narration. Videos are returned as signed URLs ready for download.
+        - paragraph [ref=e201]:
+          - text: This endpoint features dynamic concurrency management. If you receive a
+          - code [ref=e202]: 429 Too Many Requests
+          - text: or
+          - code [ref=e203]: 503 Service Unavailable
+          - text: response, simply wait 5-10 seconds before retrying—both status codes indicate temporary capacity constraints and are safe to retry. If you consistently receive 429 errors, you may need to execute a cool-off period of at least a few hours before trying again. Video generation typically completes within 60-180 seconds depending on the model and mode. The endpoint automatically polls for completion and returns the final result.
+        - paragraph [ref=e204]:
+          - text: Use a
+          - link "Google AI Ultra" [ref=e205] [cursor=pointer]:
+            - /url: https://one.google.com/ai
+          - text: $125/m special subscription plan for
+          - code [ref=e206]: Veo 3.1 Fast
+          - text: $5cents/video and
+          - code [ref=e207]: Veo 3.1 Quality
+          - text: $50cents/video generations.
+          - code [ref=e208]: Veo 3.1 Fast Relaxed
+          - text: is available for Ultra subscribers with no credit cost but lower generation priority.
+        - heading "Model Capabilities" [level=3] [ref=e209]:
+          - link "Model Capabilities" [ref=e210] [cursor=pointer]:
+            - /url: "#model-capabilities"
+          - text: Model Capabilities
+        - table [ref=e212]:
+          - rowgroup [ref=e213]:
+            - row "Parameter Veo 3.1 Quality veo-3.1-quality Veo 3.1 Fast veo-3.1-fast (default) Veo 3.1 Fast Relaxed veo-3.1-fast-relaxed Veo 3.1 Lite veo-3.1-lite" [ref=e214]:
+              - columnheader "Parameter" [ref=e215]
+              - columnheader "Veo 3.1 Quality veo-3.1-quality" [ref=e216]:
+                - link "Veo 3.1 Quality" [ref=e217] [cursor=pointer]:
+                  - /url: https://deepmind.google/technologies/veo/
+                - code [ref=e218]: veo-3.1-quality
+              - columnheader "Veo 3.1 Fast veo-3.1-fast (default)" [ref=e219]:
+                - link "Veo 3.1 Fast" [ref=e220] [cursor=pointer]:
+                  - /url: https://deepmind.google/technologies/veo/
+                - code [ref=e221]: veo-3.1-fast
+                - text: (default)
+              - columnheader "Veo 3.1 Fast Relaxed veo-3.1-fast-relaxed" [ref=e222]:
+                - link "Veo 3.1 Fast Relaxed" [ref=e223] [cursor=pointer]:
+                  - /url: https://deepmind.google/technologies/veo/
+                - code [ref=e224]: veo-3.1-fast-relaxed
+              - columnheader "Veo 3.1 Lite veo-3.1-lite" [ref=e225]:
+                - link "Veo 3.1 Lite" [ref=e226] [cursor=pointer]:
+                  - /url: https://deepmind.google/technologies/veo/
+                - code [ref=e227]: veo-3.1-lite
+          - rowgroup [ref=e228]:
+            - row "T2V (text-to-video) ✓ ✓ ✓ ✓" [ref=e229]:
+              - cell "T2V (text-to-video)" [ref=e230]
+              - cell "✓" [ref=e231]
+              - cell "✓" [ref=e232]
+              - cell "✓" [ref=e233]
+              - cell "✓" [ref=e234]
+            - row "I2V (start frame) ✓ ✓ ✓ ✓" [ref=e235]:
+              - cell "I2V (start frame)" [ref=e236]
+              - cell "✓" [ref=e237]
+              - cell "✓" [ref=e238]
+              - cell "✓" [ref=e239]
+              - cell "✓" [ref=e240]
+            - row "I2V-FL (start + end) ✓ ✓ ✓ ✓" [ref=e241]:
+              - cell "I2V-FL (start + end)" [ref=e242]
+              - cell "✓" [ref=e243]
+              - cell "✓" [ref=e244]
+              - cell "✓" [ref=e245]
+              - cell "✓" [ref=e246]
+            - row "R2V (reference images 1-3) ✗ ✓ ✓ ✗" [ref=e247]:
+              - cell "R2V (reference images 1-3)" [ref=e248]
+              - cell "✗" [ref=e249]
+              - cell "✓" [ref=e250]
+              - cell "✓" [ref=e251]
+              - cell "✗" [ref=e252]
+            - row "Voice narration ✗ ✓ ✓ ✗" [ref=e253]:
+              - cell "Voice narration" [ref=e254]
+              - cell "✗" [ref=e255]
+              - cell "✓" [ref=e256]
+              - cell "✓" [ref=e257]
+              - cell "✗" [ref=e258]
+            - row "Aspect ratios all all all all" [ref=e259]:
+              - cell "Aspect ratios" [ref=e260]
+              - cell "all" [ref=e261]
+              - cell "all" [ref=e262]
+              - cell "all" [ref=e263]
+              - cell "all" [ref=e264]
+            - row "count ✓ (1-4) ✓ (1-4) ✓ (1-4) ✓ (1-4)" [ref=e265]:
+              - cell "count" [ref=e266]:
+                - code [ref=e267]: count
+              - cell "✓ (1-4)" [ref=e268]
+              - cell "✓ (1-4)" [ref=e269]
+              - cell "✓ (1-4)" [ref=e270]
+              - cell "✓ (1-4)" [ref=e271]
+            - row "seed ✓ ✓ ✓ ✓" [ref=e272]:
+              - cell "seed" [ref=e273]:
+                - code [ref=e274]: seed
+              - cell "✓" [ref=e275]
+              - cell "✓" [ref=e276]
+              - cell "✓" [ref=e277]
+              - cell "✓" [ref=e278]
+            - row "Subscription all all Ultra only all" [ref=e279]:
+              - cell "Subscription" [ref=e280]
+              - cell "all" [ref=e281]
+              - cell "all" [ref=e282]
+              - cell "Ultra only" [ref=e283]
+              - cell "all" [ref=e284]
+            - row "Cost 100 credits / $0.50 10 credits / $0.05 free (lower priority) 5 credits / $0.025" [ref=e285]:
+              - cell "Cost" [ref=e286]
+              - cell "100 credits / $0.50" [ref=e287]
+              - cell "10 credits / $0.05" [ref=e288]
+              - cell "free (lower priority)" [ref=e289]
+              - cell "5 credits / $0.025" [ref=e290]
+        - blockquote [ref=e291]:
+          - text: POST
+          - paragraph [ref=e292]:
+            - strong [ref=e293]: https://api.useapi.net/v1/google-flow/videos
+        - heading "Request Headers" [level=3] [ref=e294]:
+          - link "Request Headers" [ref=e295] [cursor=pointer]:
+            - /url: "#request-headers"
+          - text: Request Headers
+        - generic [ref=e296]:
+          - code [ref=e299]: "Authorization: Bearer {API token} Content-Type: application/json # Alternatively you can use multipart/form-data # Content-Type: multipart/form-data"
+          - button "Copy code to clipboard" [ref=e300]:
+            - img [ref=e301]
+        - list [ref=e303]:
+          - listitem [ref=e304]:
+            - text: •
+            - code [ref=e305]: API token
+            - text: is
+            - strong [ref=e306]: required
+            - text: ", see"
+            - link "Setup useapi.net" [ref=e307] [cursor=pointer]:
+              - /url: ../start-here/setup-useapi
+            - text: for details.
+        - heading "Request Body" [level=3] [ref=e308]:
+          - link "Request Body" [ref=e309] [cursor=pointer]:
+            - /url: "#request-body"
+          - text: Request Body
+        - generic [ref=e310]:
+          - code [ref=e313]: "{ \"prompt\": \"A serene mountain landscape at sunset with camera slowly panning right\", \"model\": \"veo-3.1-fast\", \"aspectRatio\": \"landscape\", \"count\": 2, \"seed\": 123456 }"
+          - button "Copy code to clipboard" [ref=e314]:
+            - img [ref=e315]
+        - list [ref=e317]:
+          - listitem [ref=e318]:
+            - text: •
+            - paragraph [ref=e319]:
+              - code [ref=e320]: email
+              - text: is optional. The email address of the Google Flow account to use.
+            - paragraph [ref=e321]:
+              - text: When only one
+              - link "account" [ref=e322] [cursor=pointer]:
+                - /url: ./get-google-flow-accounts
+              - text: is configured, the API will automatically use that account.
+            - paragraph [ref=e323]:
+              - text: With multiple
+              - link "accounts" [ref=e324] [cursor=pointer]:
+                - /url: ./get-google-flow-accounts
+              - text: configured, omitting the email parameter triggers automatic
+              - link "load balancing" [ref=e325] [cursor=pointer]:
+                - /url: ./get-google-flow-jobs#load-balancing-algorithm
+              - text: based on
+              - strong [ref=e326]: video generation
+              - text: job statistics to select the healthiest account.
+            - paragraph [ref=e327]:
+              - text: If reference images (
+              - code [ref=e328]: startImage
+              - text: ","
+              - code [ref=e329]: endImage
+              - text: ", or"
+              - code [ref=e330]: referenceImage_1
+              - text: to
+              - code [ref=e331]: _3
+              - text: ) are provided, the
+              - code [ref=e332]: email
+              - text: parameter can be omitted—the API will automatically use the same account where the images were uploaded.
+          - listitem [ref=e333]:
+            - text: •
+            - code [ref=e334]: prompt
+            - text: is
+            - strong [ref=e335]: required
+            - text: ", text description for video generation."
+          - listitem [ref=e336]:
+            - text: •
+            - code [ref=e337]: model
+            - text: "is optional, the AI model to use for video generation (default:"
+            - code [ref=e338]: veo-3.1-fast
+            - text: ).
+            - text: "Supported values:"
+            - code [ref=e339]: veo-3.1-quality
+            - text: ","
+            - code [ref=e340]: veo-3.1-fast
+            - text: ","
+            - code [ref=e341]: veo-3.1-fast-relaxed
+            - text: (Ultra only, no credits, lower priority),
+            - code [ref=e342]: veo-3.1-lite
+            - text: (faster, lower cost).
+          - listitem [ref=e343]:
+            - text: •
+            - code [ref=e344]: aspectRatio
+            - text: "is optional, output video aspect ratio (default:"
+            - code [ref=e345]: landscape
+            - text: ).
+            - text: "Supported values:"
+            - code [ref=e346]: landscape
+            - text: and
+            - code [ref=e347]: portrait
+            - text: .
+          - listitem [ref=e348]:
+            - text: •
+            - code [ref=e349]: count
+            - text: "is optional, number of video variations to generate (1-4, default:"
+            - code [ref=e350]: "1"
+            - text: ).
+          - listitem [ref=e351]:
+            - text: •
+            - code [ref=e352]: seed
+            - text: is optional, random seed for reproducible results (integer ≥ 0).
+          - listitem [ref=e353]:
+            - text: •
+            - code [ref=e354]: startImage
+            - text: is optional, mediaGenerationId from
+            - link "POST /assets/email" [ref=e355] [cursor=pointer]:
+              - /url: ./post-google-flow-assets-email
+              - text: POST /assets/
+              - code [ref=e356]: email
+            - text: for I2V mode (video starts with this frame).
+          - listitem [ref=e357]:
+            - text: •
+            - code [ref=e358]: endImage
+            - text: is optional, mediaGenerationId from
+            - link "POST /assets/email" [ref=e359] [cursor=pointer]:
+              - /url: ./post-google-flow-assets-email
+              - text: POST /assets/
+              - code [ref=e360]: email
+            - text: for I2V-FL mode (video ends with this frame, requires
+            - code [ref=e361]: startImage
+            - text: ).
+          - listitem [ref=e362]:
+            - text: •
+            - code [ref=e363]: referenceImage_1
+            - text: to
+            - code [ref=e364]: referenceImage_3
+            - text: are optional, mediaGenerationId from
+            - link "POST /assets/email" [ref=e365] [cursor=pointer]:
+              - /url: ./post-google-flow-assets-email
+              - text: POST /assets/
+              - code [ref=e366]: email
+            - text: for R2V mode (1-3 reference images for style/composition). Only works with
+            - code [ref=e367]: veo-3.1-fast
+            - text: and
+            - code [ref=e368]: veo-3.1-fast-relaxed
+            - text: models.
+          - listitem [ref=e369]:
+            - text: •
+            - code [ref=e370]: voice
+            - text: is optional, voice name for AI narration in the generated video (case-insensitive). Requires at least one
+            - code [ref=e371]: referenceImage
+            - text: (R2V mode). Preview voice samples using the dropdown in Try It below.
+            - generic [ref=e372]:
+              - code [ref=e375]: "[\"achird\",\"achernar\",\"algieba\",\"algenib\",\"alnilam\",\"aoede\",\"autonoe\",\"callirrhoe\",\"charon\",\"despina\",\"enceladus\",\"erinome\",\"fenrir\",\"gacrux\",\"iapetus\",\"kore\",\"laomedeia\",\"leda\",\"orus\",\"puck\",\"pulcherrima\",\"rasalgethi\",\"sadachbia\",\"sadaltager\",\"schedar\",\"sulafat\",\"umbriel\",\"vindemiatrix\",\"zephyr\",\"zubenelgenubi\"]"
+              - button "Copy code to clipboard" [ref=e376]:
+                - img [ref=e377]
+            - paragraph [ref=e379]:
+              - text: "Voice samples:"
+              - code [ref=e380]: "https://www.gstatic.com/aistudio/voices/samples/{Name}.wav"
+          - listitem [ref=e381]:
+            - text: •
+            - code [ref=e382]: async
+            - text: "is optional, enables fire-and-forget mode (default:"
+            - code [ref=e383]: "false"
+            - text: ). When
+            - code [ref=e384]: "true"
+            - text: ", returns immediately with"
+            - code [ref=e385]: 201 Created
+            - text: and job metadata. Poll
+            - link "GET /jobs/jobId" [ref=e386] [cursor=pointer]:
+              - /url: ./get-google-flow-jobs-jobid
+              - text: GET /jobs/
+              - code [ref=e387]: jobId
+            - text: for completion status. Useful for avoiding long request timeouts since video generation takes 60-180 seconds.
+          - listitem [ref=e388]:
+            - text: •
+            - code [ref=e389]: replyUrl
+            - text: is optional, webhook URL for job status callbacks. Receives POST requests with job status updates (
+            - code [ref=e390]: created
+            - text: ","
+            - code [ref=e391]: started
+            - text: ","
+            - code [ref=e392]: completed
+            - text: ","
+            - code [ref=e393]: failed
+            - text: ). The JSON payload shape matches
+            - link "GET /jobs/jobId" [ref=e394] [cursor=pointer]:
+              - /url: ./get-google-flow-jobs-jobid
+              - text: GET /jobs/
+              - code [ref=e395]: jobId
+            - text: response.
+          - listitem [ref=e396]:
+            - text: •
+            - code [ref=e397]: replyRef
+            - text: is optional, custom reference string passed back in webhook callbacks. Useful for tracking jobs on your end.
+          - listitem [ref=e398]:
+            - text: •
+            - code [ref=e399]: captchaToken
+            - text: ","
+            - code [ref=e400]: captchaRetry
+            - text: ","
+            - code [ref=e401]: captchaOrder
+            - text: are optional, mutually exclusive captcha parameters. See
+            - link "Captcha Parameters" [ref=e402] [cursor=pointer]:
+              - /url: ./post-google-flow-accounts-captcha-providers#captcha-parameters
+            - text: for details.
+        - paragraph [ref=e403]:
+          - strong [ref=e404]: "Important:"
+        - list [ref=e405]:
+          - listitem [ref=e406]: • Cannot use both reference images (R2V) and start/end frames (I2V) in the same request
+          - listitem [ref=e407]: • End frame only (without start frame) is not supported
+          - listitem [ref=e408]:
+            - text: • R2V mode works with
+            - code [ref=e409]: veo-3.1-fast
+            - text: and
+            - code [ref=e410]: veo-3.1-fast-relaxed
+            - text: models only
+          - listitem [ref=e411]:
+            - text: • Voice narration requires at least one
+            - code [ref=e412]: referenceImage
+            - text: (R2V mode)
+        - heading "Responses" [level=3] [ref=e413]:
+          - link "Responses" [ref=e414] [cursor=pointer]:
+            - /url: "#responses"
+          - text: Responses
+        - list [ref=e415]:
+          - listitem [ref=e416]:
+            - link "200" [ref=e417] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e418]:
+            - link "201" [ref=e419] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e420]:
+            - link "400" [ref=e421] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e422]:
+            - link "401" [ref=e423] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e424]:
+            - link "402" [ref=e425] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e426]:
+            - link "403" [ref=e427] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e428]:
+            - link "404" [ref=e429] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e430]:
+            - link "408" [ref=e431] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e432]:
+            - link "429" [ref=e433] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e434]:
+            - link "503" [ref=e435] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e436]:
+            - link "596" [ref=e437] [cursor=pointer]:
+              - /url: "#"
+        - list [ref=e438]:
+          - listitem [ref=e439]:
+            - paragraph [ref=e440]:
+              - link "200 OK" [ref=e441] [cursor=pointer]:
+                - /url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
+            - paragraph [ref=e442]: Videos generated successfully. Returns job ID, media array with video data, and operations array (deprecated) with video URLs and metadata.
+            - generic [ref=e443]:
+              - code [ref=e446]: "{ \"jobId\": \"j1731859234567v-u12345-email:jo***@gmail.com-bot:google-flow\", \"media\": [ { \"name\": \"CAUSJ...redacted...OWQ5ZA\", \"projectId\": \"...redacted...\", \"mediaMetadata\": { \"mediaStatus\": { \"mediaGenerationStatus\": \"MEDIA_GENERATION_STATUS_SUCCESSFUL\" }, \"visibility\": \"PRIVATE\" }, \"video\": { \"generatedVideo\": { \"seed\": 123456, \"model\": \"veo_3_1_t2v\", \"aspectRatio\": \"VIDEO_ASPECT_RATIO_LANDSCAPE\", \"isLooped\": false, \"prompt\": \"A serene mountain landscape at sunset with camera slowly panning right\" }, \"operation\": { \"name\": \"d00af...redacted...6f7a\" } }, \"mediaGenerationId\": \"user:12345-email:6a6f...-video:CAUSJ...redacted\", \"videoUrl\": \"https://storage.googleapis.com/ai-sandbox-videofx/video/...redacted...\" } ], \"operations\": [ { \"operation\": { \"name\": \"d00af...redacted...6f7a\", \"metadata\": { \"@type\": \"type.googleapis.com/google.internal.labs.aisandbox.v1.Media\", \"name\": \"CAUSJ...redacted...OWQ5ZA\", \"video\": { \"seed\": 123456, \"mediaGenerationId\": \"CAUSJ...redacted...OWQ5ZA\", \"prompt\": \"A serene mountain landscape at sunset with camera slowly panning right\", \"fifeUrl\": \"https://storage.googleapis.com/ai-sandbox-videofx/video/...redacted...\", \"mediaVisibility\": \"PRIVATE\", \"servingBaseUri\": \"https://storage.googleapis.com/ai-sandbox-videofx/image/...redacted...\", \"model\": \"veo_3_1_t2v\", \"isLooped\": false, \"aspectRatio\": \"VIDEO_ASPECT_RATIO_LANDSCAPE\" } } }, \"sceneId\": \"323c0...redacted...3ebf6\", \"mediaGenerationId\": \"CAUSJ...redacted...OWQ5ZA\", \"status\": \"MEDIA_GENERATION_STATUS_SUCCESSFUL\" } ], \"remainingCredits\": 18760, \"captcha\": { \"service\": \"AntiCaptcha\", \"taskId\": \"abc123...\", \"durationMs\": 3500, \"attempts\": [ { \"service\": \"AntiCaptcha\", \"taskId\": \"abc123...\", \"durationMs\": 3500, \"success\": true } ] } }"
+              - button "Copy code to clipboard" [ref=e447]:
+                - img [ref=e448]
+          - text: • • • • • • • • • • • •
+        - heading "Model" [level=3] [ref=e450]:
+          - link "Model" [ref=e451] [cursor=pointer]:
+            - /url: "#model"
+          - text: Model
+        - list [ref=e452]:
+          - listitem [ref=e453]:
+            - link "200 OK (Sync)" [ref=e454] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e455]:
+            - link "201 Created (Async)" [ref=e456] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e457]:
+            - link "Error" [ref=e458] [cursor=pointer]:
+              - /url: "#"
+        - list [ref=e459]:
+          - listitem [ref=e460]:
+            - paragraph [ref=e461]: Video generation completed. Returns full video data with signed URLs.
+            - generic [ref=e462]:
+              - code [ref=e465]: "{ jobId: string // Job identifier media: Array<{ // Preferred — use this instead of operations name: string // Media identifier (raw UUID) projectId: string mediaMetadata: { mediaStatus: { mediaGenerationStatus: string // MEDIA_GENERATION_STATUS_SUCCESSFUL | FAILED error?: { code: number; message: string } } visibility?: string // \"PRIVATE\" requestData?: object // Original request data } video?: { generatedVideo: { seed: number model: string // veo_3_1_t2v | veo_3_1_i2v | veo_3_1_i2v_fl | veo_3_1_r2v aspectRatio: string // VIDEO_ASPECT_RATIO_LANDSCAPE | PORTRAIT isLooped: boolean prompt?: string } operation: { name: string } } mediaGenerationId: string // Encoded reference ID for use in subsequent API calls videoUrl?: string // Signed video download URL (MP4, valid ~24h) }> operations: Array<{ // Deprecated — will be removed in a future release operation: { name: string metadata: { '@type': string name: string video: { seed: number mediaGenerationId: string prompt: string fifeUrl: string // Signed video URL (MP4, valid ~24h) mediaVisibility: string servingBaseUri: string // Signed thumbnail URL (JPEG, valid ~24h) model: string // veo_3_1_t2v | veo_3_1_i2v | veo_3_1_i2v_fl | veo_3_1_r2v isLooped: boolean aspectRatio: string // VIDEO_ASPECT_RATIO_LANDSCAPE | PORTRAIT } } } sceneId: string mediaGenerationId: string status: string // MEDIA_GENERATION_STATUS_SUCCESSFUL | FAILED }> remainingCredits?: number captcha?: { // Captcha metadata service: string // \"CapSolver\" | \"AntiCaptcha\" | \"YesCaptcha\" | \"CapMonster\" | \"SolveCaptcha\" | \"2Captcha\" | \"EzCaptcha\" | \"UserProvided\" taskId?: string durationMs: number attempts: Array<{ service: string taskId?: string durationMs: number success: boolean error?: string }> } }"
+              - button "Copy code to clipboard" [ref=e466]:
+                - img [ref=e467]
+          - text: • •
+        - heading "Examples" [level=3] [ref=e469]:
+          - link "Examples" [ref=e470] [cursor=pointer]:
+            - /url: "#examples"
+          - text: Examples
+        - list [ref=e471]:
+          - listitem [ref=e472]:
+            - link "Curl" [ref=e473] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e474]:
+            - link "JavaScript" [ref=e475] [cursor=pointer]:
+              - /url: "#"
+          - listitem [ref=e476]:
+            - link "Python" [ref=e477] [cursor=pointer]:
+              - /url: "#"
+        - list [ref=e478]:
+          - listitem [ref=e479]:
+            - generic [ref=e480]:
+              - code [ref=e483]: "curl -X POST \\ -H \"Authorization: Bearer YOUR_API_TOKEN\" \\ -H \"Content-Type: application/json\" \\ -d '{ \"prompt\": \"A serene mountain landscape at sunset with camera slowly panning right\", \"model\": \"veo-3.1-fast\", \"aspectRatio\": \"landscape\", \"count\": 2, \"seed\": 123456 }' \\ \"https://api.useapi.net/v1/google-flow/videos\" > response.json # Extract video URLs using jq (prefer media[] over deprecated operations[]) cat response.json | jq -r '.media[0].videoUrl' cat response.json | jq -r '.media[1].videoUrl' # Download videos using curl curl \"$(cat response.json | jq -r '.media[0].videoUrl')\" --output video_1.mp4 curl \"$(cat response.json | jq -r '.media[1].videoUrl')\" --output video_2.mp4"
+              - button "Copy code to clipboard" [ref=e484]:
+                - img [ref=e485]
+          - text: • •
+        - heading "Try It" [level=3] [ref=e487]:
+          - link "Try It" [ref=e488] [cursor=pointer]:
+            - /url: "#try-it"
+          - text: Try It
+        - generic [ref=e490]:
+          - generic [ref=e491]:
+            - generic [ref=e492]:
+              - generic [ref=e493]:
+                - text: API Token
+                - generic [ref=e494]:
+                  - text: (see
+                  - link "Setup useapi.net" [ref=e495] [cursor=pointer]:
+                    - /url: ../start-here/setup-useapi
+                  - text: )
+              - textbox "API Token (see Setup useapi.net)" [ref=e496]:
+                - /placeholder: user:12345-abc…xyz
+            - generic [ref=e497]:
+              - generic [ref=e498]: email (optional)
+              - textbox "email (optional)" [ref=e499]:
+                - /placeholder: john@gmail.com
+            - generic [ref=e500]:
+              - generic [ref=e501]: prompt (required)
+              - textbox "prompt (required)" [ref=e502]:
+                - /placeholder: A serene mountain landscape
+            - generic [ref=e503]:
+              - text: model
+              - combobox "model" [ref=e504]:
+                - option "veo-3.1-fast (default)" [selected]
+                - option "veo-3.1-fast-relaxed (Ultra only, no credits, lower priority)"
+                - option "veo-3.1-quality"
+                - option "veo-3.1-lite (faster, lower cost)"
+            - generic [ref=e505]:
+              - text: aspectRatio
+              - combobox "aspectRatio" [ref=e506]:
+                - option "landscape (default)" [selected]
+                - option "portrait"
+            - generic [ref=e507]:
+              - text: count
+              - spinbutton "count" [ref=e508]
+            - generic [ref=e509]:
+              - text: seed
+              - spinbutton "seed" [ref=e510]
+            - generic [ref=e511]:
+              - generic [ref=e512]:
+                - text: async
+                - generic [ref=e513]:
+                  - text: (fire-and-forget mode, see
+                  - link "GET /jobs/jobId" [ref=e514] [cursor=pointer]:
+                    - /url: ./get-google-flow-jobs-jobid
+                  - text: )
+              - combobox "async (fire-and-forget mode, see GET /jobs/jobId)" [ref=e515]:
+                - option "false (default)" [selected]
+                - option "true"
+            - generic [ref=e516]:
+              - generic [ref=e517]: replyUrl (webhook URL)
+              - textbox "replyUrl (webhook URL)" [ref=e518]:
+                - /placeholder: https://your-domain.com/webhook
+            - generic [ref=e519]:
+              - generic [ref=e520]: replyRef (custom reference)
+              - textbox "replyRef (custom reference)" [ref=e521]:
+                - /placeholder: my-custom-id-123
+            - generic [ref=e522]:
+              - generic [ref=e523]:
+                - text: startImage
+                - generic [ref=e524]:
+                  - text: (optional, from
+                  - link "POST /assets/email" [ref=e525] [cursor=pointer]:
+                    - /url: ./post-google-flow-assets-email
+                  - text: )
+              - textbox "startImage (optional, from POST /assets/email)" [ref=e526]:
+                - /placeholder: user:123-email:...
+            - generic [ref=e527]:
+              - generic [ref=e528]: endImage (optional, requires startImage)
+              - textbox "endImage (optional, requires startImage)" [ref=e529]:
+                - /placeholder: user:123-email:...
+            - generic [ref=e530]:
+              - generic [ref=e531]: referenceImage_1 (optional, R2V mode)
+              - textbox "referenceImage_1 (optional, R2V mode)" [ref=e532]:
+                - /placeholder: user:123-email:...
+            - generic [ref=e533]:
+              - text: referenceImage_2
+              - textbox "referenceImage_2" [ref=e534]:
+                - /placeholder: user:123-email:...
+            - generic [ref=e535]:
+              - text: referenceImage_3
+              - textbox "referenceImage_3" [ref=e536]:
+                - /placeholder: user:123-email:...
+            - generic [ref=e537]:
+              - generic [ref=e538]: voice (optional, requires referenceImage, select to preview)
+              - combobox "voice (optional, requires referenceImage, select to preview)" [ref=e540]:
+                - option "none" [selected]
+                - option "Achird"
+                - option "Achernar"
+                - option "Algieba"
+                - option "Algenib"
+                - option "Alnilam"
+                - option "Aoede"
+                - option "Autonoe"
+                - option "Callirrhoe"
+                - option "Charon"
+                - option "Despina"
+                - option "Enceladus"
+                - option "Erinome"
+                - option "Fenrir"
+                - option "Gacrux"
+                - option "Iapetus"
+                - option "Kore"
+                - option "Laomedeia"
+                - option "Leda"
+                - option "Orus"
+                - option "Puck"
+                - option "Pulcherrima"
+                - option "Rasalgethi"
+                - option "Sadachbia"
+                - option "Sadaltager"
+                - option "Schedar"
+                - option "Sulafat"
+                - option "Umbriel"
+                - option "Vindemiatrix"
+                - option "Zephyr"
+                - option "Zubenelgenubi"
+            - generic [ref=e541]:
+              - generic [ref=e542]: captchaToken (optional, your own reCAPTCHA token)
+              - textbox "captchaToken (optional, your own reCAPTCHA token)" [ref=e543]:
+                - /placeholder: reCAPTCHA v3 Enterprise token
+            - generic [ref=e544]:
+              - generic [ref=e545]: captchaRetry (1-10, optional)
+              - spinbutton "captchaRetry (1-10, optional)" [ref=e546]
+            - generic [ref=e547]:
+              - generic [ref=e548]: captchaOrder (optional)
+              - textbox "captchaOrder (optional)" [ref=e549]:
+                - /placeholder: CapSolver,AntiCaptcha
+          - button "Go" [ref=e550] [cursor=pointer]
