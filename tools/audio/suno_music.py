@@ -128,7 +128,7 @@ class SunoMusic(BaseTool):
     ]
 
     _BASE_URL = "https://api.sunoapi.org/api/v1"
-    _POLL_INTERVAL = 30  # seconds between status checks
+    _POLL_INTERVAL = 10  # seconds between status checks
     _MAX_WAIT = 300  # 5 minutes max wait
 
     def _get_api_key(self) -> str | None:
@@ -167,7 +167,8 @@ class SunoMusic(BaseTool):
                 return ToolResult(success=False, error="Suno returned no tracks.")
 
             track = tracks[min(track_index, len(tracks) - 1)]
-            audio_url = track.get("audio_url")
+            # API returns camelCase audioUrl; snake_case fallback for safety
+            audio_url = track.get("audioUrl") or track.get("audio_url")
             if not audio_url:
                 return ToolResult(success=False, error="No audio_url in Suno response.")
 
@@ -211,7 +212,7 @@ class SunoMusic(BaseTool):
             "model": model,
             "customMode": custom_mode,
             "instrumental": instrumental,
-            "callBackUrl": "",  # no webhook; we poll
+            "callBackUrl": "https://example.com/noop",  # required field; we poll instead
         }
 
         if custom_mode:
@@ -233,7 +234,15 @@ class SunoMusic(BaseTool):
         response.raise_for_status()
         data = response.json()
 
-        task_id = data.get("data", {}).get("taskId") or data.get("taskId")
+        # Check business-level error codes (API returns HTTP 200 even on errors)
+        code = data.get("code")
+        if code is not None and int(code) != 200:
+            msg = data.get("msg", "unknown error")
+            if "credits" in msg.lower() or "insufficient" in msg.lower():
+                raise RuntimeError(f"Suno credits insufficient — please top up at sunoapi.org (code {code})")
+            raise RuntimeError(f"Suno API error (code {code}): {msg}")
+
+        task_id = (data.get("data") or {}).get("taskId") or data.get("taskId")
         if not task_id:
             raise RuntimeError(f"No taskId in Suno response: {data}")
 
@@ -257,10 +266,14 @@ class SunoMusic(BaseTool):
             response.raise_for_status()
             result = response.json()
 
-            status = result.get("data", {}).get("status") or result.get("status", "")
+            data_obj = result.get("data") or {}
+            status = data_obj.get("status") or result.get("status", "")
+
+            def _suno_tracks(obj: dict) -> list:
+                return (obj.get("response") or {}).get("sunoData") or []
 
             if status == "SUCCESS":
-                return result.get("data", result)
+                return {"data": _suno_tracks(data_obj)}
             elif status in (
                 "CREATE_TASK_FAILED",
                 "GENERATE_AUDIO_FAILED",
@@ -268,7 +281,12 @@ class SunoMusic(BaseTool):
             ):
                 raise RuntimeError(f"Suno generation failed with status: {status}")
 
-            # PENDING, GENERATING, TEXT_SUCCESS, FIRST_SUCCESS — keep polling
+            # Also accept FIRST_SUCCESS if first track has audioUrl
+            if status == "FIRST_SUCCESS":
+                suno_data = _suno_tracks(data_obj)
+                if suno_data and suno_data[0].get("audioUrl"):
+                    return {"data": suno_data}
+            # PENDING, GENERATING, TEXT_SUCCESS — keep polling
 
         raise TimeoutError(
             f"Suno generation timed out after {self._MAX_WAIT}s (taskId: {task_id})"

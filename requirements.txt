@@ -3,3 +3,7 @@ pyyaml>=6.0
 pydantic>=2.0
 jsonschema>=4.20
 python-dotenv>=1.0
+requests>=2.31
+
+# Google AI (Veo 3.1 native video generation + TTS + Imagen)
+google-genai>=1.0

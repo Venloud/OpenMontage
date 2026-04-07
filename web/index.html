@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OpenMontage — AI Video Studio</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c28;
+    --border: #2a2a3a;
+    --accent: #7c6af7;
+    --accent2: #a78bfa;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --success: #34d399;
+    --error: #f87171;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .app { display: grid; grid-template-columns: 1fr 420px; min-height: 100vh; }
+  header {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent2); }
+  .badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .panel-left {
+    padding: 24px;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  .panel-right {
+    padding: 24px;
+    overflow-y: auto;
+    background: var(--surface);
+  }
+  .section { margin-bottom: 24px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  label { display: block; margin-bottom: 6px; font-size: 13px; }
+  label .hint { color: var(--muted); font-size: 11px; margin-left: 4px; }
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 13px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color .15s;
+    font-family: inherit;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+  select option { background: var(--surface2); }
+  textarea { resize: vertical; }
+  #script { min-height: 200px; font-size: 14px; }
+  #system_prompt { min-height: 80px; font-size: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .slider-wrap { display: flex; align-items: center; gap: 12px; }
+  input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent2);
+    cursor: pointer;
+  }
+  .slider-val { min-width: 36px; text-align: center; font-size: 13px; color: var(--accent2); font-weight: 600; }
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--accent); background: rgba(124,106,247,.05); }
+  .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-zone .uz-icon { font-size: 24px; margin-bottom: 4px; }
+  .upload-zone .uz-label { font-size: 12px; color: var(--muted); }
+  .upload-zone .uz-file { font-size: 12px; color: var(--accent2); margin-top: 4px; }
+  .pill-group { display: flex; gap: 8px; }
+  .pill {
+    flex: 1; padding: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; text-align: center;
+    transition: all .15s; user-select: none;
+  }
+  .pill.active { border-color: var(--accent); color: var(--accent2); background: rgba(124,106,247,.1); }
+  .number-wrap { position: relative; }
+  .number-wrap input { padding-right: 40px; }
+  .number-wrap .unit { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .btn-generate {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white; border: none;
+    border-radius: var(--radius);
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.3px;
+    transition: opacity .15s, transform .1s;
+    margin-top: 8px;
+  }
+  .btn-generate:hover { opacity: .9; }
+  .btn-generate:active { transform: scale(.98); }
+  .btn-generate:disabled { opacity: .5; cursor: not-allowed; }
+  .output-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .job-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px; margin-bottom: 16px;
+  }
+  .job-stage { font-size: 13px; font-weight: 600; color: var(--accent2); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent2); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .progress-bar-wrap { height: 6px; background: var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 6px; transition: width .4s ease; }
+  .log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .log-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .btn-expand-log {
+    background: none; border: 1px solid var(--border); border-radius: 6px;
+    color: var(--muted); font-size: 11px; padding: 3px 8px; cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .btn-expand-log:hover { color: var(--accent2); border-color: var(--accent2); }
+  .log-box {
+    background: var(--bg); border-radius: 8px; padding: 10px 12px;
+    height: calc(100vh - 360px); min-height: 220px;
+    overflow-y: auto; font-family: monospace; font-size: 12px;
+    color: var(--muted); line-height: 1.9;
+  }
+  .log-line { color: var(--text); }
+  .log-ok { color: var(--success) !important; font-weight: 600; }
+  .log-err { color: var(--error) !important; font-weight: 600; }
+  .log-warn { color: #fbbf24 !important; }
+  /* Fullscreen log modal */
+  .log-modal {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,.85); backdrop-filter: blur(4px);
+    padding: 24px;
+  }
+  .log-modal.open { display: flex; flex-direction: column; }
+  .log-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .log-modal-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .btn-close-modal {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 13px;
+    padding: 6px 14px; cursor: pointer; transition: border-color .15s;
+  }
+  .btn-close-modal:hover { border-color: var(--accent2); color: var(--accent2); }
+  .log-modal-box {
+    flex: 1; background: var(--bg); border-radius: var(--radius);
+    padding: 16px 18px; overflow-y: auto;
+    font-family: monospace; font-size: 13px; line-height: 2;
+    color: var(--muted);
+  }
+  .video-wrap { background: #000; border-radius: var(--radius); overflow: hidden; margin: 16px 0 12px; aspect-ratio: 9/16; max-height: 360px; display: flex; align-items: center; justify-content: center; }
+  .video-wrap.wide { aspect-ratio: 16/9; }
+  .video-wrap.square { aspect-ratio: 1; }
+  .video-wrap video { width: 100%; height: 100%; object-fit: contain; }
+  .btn-download { width: 100%; padding: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .15s; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+  .btn-download:hover { border-color: var(--accent2); color: var(--accent2); }
+  .empty-state { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 13px; line-height: 1.7; }
+  .voices-loading { color: var(--muted); font-size: 12px; padding: 8px 0; }
+  /* Toggle switch */
+  .toggle-switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute; inset: 0;
+    background: var(--border); border-radius: 22px;
+    cursor: pointer; transition: background .2s;
+  }
+  .toggle-track::after {
+    content: ''; position: absolute;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff; top: 3px; left: 3px;
+    transition: transform .2s;
+  }
+  .toggle-switch input:checked + .toggle-track { background: var(--accent); }
+  .toggle-switch input:checked + .toggle-track::after { transform: translateX(18px); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Open<span>Montage</span></div>
+  <span class="badge">AI VIDEO STUDIO</span>
+</header>
+
+<div class="app">
+  <!-- LEFT: Form -->
+  <div class="panel-left">
+    <form id="form" enctype="multipart/form-data">
+
+      <div class="section">
+        <div class="section-title">Kịch bản</div>
+        <label>Nội dung narration <span class="hint">— AI sẽ tạo video từ đây</span></label>
+        <textarea id="script" name="script" placeholder="Nhập kịch bản tiếng Việt tại đây...&#10;&#10;Ví dụ:&#10;Có bao giờ bạn tự hỏi... thiện tâm đến từ đâu?&#10;&#10;Phật A Di Đà dạy rằng: trong mỗi người đều ẩn chứa một nguồn sáng thuần khiết."></textarea>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Giọng đọc</div>
+        <label>Chọn giọng Vbee</label>
+        <div id="voices-loading" class="voices-loading">⏳ Đang tải danh sách giọng...</div>
+        <div id="voice-wrap" style="display:none">
+          <select name="voice_code" id="voice_code"></select>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Video</div>
+        <div class="grid-2">
+          <div>
+            <label>Thời lượng</label>
+            <div class="number-wrap">
+              <input type="number" name="duration" id="duration" value="30" min="10" max="120"/>
+              <span class="unit">giây</span>
+            </div>
+          </div>
+          <div>
+            <label>Khung hình</label>
+            <div class="pill-group" id="aspect-pills">
+              <div class="pill active" data-val="9:16">9:16<br><small>Dọc</small></div>
+              <div class="pill" data-val="16:9">16:9<br><small>Ngang</small></div>
+              <div class="pill" data-val="1:1">1:1<br><small>Vuông</small></div>
+            </div>
+            <input type="hidden" name="aspect_ratio" id="aspect_ratio" value="9:16"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tốc độ giọng</div>
+        <label>Speed rate <span class="hint">— 0.7 chậm · 1.0 bình thường · 1.3 nhanh</span></label>
+        <div class="slider-wrap">
+          <input type="range" name="speed_rate" id="speed_rate" min="0.7" max="1.3" step="0.05" value="0.9"/>
+          <span class="slider-val" id="speed-val">0.90</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Đính kèm</div>
+        <div class="grid-2">
+          <div>
+            <label>Ảnh tham khảo <span class="hint">(scene đầu)</span></label>
+            <div class="upload-zone">
+              <input type="file" name="image" id="image-input" accept="image/*"/>
+              <div class="uz-icon">🖼️</div>
+              <div class="uz-label">Click hoặc kéo thả</div>
+              <div class="uz-file" id="image-name"></div>
+            </div>
+          </div>
+          <div>
+            <label>Video tham khảo <span class="hint">(style)</span></label>
+            <div class="upload-zone">
+              <input type="file" name="video" id="video-input" accept="video/*"/>
+              <div class="uz-icon">🎬</div>
+              <div class="uz-label">Click hoặc kéo thả</div>
+              <div class="uz-file" id="video-name"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Phụ đề</div>
+        <div class="toggle-row" style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <label class="toggle-switch">
+            <input type="checkbox" name="subtitle_enabled" id="subtitle_enabled" value="true"/>
+            <span class="toggle-track"></span>
+          </label>
+          <span style="font-size:13px">Bật phụ đề tiếng Việt <span class="hint">(Whisper AI)</span></span>
+        </div>
+        <div id="subtitle-options" style="display:none">
+          <div class="grid-2" style="margin-bottom:10px">
+            <div>
+              <label>Cỡ chữ</label>
+              <div class="slider-wrap">
+                <input type="range" name="subtitle_fontsize" id="subtitle_fontsize" min="16" max="48" step="2" value="24"/>
+                <span class="slider-val" id="subtitle-size-val">24</span>
+              </div>
+            </div>
+            <div>
+              <label>Màu chữ</label>
+              <select name="subtitle_color" id="subtitle_color">
+                <option value="white" selected>Trắng</option>
+                <option value="yellow">Vàng</option>
+                <option value="cyan">Xanh lam</option>
+                <option value="orange">Cam</option>
+              </select>
+            </div>
+          </div>
+          <label>Vị trí</label>
+          <div class="pill-group" id="sub-pos-pills">
+            <div class="pill active" data-val="bottom">Dưới</div>
+            <div class="pill" data-val="top">Trên</div>
+          </div>
+          <input type="hidden" name="subtitle_position" id="subtitle_position" value="bottom"/>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Watermark</div>
+        <div class="grid-2" style="margin-bottom:10px">
+          <div>
+            <label>Chữ watermark <span class="hint">(tùy chọn)</span></label>
+            <input type="text" name="watermark_text" id="watermark_text" placeholder="© OpenMontage"/>
+          </div>
+          <div>
+            <label>Vị trí</label>
+            <select name="watermark_position" id="watermark_position">
+              <option value="bottom_right" selected>Dưới phải</option>
+              <option value="bottom_left">Dưới trái</option>
+              <option value="bottom_center">Dưới giữa</option>
+              <option value="top_right">Trên phải</option>
+              <option value="top_left">Trên trái</option>
+              <option value="center">Giữa</option>
+            </select>
+          </div>
+        </div>
+        <label>Ảnh watermark <span class="hint">(PNG có nền trong tốt nhất)</span></label>
+        <div class="upload-zone">
+          <input type="file" name="watermark_image" id="wm-input" accept="image/*"/>
+          <div class="uz-icon">🔖</div>
+          <div class="uz-label">Click hoặc kéo thả</div>
+          <div class="uz-file" id="wm-name"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">System Prompt</div>
+        <label>Hướng dẫn thêm cho AI <span class="hint">(tùy chọn)</span></label>
+        <textarea id="system_prompt" name="system_prompt" placeholder="Ví dụ: Tạo video phong cách điện ảnh, màu sắc ấm vàng..."></textarea>
+      </div>
+
+      <div class="section" style="background:rgba(124,106,247,.07);border:1px solid rgba(124,106,247,.25);border-radius:var(--radius);padding:14px;">
+        <div class="section-title" style="color:var(--accent2)">Tốc độ tạo video</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="toggle-row" style="display:flex;align-items:center;gap:10px">
+            <label class="toggle-switch">
+              <input type="checkbox" name="enable_music" id="enable_music" value="true" checked/>
+              <span class="toggle-track"></span>
+            </label>
+            <span style="font-size:13px">Nhạc nền <span class="hint">(MusicGen ~2.5 phút, Suno ~3-5 phút)</span></span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);padding-left:2px;line-height:1.6">
+            ⚡ <strong>Tắt nhạc</strong>: tiết kiệm ~2.5 phút — chỉ có narration + video clips<br>
+            🎬 <strong>2 clips/video</strong> (loop tự động) — tiết kiệm 3 phút so với 4 clips<br>
+            🔄 Veo rate limit: 2 req/phút · 10 req/ngày (Paid Tier 1)
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-generate" id="btn-generate">✨ Tạo Video</button>
+    </form>
+  </div>
+
+  <!-- RIGHT: Output -->
+  <div class="panel-right">
+    <div class="output-title">
+      <span>Kết quả</span>
+      <button class="btn-expand-log" id="btn-fullscreen-log" style="display:none" onclick="openLogModal()">⛶ Toàn màn hình</button>
+    </div>
+    <div id="output-area">
+      <div class="empty-state">
+        <div class="es-icon">🎬</div>
+        <p>Điền kịch bản và nhấn<br/><strong>Tạo Video</strong> để bắt đầu.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen log modal -->
+<div class="log-modal" id="log-modal">
+  <div class="log-modal-header">
+    <span class="log-modal-title">📋 Log đầy đủ</span>
+    <button class="btn-close-modal" onclick="closeLogModal()">✕ Đóng</button>
+  </div>
+  <div class="log-modal-box" id="log-modal-box"></div>
+</div>
+
+<script>
+'use strict';
+
+const API = '';
+let pollTimer = null;
+
+// ── Load voices ───────────────────────────────────────────────────────────────
+async function loadVoices() {
+  const loadingEl = document.getElementById('voices-loading');
+  const wrapEl = document.getElementById('voice-wrap');
+  const sel = document.getElementById('voice_code');
+
+  try {
+    const res = await fetch(API + '/api/voices');
+    const data = await res.json();
+    const voices = Array.isArray(data.voices) ? data.voices : [];
+
+    sel.textContent = ''; // clear safely
+    voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = String(v.code || '');
+      opt.textContent = String(v.name || v.code || '');
+      if (v.code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
+      sel.appendChild(opt);
+    });
+
+    loadingEl.style.display = 'none';
+    wrapEl.style.display = 'block';
+  } catch (_) {
+    loadingEl.textContent = '⚠️ Dùng giọng mặc định';
+    const defaults = [
+      ['s_sg_male_thientam_ytstable_vc', 'Thiện Tâm (Sài Gòn Nam) — mặc định'],
+      ['hn_male_manhdung_news_48k-fhg',  'Mạnh Dũng (Hà Nội Nam)'],
+      ['hn_female_ngochuyen_full_48k-fhg','Ngọc Huyền (Hà Nội Nữ)'],
+      ['sg_male_trungkien_vdts_48k-fhg',  'Trung Kiên (Sài Gòn Nam)'],
+      ['sg_female_lantrinh_vdts_48k-fhg', 'Lan Trinh (Sài Gòn Nữ)'],
+    ];
+    sel.textContent = '';
+    defaults.forEach(([code, name]) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = name;
+      if (code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
+      sel.appendChild(opt);
+    });
+    wrapEl.style.display = 'block';
+  }
+}
+
+// ── Aspect ratio pills ────────────────────────────────────────────────────────
+document.getElementById('aspect-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  document.querySelectorAll('#aspect-pills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('aspect_ratio').value = pill.dataset.val;
+});
+
+// ── Speed slider ──────────────────────────────────────────────────────────────
+document.getElementById('speed_rate').addEventListener('input', e => {
+  document.getElementById('speed-val').textContent = parseFloat(e.target.value).toFixed(2);
+});
+
+// ── Subtitle toggle ───────────────────────────────────────────────────────────
+document.getElementById('subtitle_enabled').addEventListener('change', e => {
+  document.getElementById('subtitle-options').style.display = e.target.checked ? 'block' : 'none';
+});
+
+// ── Subtitle font size slider ─────────────────────────────────────────────────
+document.getElementById('subtitle_fontsize').addEventListener('input', e => {
+  document.getElementById('subtitle-size-val').textContent = e.target.value;
+});
+
+// ── Subtitle position pills ───────────────────────────────────────────────────
+document.getElementById('sub-pos-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  document.querySelectorAll('#sub-pos-pills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('subtitle_position').value = pill.dataset.val;
+});
+
+// ── File labels ───────────────────────────────────────────────────────────────
+document.getElementById('image-input').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  document.getElementById('image-name').textContent = f ? f.name : '';
+});
+document.getElementById('video-input').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  document.getElementById('video-name').textContent = f ? f.name : '';
+});
+document.getElementById('wm-input').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  document.getElementById('wm-name').textContent = f ? f.name : '';
+});
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = true;
+  btn.textContent = '⏳ Đang xử lý...';
+
+  try {
+    const res = await fetch(API + '/api/generate', {
+      method: 'POST',
+      body: new FormData(e.target),
+    });
+    const data = await res.json();
+
+    if (data.job_id) {
+      buildJobCard(data.job_id);
+      startPolling(data.job_id);
+    } else {
+      alert('Lỗi server');
+      btn.disabled = false;
+      btn.textContent = '✨ Tạo Video';
+    }
+  } catch (err) {
+    alert('Lỗi kết nối: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = '✨ Tạo Video';
+  }
+});
+
+// ── Job card (safe DOM construction) ─────────────────────────────────────────
+function buildJobCard(jobId) {
+  const area = document.getElementById('output-area');
+  area.textContent = '';
+
+  const card = document.createElement('div');
+  card.className = 'job-card';
+  card.id = 'job-card-' + jobId;
+
+  const stageRow = document.createElement('div');
+  stageRow.className = 'job-stage';
+  stageRow.id = 'stage-' + jobId;
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  const stageText = document.createElement('span');
+  stageText.id = 'stage-text-' + jobId;
+  stageText.textContent = 'Đang khởi động...';
+  stageRow.appendChild(spinner);
+  stageRow.appendChild(stageText);
+
+  const barWrap = document.createElement('div');
+  barWrap.className = 'progress-bar-wrap';
+  const bar = document.createElement('div');
+  bar.className = 'progress-bar';
+  bar.id = 'progress-' + jobId;
+  bar.style.width = '0%';
+  barWrap.appendChild(bar);
+
+  // Log header with expand button
+  const logHeader = document.createElement('div');
+  logHeader.className = 'log-header';
+  const logLabel = document.createElement('span');
+  logLabel.className = 'log-label';
+  logLabel.textContent = 'Log';
+  const btnExpand = document.createElement('button');
+  btnExpand.className = 'btn-expand-log';
+  btnExpand.textContent = '⛶ Toàn màn hình';
+  btnExpand.addEventListener('click', openLogModal);
+  logHeader.appendChild(logLabel);
+  logHeader.appendChild(btnExpand);
+
+  const logBox = document.createElement('div');
+  logBox.className = 'log-box';
+  logBox.id = 'log-' + jobId;
+
+  card.appendChild(stageRow);
+  card.appendChild(barWrap);
+  card.appendChild(logHeader);
+  card.appendChild(logBox);
+
+  const videoArea = document.createElement('div');
+  videoArea.id = 'video-area-' + jobId;
+
+  area.appendChild(card);
+  area.appendChild(videoArea);
+
+  // Show fullscreen button in header
+  document.getElementById('btn-fullscreen-log').style.display = '';
+}
+
+function startPolling(jobId) {
+  _currentJobId = jobId;
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(() => pollJob(jobId), 3000);
+}
+
+async function pollJob(jobId) {
+  try {
+    const res = await fetch(API + '/api/jobs/' + jobId);
+    const job = await res.json();
+
+    const bar = document.getElementById('progress-' + jobId);
+    if (bar) bar.style.width = (job.progress || 0) + '%';
+
+    const stageText = document.getElementById('stage-text-' + jobId);
+    if (stageText) stageText.textContent = job.stage || '...';
+
+    const logBox = document.getElementById('log-' + jobId);
+    if (logBox && Array.isArray(job.log)) {
+      renderLogLines(logBox, job.log, true);
+      // Sync modal if open
+      const modal = document.getElementById('log-modal');
+      if (modal.classList.contains('open')) {
+        renderLogLines(document.getElementById('log-modal-box'), job.log, true);
+      }
+    }
+
+    if (job.status === 'done') {
+      clearInterval(pollTimer);
+      showVideoResult(jobId, job.output, job.params);
+    } else if (job.status === 'error') {
+      clearInterval(pollTimer);
+      showError(jobId, job.error);
+    }
+  } catch (err) {
+    console.warn('Poll error:', err);
+  }
+}
+
+function showVideoResult(jobId, outputPath, params) {
+  const stageEl = document.getElementById('stage-' + jobId);
+  if (stageEl) {
+    stageEl.textContent = '';
+    const ok = document.createElement('span');
+    ok.style.color = 'var(--success)';
+    ok.textContent = '✅ Hoàn thành!';
+    stageEl.appendChild(ok);
+  }
+
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = false;
+  btn.textContent = '✨ Tạo Video Mới';
+
+  const ar = (params && params.aspect_ratio) || '9:16';
+  const videoAreaEl = document.getElementById('video-area-' + jobId);
+  if (!videoAreaEl) return;
+
+  videoAreaEl.textContent = '';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'video-wrap' +
+    (ar === '16:9' ? ' wide' : ar === '1:1' ? ' square' : '');
+
+  const vid = document.createElement('video');
+  vid.controls = true;
+  vid.autoplay = true;
+  vid.loop = true;
+  vid.src = '/' + String(outputPath);
+  wrap.appendChild(vid);
+
+  const dlLink = document.createElement('a');
+  dlLink.className = 'btn-download';
+  // Use static file path directly — works even after API restart
+  dlLink.href = '/' + String(outputPath);
+  dlLink.download = 'openmontage_' + jobId + '.mp4';
+  dlLink.textContent = '⬇️ Tải video MP4';
+
+  videoAreaEl.appendChild(wrap);
+  videoAreaEl.appendChild(dlLink);
+}
+
+function showError(jobId, error) {
+  const stageEl = document.getElementById('stage-' + jobId);
+  if (stageEl) {
+    stageEl.textContent = '';
+    const errSpan = document.createElement('span');
+    errSpan.style.color = 'var(--error)';
+    errSpan.textContent = '❌ Lỗi: ' + String(error || 'Unknown');
+    stageEl.appendChild(errSpan);
+  }
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = false;
+  btn.textContent = '✨ Tạo Video';
+}
+
+// ── Log rendering ─────────────────────────────────────────────────────────────
+function renderLogLines(container, lines, autoScroll) {
+  container.textContent = '';
+  lines.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    const s = String(line);
+    if (s.startsWith('✅')) div.classList.add('log-ok');
+    else if (s.startsWith('❌')) div.classList.add('log-err');
+    else if (s.startsWith('⚠️')) div.classList.add('log-warn');
+    div.textContent = s;
+    container.appendChild(div);
+  });
+  if (autoScroll) container.scrollTop = container.scrollHeight;
+}
+
+// ── Fullscreen log modal ───────────────────────────────────────────────────────
+let _currentJobId = null;
+
+function openLogModal() {
+  const modal = document.getElementById('log-modal');
+  modal.classList.add('open');
+  // Sync current log content
+  const logBox = _currentJobId ? document.getElementById('log-' + _currentJobId) : null;
+  const lines = logBox ? Array.from(logBox.querySelectorAll('.log-line')).map(d => d.textContent) : [];
+  renderLogLines(document.getElementById('log-modal-box'), lines, true);
+}
+
+function closeLogModal() {
+  document.getElementById('log-modal').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLogModal();
+});
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadVoices();
+</script>
+</body>
+</html>
