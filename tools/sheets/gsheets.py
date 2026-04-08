@@ -23,10 +23,16 @@ import requests
 # ── URL parsing ───────────────────────────────────────────────────────────────
 
 def parse_sheet_url(url_or_id: str) -> tuple[str, str]:
-    """Return (spreadsheet_id, gid) from a Sheets URL or bare ID."""
+    """Return (spreadsheet_id, gid) from a Sheets URL or bare ID.
+
+    Handles both ?gid= (query) and #gid= (hash fragment) formats.
+    """
     m = re.search(r"/d/([a-zA-Z0-9_-]{20,})", url_or_id)
     sheet_id = m.group(1) if m else url_or_id
-    m2 = re.search(r"gid=(\d+)", url_or_id)
+    # Match gid in query string (?gid=N) or hash fragment (#gid=N)
+    m2 = re.search(r"[?&#]gid=(\d+)", url_or_id)
+    if not m2:
+        m2 = re.search(r"\bgid=(\d+)", url_or_id)
     gid = m2.group(1) if m2 else "0"
     return sheet_id, gid
 
@@ -40,9 +46,18 @@ def read_csv(url_or_id: str) -> list[list[str]]:
         f"https://docs.google.com/spreadsheets/d/{sheet_id}"
         f"/export?format=csv&gid={gid}"
     )
-    resp = requests.get(csv_url, timeout=30)
+    resp = requests.get(csv_url, timeout=30, allow_redirects=True)
+    if resp.status_code in (400, 403):
+        raise PermissionError(
+            f"Sheet không public (HTTP {resp.status_code}). "
+            "Vào Google Sheets → Share → Change to 'Anyone with the link' → Viewer. "
+            f"GID đang dùng: {gid}"
+        )
     resp.raise_for_status()
-    reader = csv.reader(io.StringIO(resp.text))
+    # Force UTF-8 — Google Sheets CSV is always UTF-8 but requests may
+    # auto-detect as ISO-8859-1, causing Vietnamese text to be mojibake.
+    text = resp.content.decode("utf-8")
+    reader = csv.reader(io.StringIO(text))
     return list(reader)
 
 

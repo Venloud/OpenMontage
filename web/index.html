@@ -238,14 +238,10 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
 <div class="shell">
   <!-- Sidebar -->
   <nav class="sidebar">
-    <div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>Dashboard</div>
-    <div class="nav-item" data-page="factory"><span class="nav-icon">🎬</span>Factory</div>
-    <div class="nav-item" data-page="queue"><span class="nav-icon">⚡</span>Queue</div>
-    <div class="nav-item" data-page="history"><span class="nav-icon">📋</span>History</div>
-    <div class="nav-item" data-page="media"><span class="nav-icon">🗂️</span>Media Library</div>
+    <div class="nav-item active" data-page="factory"><span class="nav-icon">🎬</span>Factory</div>
     <div class="nav-item" data-page="clips"><span class="nav-icon">🎞️</span>Clip Factory</div>
+    <div class="nav-item" data-page="compose"><span class="nav-icon">🎼</span>Ghép Video</div>
     <div class="nav-bottom">
-      <div class="nav-item" data-page="testlab"><span class="nav-icon">🧪</span>Test Lab</div>
       <div class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span>Settings</div>
     </div>
   </nav>
@@ -254,7 +250,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
   <div class="main" id="main">
 
     <!-- ──────────────── DASHBOARD ──────────────── -->
-    <div class="page active" id="page-dashboard">
+    <div class="page" id="page-dashboard">
       <div class="page-title">Dashboard</div>
 
       <div class="stats-grid" id="stats-grid">
@@ -279,7 +275,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
     </div>
 
     <!-- ──────────────── FACTORY ──────────────── -->
-    <div class="page" id="page-factory">
+    <div class="page active" id="page-factory">
       <div class="page-title">Factory <span style="font-size:14px;font-weight:400;color:var(--muted)">— Tạo job generate</span></div>
 
       <div style="display:flex;gap:8px;margin-bottom:16px">
@@ -312,6 +308,14 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
 
             <div class="form-section">
               <div class="section-label">Giọng đọc</div>
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+                <div class="pill-group" id="tts-engine-pills" style="gap:5px">
+                  <div class="pill" data-val="auto" title="Tự động: ưu tiên Local F5-TTS, fallback Vbee">⚡ Auto</div>
+                  <div class="pill" data-val="local" title="Chỉ dùng Local F5-TTS (giọng clone)">🖥️ Local F5-TTS</div>
+                  <div class="pill active" data-val="vbee" title="Chỉ dùng Vbee API">☁️ Vbee</div>
+                </div>
+                <input type="hidden" name="tts_engine" id="tts_engine" value="vbee"/>
+              </div>
               <div id="voices-loading" style="color:var(--muted);font-size:12px;padding:5px 0">⏳ Đang tải...</div>
               <div id="voice-wrap" style="display:none"><select name="voice_code" id="voice_code"></select></div>
             </div>
@@ -522,10 +526,10 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
               <div>
                 <label>Model</label>
                 <select id="cl-model">
-                  <option value="veo-3.1-fast" selected>veo-3.1-fast (5¢)</option>
+                  <option value="veo-3.1-fast-relaxed" selected>veo-3.1-fast-relaxed (free)</option>
+                  <option value="veo-3.1-fast">veo-3.1-fast (5¢)</option>
                   <option value="veo-3.1-lite">veo-3.1-lite (2.5¢)</option>
                   <option value="veo-3.1-quality">veo-3.1-quality (50¢)</option>
-                  <option value="veo-3.1-fast-relaxed">veo-3.1-fast-relaxed (free)</option>
                 </select>
               </div>
               <div>
@@ -577,6 +581,241 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
             </tr></thead>
             <tbody id="clip-detail-rows"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ──────────────── GHÉP VIDEO ──────────────── -->
+    <div class="page" id="page-compose">
+      <div class="page-title">Ghép Video <span style="font-size:13px;font-weight:400;color:var(--muted)">— Ghép clip 8s thành video hoàn chỉnh với TTS + nhạc</span></div>
+
+      <div style="display:grid;grid-template-columns:440px 1fr;gap:20px;align-items:start">
+
+        <!-- Left: config -->
+        <div>
+          <!-- Folder clips -->
+          <div class="settings-group">
+            <div class="settings-group-title">Thư mục Clips</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="font-size:12px;color:var(--muted)">Đường dẫn folder chứa các clip 8s</label>
+              <input type="text" id="cp-folder" placeholder="clips/abc12345 hoặc /absolute/path/to/folder"/>
+              <div id="cp-clip-count" style="font-size:12px;color:var(--muted)"></div>
+              <button class="btn" style="width:fit-content;font-size:12px;padding:4px 12px" onclick="checkComposeFolder()">🔍 Kiểm tra folder</button>
+            </div>
+          </div>
+
+          <!-- Narration sheet -->
+          <div class="settings-group">
+            <div class="settings-group-title">Sheet Narration (tuỳ chọn)</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label style="font-size:12px;color:var(--muted)">Sheet URL (cần public hoặc service account)</label>
+              <input type="text" id="cp-sheet-url" placeholder="https://docs.google.com/spreadsheets/d/..." value="https://docs.google.com/spreadsheets/d/1h4RYXblqa5qV4_Ydf5MPbwRPJ_oNAnzI6fTb5MP_xt0/edit?gid=1751351399#gid=1751351399"/>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Cột NARRATION (A=0, B=1…)</label>
+                  <input type="number" id="cp-prompt-col" value="1" min="0" max="20" style="width:100%"/>
+                </div>
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Header rows (dòng tiêu đề)</label>
+                  <input type="number" id="cp-header-rows" value="1" min="0" max="5" style="width:100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Voice & duration -->
+          <div class="settings-group">
+            <div class="settings-group-title">Giọng đọc & Thời lượng</div>
+            <div style="margin-bottom:8px">
+              <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:5px">TTS Engine</label>
+              <div class="pill-group" id="cp-tts-engine-pills" style="gap:5px">
+                <div class="pill" data-val="auto" title="Tự động: ưu tiên Local F5-TTS, fallback Vbee">⚡ Auto</div>
+                <div class="pill" data-val="local" title="Chỉ dùng Local F5-TTS (giọng clone)">🖥️ Local F5-TTS</div>
+                <div class="pill active" data-val="vbee" title="Chỉ dùng Vbee API">☁️ Vbee</div>
+              </div>
+              <input type="hidden" id="cp-tts-engine" value="vbee"/>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <div style="flex:1">
+                <label style="font-size:11px;color:var(--muted)">Giọng đọc (TTS)</label>
+                <select id="cp-voice" style="width:100%">
+                  <option value="">— Đang tải giọng... —</option>
+                </select>
+              </div>
+              <div style="flex:1">
+                <label style="font-size:11px;color:var(--muted)">Thời lượng / video (giây)</label>
+                <input type="number" id="cp-duration" value="30" min="8" max="300" style="width:100%"/>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted)">Số video tạo ra</label>
+              <input type="number" id="cp-count" value="5" min="1" max="50" style="width:100%"/>
+            </div>
+          </div>
+
+          <!-- Music -->
+          <div class="settings-group">
+            <div class="settings-group-title" style="display:flex;align-items:center;gap:10px">
+              Nhạc nền
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:400;cursor:pointer">
+                <input type="checkbox" id="cp-music" checked style="width:14px;height:14px"/> Bật nhạc nền
+              </label>
+            </div>
+            <div id="cp-music-picker" style="display:flex;flex-direction:column;gap:8px">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+                <input type="radio" name="cp-music-mode" id="cp-music-random" value="random" checked/> Random (xáo ngẫu nhiên mỗi video)
+              </label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+                <input type="radio" name="cp-music-mode" id="cp-music-pick" value="pick"/> Chọn cụ thể
+              </label>
+              <div id="cp-music-select-row" style="display:none;gap:8px;align-items:center">
+                <select id="cp-music-file" style="flex:1">
+                  <option value="">— Đang tải... —</option>
+                </select>
+                <button class="btn" id="cp-btn-preview" style="padding:4px 10px;font-size:13px">▶</button>
+              </div>
+              <audio id="cp-audio-preview" style="display:none;width:100%" controls></audio>
+            </div>
+          </div>
+
+          <!-- Subtitles / Transcription -->
+          <div class="settings-group">
+            <div class="settings-group-title" style="display:flex;align-items:center;gap:10px">
+              Phụ đề (Transcription)
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:400;cursor:pointer">
+                <input type="checkbox" id="cp-subtitle" style="width:14px;height:14px"/> Hiển thị phụ đề
+              </label>
+            </div>
+            <div id="cp-subtitle-options" style="display:none;flex-direction:column;gap:8px">
+              <div style="font-size:11px;color:var(--muted)">Whisper tự động transcribe narration → burn vào video</div>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Cỡ chữ</label>
+                  <input type="range" id="cp-subtitle-size" min="8" max="48" step="2" value="20" style="width:100%"/>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted)"><span>8</span><span id="cp-subtitle-size-val">20</span><span>48</span></div>
+                </div>
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Màu chữ</label>
+                  <select id="cp-subtitle-color" style="width:100%">
+                    <option value="white" selected>Trắng</option>
+                    <option value="yellow">Vàng</option>
+                    <option value="cyan">Xanh cyan</option>
+                    <option value="black">Đen</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--muted)">Vị trí</label>
+                <div class="pill-group" id="cp-sub-pos-pills" style="gap:5px;flex-wrap:wrap">
+                  <div class="pill" data-val="top">Trên</div>
+                  <div class="pill" data-val="center">Giữa</div>
+                  <div class="pill active" data-val="bottom">Dưới</div>
+                </div>
+                <input type="hidden" id="cp-subtitle-pos" value="bottom"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remove VEO logo -->
+          <div class="settings-group">
+            <div class="settings-group-title">Xóa logo VEO</div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+                <input type="checkbox" id="cp-remove-veo" style="width:15px;height:15px"/>
+                Xóa chữ "Veo" trong clip
+              </label>
+              <div id="cp-veo-corner-row" style="display:none;gap:6px;align-items:center">
+                <label style="font-size:11px;color:var(--muted)">Góc logo:</label>
+                <select id="cp-veo-corner" style="font-size:12px">
+                  <option value="bottom_right" selected>Dưới phải</option>
+                  <option value="bottom_left">Dưới trái</option>
+                  <option value="top_right">Trên phải</option>
+                  <option value="top_left">Trên trái</option>
+                </select>
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:5px">Dùng FFmpeg delogo — xóa watermark "Veo" ở góc clip trước khi ghép.</div>
+          </div>
+
+          <!-- Watermark / Subscription -->
+          <div class="settings-group">
+            <div class="settings-group-title" style="display:flex;align-items:center;gap:10px">
+              Watermark & Subscription
+            </div>
+            <!-- Text watermark -->
+            <div style="margin-bottom:10px">
+              <label style="font-size:11px;color:var(--muted)">Chữ watermark</label>
+              <input type="text" id="cp-watermark-text" placeholder="@kênh của bạn" style="width:100%;margin-bottom:6px"/>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <div style="flex:1;min-width:100px">
+                  <label style="font-size:11px;color:var(--muted)">Vị trí</label>
+                  <select id="cp-watermark-pos" style="width:100%">
+                    <option value="top_left" selected>Trên trái</option>
+                    <option value="top_right">Trên phải</option>
+                    <option value="bottom_left">Dưới trái</option>
+                    <option value="bottom_right">Dưới phải</option>
+                    <option value="bottom_center">Dưới giữa</option>
+                  </select>
+                </div>
+                <div style="flex:1;min-width:100px">
+                  <label style="font-size:11px;color:var(--muted)">Cỡ chữ — <span id="cp-wm-size-val">24</span>px</label>
+                  <input type="range" id="cp-wm-fontsize" min="10" max="72" step="2" value="24" style="width:100%"/>
+                </div>
+                <div style="flex:1;min-width:100px">
+                  <label style="font-size:11px;color:var(--muted)">Độ trong suốt — <span id="cp-wm-opacity-val">75</span>%</label>
+                  <input type="range" id="cp-wm-opacity" min="10" max="100" step="5" value="75" style="width:100%"/>
+                </div>
+              </div>
+            </div>
+            <!-- Image watermark -->
+            <div>
+              <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:5px">Ảnh watermark (PNG/JPG)</label>
+              <div class="upload-zone" id="cp-wm-zone" style="padding:10px 14px;cursor:pointer;margin-bottom:6px" onclick="document.getElementById('cp-wm-input').click()">
+                <input type="file" id="cp-wm-input" accept="image/*" style="display:none"/>
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+                  <span>🖼️</span>
+                  <span id="cp-wm-name" style="color:var(--muted)">Chọn ảnh watermark...</span>
+                  <button id="cp-wm-clear" style="display:none;margin-left:auto;background:none;border:none;color:var(--error);cursor:pointer;font-size:16px" onclick="event.stopPropagation();clearCpWatermark()">✕</button>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Kích thước ảnh — <span id="cp-wm-scale-val">15</span>% chiều rộng</label>
+                  <input type="range" id="cp-wm-scale" min="5" max="50" step="1" value="15" style="width:100%"/>
+                </div>
+                <div style="flex:1">
+                  <label style="font-size:11px;color:var(--muted)">Độ trong suốt ảnh — <span id="cp-wm-img-opacity-val">75</span>%</label>
+                  <input type="range" id="cp-wm-img-opacity" min="10" max="100" step="5" value="75" style="width:100%"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+<div id="cp-start-status" style="font-size:13px;margin-bottom:8px"></div>
+          <button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startComposeSession()">🎼 Bắt đầu Ghép Video</button>
+        </div>
+
+        <!-- Right: sessions list -->
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-weight:600">Sessions</div>
+            <button class="btn" style="font-size:12px;padding:4px 10px" onclick="loadComposeSessions()">↻ Refresh</button>
+          </div>
+          <div id="compose-sessions-list" style="font-size:13px;color:var(--muted)">Chưa có session nào.</div>
+        </div>
+      </div>
+
+      <!-- Detail modal overlay -->
+      <div id="compose-detail-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;overflow:auto;padding:40px 20px">
+        <div style="max-width:800px;margin:0 auto;background:var(--surface);border-radius:12px;padding:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div id="compose-detail-title" style="font-weight:700;font-size:16px">Session Detail</div>
+            <button class="btn" onclick="document.getElementById('compose-detail-modal').style.display='none'">✕ Đóng</button>
+          </div>
+          <div id="compose-detail-info" style="font-size:12px;color:var(--muted);margin-bottom:12px"></div>
+          <pre id="compose-detail-log" style="background:var(--bg);border-radius:8px;padding:12px;font-size:11px;max-height:200px;overflow-y:auto;white-space:pre-wrap;margin-bottom:16px"></pre>
+          <div id="compose-detail-videos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px"></div>
         </div>
       </div>
     </div>
@@ -671,6 +910,73 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;hei
           <div class="uz-file" id="audio-upload-status"></div>
         </div>
       </div>
+
+      <!-- ── Local TTS ── -->
+      <div class="settings-group">
+        <div class="settings-group-title" style="display:flex;align-items:center;gap:10px">
+          🎙️ Local TTS (F5-TTS)
+          <span id="local-tts-badge" style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--border);color:var(--muted)">Đang kiểm tra...</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+          Chạy voice cloning on-device — không tốn Vbee credit. M4 Mac đạt ~50x realtime sau khi model load.
+        </div>
+
+        <!-- Status & Enable -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+            <input type="checkbox" id="ltts-enabled" style="width:15px;height:15px"/> Bật Local TTS (ưu tiên trước Vbee)
+          </label>
+        </div>
+
+        <!-- Venv path -->
+        <div style="margin-bottom:10px">
+          <label style="font-size:11px;color:var(--muted)">Python venv path (có f5-tts)</label>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <input type="text" id="ltts-venv" placeholder="~/.venv-tts" style="flex:1;font-family:monospace;font-size:12px"/>
+            <button class="btn" style="font-size:12px;padding:4px 10px;white-space:nowrap" onclick="checkF5TTSVenv()">🔍 Kiểm tra</button>
+          </div>
+          <div id="ltts-venv-status" style="font-size:11px;margin-top:4px;color:var(--muted)"></div>
+        </div>
+
+        <!-- Setup instructions (collapsible) -->
+        <details style="margin-bottom:12px">
+          <summary style="font-size:12px;color:#818cf8;cursor:pointer">📋 Hướng dẫn cài đặt F5-TTS</summary>
+          <pre style="background:var(--bg);border-radius:8px;padding:12px;font-size:11px;margin-top:8px;overflow-x:auto;white-space:pre">python3.13 -m venv ~/.venv-tts
+source ~/.venv-tts/bin/activate
+pip install torch torchaudio f5-tts soundfile openai-whisper
+
+# Lần đầu chạy sẽ download model ~3GB từ HuggingFace
+# Các lần sau load từ cache, không cần internet</pre>
+        </details>
+
+        <!-- Voice samples -->
+        <div style="margin-bottom:8px;font-weight:500;font-size:13px">Voice Samples</div>
+        <div id="ltts-samples-list" style="margin-bottom:12px;font-size:12px;color:var(--muted)">Đang tải...</div>
+
+        <!-- Upload sample -->
+        <div class="upload-zone" style="max-width:400px;margin-bottom:12px">
+          <input type="file" id="ltts-upload-input" accept=".mp3,.wav,.flac,.m4a" onchange="uploadVoiceSample(this)"/>
+          <div class="uz-icon">🎤</div>
+          <div class="uz-label">Upload voice sample (10-30 giây WAV/MP3)</div>
+          <div class="uz-file" id="ltts-upload-status"></div>
+        </div>
+
+        <!-- Ref text -->
+        <div style="margin-bottom:10px">
+          <label style="font-size:11px;color:var(--muted)">Transcript của voice sample (để trống → auto Whisper)</label>
+          <textarea id="ltts-ref-text" rows="2" placeholder="Nội dung được đọc trong file sample..." style="width:100%;margin-top:4px;font-size:12px;resize:vertical"></textarea>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <label style="font-size:11px;color:var(--muted)">Đoạn văn test (để trống → dùng câu mặc định)</label>
+          <textarea id="ltts-test-text" rows="3" placeholder="Nhập đoạn văn muốn test giọng đọc..." style="width:100%;margin-top:4px;font-size:12px;resize:vertical"></textarea>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" style="font-size:13px" onclick="saveLocalTTSConfig()">💾 Lưu cấu hình</button>
+          <button class="btn" style="font-size:13px" onclick="testLocalTTS()">▶ Test thử</button>
+        </div>
+        <div id="ltts-save-status" style="font-size:12px;margin-top:8px;color:var(--muted)"></div>
+      </div>
     </div>
 
   </div><!-- /main -->
@@ -712,6 +1018,7 @@ function onPageSwitch(page) {
   if (page === 'history') loadHistory();
   if (page === 'media') loadMedia();
   if (page === 'clips') loadClipSessions();
+  if (page === 'compose') loadComposeSessions();
   if (page === 'settings') loadSettings();
   if (page !== 'queue' && _queueTimer) { clearInterval(_queueTimer); _queueTimer = null; }
 }
@@ -911,14 +1218,211 @@ async function loadSettings() {
   if (res2) {
     const d = await res2.json();
     const el = document.getElementById('audio-list-settings');
-    if (!d.files?.length) { el.textContent = 'Không có file nhạc nào.'; return; }
-    el.innerHTML = d.files.map(f => `
-      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">
-        <span style="flex:1;font-size:13px">${f.filename}</span>
-        <span style="color:var(--muted);font-size:12px">${f.size_mb} MB</span>
-        <button class="btn-danger" onclick="deleteAudio('${f.filename}')">✕</button>
-      </div>`).join('');
+    if (!d.files?.length) { el.textContent = 'Không có file nhạc nào.'; }
+    else {
+      el.textContent = '';
+      d.files.forEach(f => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
+        const name = document.createElement('span'); name.style.flex = '1'; name.style.fontSize = '13px'; name.textContent = f.filename;
+        const sz = document.createElement('span'); sz.style.cssText = 'color:var(--muted);font-size:12px'; sz.textContent = f.size_mb + ' MB';
+        const btn = document.createElement('button'); btn.className = 'btn-danger'; btn.textContent = '✕';
+        btn.addEventListener('click', () => deleteAudio(f.filename));
+        row.appendChild(name); row.appendChild(sz); row.appendChild(btn);
+        el.appendChild(row);
+      });
+    }
   }
+
+  // Local TTS
+  loadLocalTTSStatus();
+}
+
+async function loadLocalTTSStatus() {
+  try {
+    const res = await fetch(`${API}/api/voice-samples`);
+    const d = await res.json();
+
+    // Badge
+    const badge = document.getElementById('local-tts-badge');
+    if (d.f5_ready && d.enabled) {
+      badge.textContent = '✅ Sẵn sàng';
+      badge.style.background = 'rgba(34,197,94,0.15)';
+      badge.style.color = 'var(--success)';
+    } else if (d.f5_ready) {
+      badge.textContent = '⚠️ F5-TTS OK nhưng chưa bật';
+      badge.style.background = 'rgba(234,179,8,0.15)';
+      badge.style.color = 'var(--warn)';
+    } else {
+      badge.textContent = '❌ F5-TTS chưa cài';
+      badge.style.background = 'rgba(239,68,68,0.1)';
+      badge.style.color = 'var(--error)';
+    }
+
+    // Populate fields
+    document.getElementById('ltts-enabled').checked = d.enabled;
+    if (d.venv) document.getElementById('ltts-venv').value = d.venv;
+    if (d.ref_text) document.getElementById('ltts-ref-text').value = d.ref_text;
+
+    // Samples list
+    const container = document.getElementById('ltts-samples-list');
+    container.textContent = '';
+    if (!d.files?.length) {
+      container.textContent = 'Chưa có voice sample. Upload file WAV/MP3 (10-30 giây).';
+    } else {
+      d.files.forEach(f => {
+        const row = document.createElement('div');
+        row.style.cssText = `display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:${f.active ? 'rgba(129,140,248,0.1)' : 'var(--bg)'};border:1px solid ${f.active ? '#818cf8' : 'var(--border)'}`;
+
+        const info = document.createElement('div');
+        info.style.flex = '1';
+        const fn = document.createElement('div');
+        fn.style.cssText = 'font-size:13px;font-weight:500';
+        fn.textContent = (f.active ? '🎯 ' : '') + f.filename;
+        const sz = document.createElement('div');
+        sz.style.cssText = 'font-size:11px;color:var(--muted)';
+        sz.textContent = f.size_mb + ' MB';
+        info.appendChild(fn); info.appendChild(sz);
+
+        const preview = document.createElement('audio');
+        preview.src = f.url;
+        preview.controls = true;
+        preview.style.cssText = 'height:28px;width:160px';
+
+        const activateBtn = document.createElement('button');
+        activateBtn.className = 'btn' + (f.active ? ' btn-primary' : '');
+        activateBtn.style.cssText = 'font-size:11px;padding:3px 8px;white-space:nowrap';
+        activateBtn.textContent = f.active ? '✓ Đang dùng' : 'Kích hoạt';
+        activateBtn.disabled = f.active;
+        activateBtn.addEventListener('click', () => activateVoiceSample(f.filename));
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn-danger';
+        delBtn.style.fontSize = '11px';
+        delBtn.textContent = '✕';
+        delBtn.addEventListener('click', async () => {
+          if (!confirm('Xoá sample này?')) return;
+          await fetch(`${API}/api/voice-samples/${encodeURIComponent(f.filename)}`, {method:'DELETE'});
+          loadLocalTTSStatus();
+        });
+
+        row.appendChild(info);
+        row.appendChild(preview);
+        row.appendChild(activateBtn);
+        row.appendChild(delBtn);
+        container.appendChild(row);
+      });
+    }
+  } catch(e) {
+    document.getElementById('local-tts-badge').textContent = '⚠️ Lỗi kiểm tra';
+  }
+}
+
+async function activateVoiceSample(filename) {
+  const refText = document.getElementById('ltts-ref-text').value.trim();
+  const res = await fetch(`${API}/api/voice-samples/activate`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filename, ref_text: refText, enabled: true}),
+  });
+  const d = await res.json();
+  if (d.ok) {
+    document.getElementById('ltts-enabled').checked = true;
+    loadLocalTTSStatus();
+  }
+}
+
+async function uploadVoiceSample(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('ltts-upload-status');
+  statusEl.textContent = '⏳ Đang upload...';
+  const fd = new FormData();
+  fd.append('file', file);
+  try {
+    const res = await fetch(`${API}/api/voice-samples/upload`, {method:'POST', body: fd});
+    const d = await res.json();
+    if (d.ok) {
+      statusEl.textContent = `✅ ${d.filename} (${d.size_mb} MB)`;
+      loadLocalTTSStatus();
+    } else {
+      statusEl.textContent = '❌ ' + (d.error || 'Lỗi');
+    }
+  } catch(e) { statusEl.textContent = '❌ ' + e; }
+  input.value = '';
+}
+
+async function checkF5TTSVenv() {
+  const venv = document.getElementById('ltts-venv').value.trim();
+  const statusEl = document.getElementById('ltts-venv-status');
+  if (!venv) { statusEl.textContent = '⚠️ Nhập đường dẫn venv'; return; }
+  statusEl.textContent = '⏳ Kiểm tra...';
+  // Save venv then reload status
+  await fetch(`${API}/api/voice-samples/config`, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({venv}),
+  });
+  try {
+    const res = await fetch(`${API}/api/voice-samples`);
+    const d = await res.json();
+    if (d.f5_ready) {
+      statusEl.textContent = '✅ F5-TTS sẵn sàng tại: ' + (d.python || venv);
+      statusEl.style.color = 'var(--success)';
+    } else {
+      statusEl.textContent = '❌ F5-TTS chưa cài trong venv này. Chạy: pip install f5-tts soundfile';
+      statusEl.style.color = 'var(--error)';
+    }
+  } catch(e) { statusEl.textContent = '❌ ' + e; statusEl.style.color = 'var(--error)'; }
+}
+
+async function saveLocalTTSConfig() {
+  const enabled = document.getElementById('ltts-enabled').checked;
+  const venv = document.getElementById('ltts-venv').value.trim();
+  const refText = document.getElementById('ltts-ref-text').value.trim();
+  const statusEl = document.getElementById('ltts-save-status');
+  statusEl.textContent = '⏳ Đang lưu...';
+  try {
+    const res = await fetch(`${API}/api/voice-samples/config`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({enabled, venv, ref_text: refText}),
+    });
+    const d = await res.json();
+    if (d.ok) {
+      statusEl.textContent = '✅ Đã lưu';
+      statusEl.style.color = 'var(--success)';
+      loadLocalTTSStatus();
+    } else {
+      statusEl.textContent = '❌ ' + (d.error || 'Lỗi');
+      statusEl.style.color = 'var(--error)';
+    }
+  } catch(e) { statusEl.textContent = '❌ ' + e; statusEl.style.color = 'var(--error)'; }
+}
+
+async function testLocalTTS() {
+  const statusEl = document.getElementById('ltts-save-status');
+  statusEl.textContent = '⏳ Đang test... (lần đầu download model ~3GB, chờ vài phút)';
+  statusEl.style.color = 'var(--muted)';
+  const testText = (document.getElementById('ltts-test-text')?.value || '').trim();
+  try {
+    const res = await fetch(`${API}/api/local-tts/test`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(testText ? {text: testText} : {}),
+    });
+    const d = await res.json();
+    if (d.ok) {
+      statusEl.textContent = `✅ Test OK — ${d.engine} — ${d.duration}s`;
+      statusEl.style.color = 'var(--success)';
+      if (d.url) {
+        const a = document.createElement('audio');
+        a.src = d.url; a.controls = true; a.style.marginTop = '8px';
+        statusEl.after(a);
+      }
+    } else {
+      statusEl.textContent = '❌ ' + (d.error || 'Lỗi');
+      statusEl.style.color = 'var(--error)';
+    }
+  } catch(e) { statusEl.textContent = '❌ ' + e; statusEl.style.color = 'var(--error)'; }
 }
 
 async function saveSettingsToken() {
@@ -1101,6 +1605,39 @@ document.getElementById('aspect-pills').addEventListener('click', e => {
   pill.classList.add('active');
   document.getElementById('aspect_ratio').value = pill.dataset.val;
 });
+document.getElementById('tts-engine-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill'); if(!pill) return;
+  document.querySelectorAll('#tts-engine-pills .pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('tts_engine').value = pill.dataset.val;
+  // Show voice select only for vbee/auto (local uses ref audio from settings)
+  const showVoice = pill.dataset.val !== 'local';
+  document.getElementById('voice-wrap').style.display = showVoice ? 'block' : 'none';
+  document.getElementById('voices-loading').style.display = showVoice ? '' : 'none';
+});
+document.getElementById('cp-tts-engine-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill'); if(!pill) return;
+  document.querySelectorAll('#cp-tts-engine-pills .pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('cp-tts-engine').value = pill.dataset.val;
+  // Show voice select only for vbee/auto
+  const showVoice = pill.dataset.val !== 'local';
+  document.getElementById('cp-voice').parentElement.style.display = showVoice ? '' : 'none';
+});
+// ── Compose subtitle controls ────────────────────────────────────────────────
+document.getElementById('cp-subtitle').addEventListener('change', e => {
+  document.getElementById('cp-subtitle-options').style.display = e.target.checked ? 'flex' : 'none';
+});
+document.getElementById('cp-subtitle-size').addEventListener('input', e => {
+  document.getElementById('cp-subtitle-size-val').textContent = e.target.value;
+});
+document.getElementById('cp-sub-pos-pills').addEventListener('click', e => {
+  const pill = e.target.closest('.pill'); if (!pill) return;
+  document.querySelectorAll('#cp-sub-pos-pills .pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('cp-subtitle-pos').value = pill.dataset.val;
+});
+
 document.getElementById('speed_rate').addEventListener('input', e => { document.getElementById('speed-val').textContent = parseFloat(e.target.value).toFixed(2); });
 document.getElementById('subtitle_fontsize').addEventListener('input', e => { document.getElementById('subtitle-size-val').textContent = e.target.value; });
 document.getElementById('subtitle_enabled').addEventListener('change', e => { document.getElementById('subtitle-options').style.display = e.target.checked ? 'block' : 'none'; });
@@ -1479,17 +2016,483 @@ function statusBadge(status) {
   const cls=status==='done'?'done':status==='error'?'error':status==='running'?'running':'queued';
   return `<span class="badge-status ${cls}"><span class="dot${status==='running'?' spin':''}"></span>${map[status]||status}</span>`;
 }
+/** DOM-element version of statusBadge — used by loadComposeSessions */
+function makeBadge(status) {
+  const map={queued:'⏳ Queued',running:'⚡ Running',done:'✅ Done',error:'❌ Error',partial:'⚠️ Partial'};
+  const cls=status==='done'?'done':status==='error'?'error':status==='running'?'running':status==='partial'?'warn':'queued';
+  const el = document.createElement('span');
+  el.className = `badge-status ${cls}`;
+  const dot = document.createElement('span');
+  dot.className = 'dot' + (status === 'running' ? ' spin' : '');
+  el.appendChild(dot);
+  el.appendChild(document.createTextNode(map[status] || status));
+  return el;
+}
 function fmtTime(ts) {
   if(!ts) return '—';
   const d = new Date(ts * 1000);
   return d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
 }
 
+// ── Ghép Video (Compose) ──────────────────────────────────────────────────────
+const COMPOSE_CACHE_KEY = 'om_compose_v1';
+
+function saveComposeCache() {
+  const cache = {
+    folder:     document.getElementById('cp-folder')?.value || '',
+    sheetUrl:   document.getElementById('cp-sheet-url')?.value || '',
+    promptCol:  document.getElementById('cp-prompt-col')?.value || '1',
+    headerRows: document.getElementById('cp-header-rows')?.value || '1',
+    voice:      document.getElementById('cp-voice')?.value || '',
+    duration:   document.getElementById('cp-duration')?.value || '30',
+    count:      document.getElementById('cp-count')?.value || '5',
+    musicOn:    document.getElementById('cp-music')?.checked ?? true,
+    musicMode:  document.getElementById('cp-music-random')?.checked ? 'random' : 'pick',
+    musicFile:  document.getElementById('cp-music-file')?.value || '',
+    ttsEngine:  document.getElementById('cp-tts-engine')?.value || 'vbee',
+    wmText:     document.getElementById('cp-watermark-text')?.value || '',
+    wmPos:      document.getElementById('cp-watermark-pos')?.value || 'top_left',
+    subEnabled: document.getElementById('cp-subtitle')?.checked ?? false,
+    subSize:    document.getElementById('cp-subtitle-size')?.value || '20',
+    subColor:   document.getElementById('cp-subtitle-color')?.value || 'white',
+    subPos:     document.getElementById('cp-subtitle-pos')?.value || 'bottom',
+  };
+  try { localStorage.setItem(COMPOSE_CACHE_KEY, JSON.stringify(cache)); } catch(_) {}
+}
+
+function restoreComposeCache() {
+  let cache;
+  try { cache = JSON.parse(localStorage.getItem(COMPOSE_CACHE_KEY) || 'null'); } catch(_) {}
+  if (!cache) return;
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+  set('cp-folder',      cache.folder);
+  set('cp-sheet-url',   cache.sheetUrl);
+  set('cp-prompt-col',  cache.promptCol);
+  set('cp-header-rows', cache.headerRows);
+  set('cp-duration',    cache.duration);
+  set('cp-count',       cache.count);
+
+  const musicEl = document.getElementById('cp-music');
+  if (musicEl && cache.musicOn !== undefined) {
+    musicEl.checked = !!cache.musicOn;
+    document.getElementById('cp-music-picker').style.display = cache.musicOn ? 'flex' : 'none';
+  }
+  if (cache.musicMode === 'pick') {
+    const pickEl = document.getElementById('cp-music-pick');
+    if (pickEl) {
+      pickEl.checked = true;
+      document.getElementById('cp-music-random').checked = false;
+      document.getElementById('cp-music-select-row').style.display = 'flex';
+      loadComposeMusicList().then(() => {
+        if (cache.musicFile) {
+          const sel = document.getElementById('cp-music-file');
+          const opt = [...(sel?.options || [])].find(o => o.value === cache.musicFile);
+          if (opt) sel.value = cache.musicFile;
+        }
+      });
+    }
+  }
+  // Restore watermark fields
+  if (cache.wmText !== undefined) { const el = document.getElementById('cp-watermark-text'); if(el) el.value = cache.wmText; }
+  if (cache.wmPos) { const el = document.getElementById('cp-watermark-pos'); if(el) el.value = cache.wmPos; }
+  // Restore subtitle fields
+  if (cache.subEnabled) {
+    const el = document.getElementById('cp-subtitle');
+    if (el) { el.checked = true; document.getElementById('cp-subtitle-options').style.display = 'flex'; }
+  }
+  if (cache.subSize) { const el = document.getElementById('cp-subtitle-size'); if(el) { el.value = cache.subSize; document.getElementById('cp-subtitle-size-val').textContent = cache.subSize; } }
+  if (cache.subColor) { const el = document.getElementById('cp-subtitle-color'); if(el) el.value = cache.subColor; }
+  if (cache.subPos) {
+    document.getElementById('cp-subtitle-pos').value = cache.subPos;
+    document.querySelectorAll('#cp-sub-pos-pills .pill').forEach(p => p.classList.toggle('active', p.dataset.val === cache.subPos));
+  }
+  // Restore TTS engine pill
+  if (cache.ttsEngine) {
+    document.getElementById('cp-tts-engine').value = cache.ttsEngine;
+    document.querySelectorAll('#cp-tts-engine-pills .pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.val === cache.ttsEngine);
+    });
+    if (cache.ttsEngine === 'local') {
+      document.getElementById('cp-voice').parentElement.style.display = 'none';
+    }
+  }
+  // Voice is restored after loadComposeVoices() runs — handled there
+  if (cache.voice) {
+    const sel = document.getElementById('cp-voice');
+    if (sel) sel.dataset.cachedVoice = cache.voice;
+  }
+}
+
+let _composeDetailId = null;
+let _composeDetailTimer = null;
+
+// Load Vbee voice list into compose voice select
+async function loadComposeVoices() {
+  const sel = document.getElementById('cp-voice');
+  try {
+    const res = await fetch(`${API}/api/voices`);
+    const data = await res.json();
+    const voices = Array.isArray(data.voices) ? data.voices : [];
+    sel.textContent = '';
+    const none = document.createElement('option');
+    none.value = '';
+    none.textContent = '— Không có narration —';
+    sel.appendChild(none);
+    voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = String(v.code || '');
+      opt.textContent = String(v.name || v.code || '');
+      if (v.code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
+      sel.appendChild(opt);
+    });
+  } catch {
+    // Fallback to known codes
+    const defaults = [
+      ['', '— Không có narration —'],
+      ['s_sg_male_thientam_ytstable_vc', 'Thiện Tâm (Sài Gòn Nam)'],
+      ['sg_female_lantrinh_vdts_48k-fhg', 'Lan Trinh (Sài Gòn Nữ)'],
+      ['hn_male_manhdung_news_48k-fhg', 'Mạnh Dũng (Hà Nội Nam)'],
+      ['hn_male_thanhlong_talk_48k-fhg', 'Thanh Long (Hà Nội Nam)'],
+      ['hn_female_ngochuyen_full_48k-fhg', 'Ngọc Huyền (Hà Nội Nữ)'],
+      ['sg_male_trungkien_vdts_48k-fhg', 'Trung Kiên (Sài Gòn Nam)'],
+    ];
+    sel.textContent = '';
+    defaults.forEach(([code, name]) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = name;
+      if (code === 's_sg_male_thientam_ytstable_vc') opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+  // Restore cached voice selection
+  const cached = sel.dataset.cachedVoice;
+  if (cached) {
+    const found = [...sel.options].find(o => o.value === cached);
+    if (found) sel.value = cached;
+    delete sel.dataset.cachedVoice;
+  }
+}
+
+// Load music list into compose music select
+async function loadComposeMusicList() {
+  const sel = document.getElementById('cp-music-file');
+  try {
+    const res = await fetch(`${API}/api/audio/list`);
+    const data = await res.json();
+    sel.textContent = '';
+    if (!data.files?.length) {
+      const opt = document.createElement('option');
+      opt.value = '';
+      opt.textContent = '— Không có file nhạc —';
+      sel.appendChild(opt);
+      return;
+    }
+    data.files.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f.filename;
+      opt.textContent = `${f.filename} (${f.size_mb} MB)`;
+      sel.appendChild(opt);
+    });
+  } catch(e) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '— Lỗi tải danh sách —';
+    sel.appendChild(opt);
+  }
+}
+
+// Wire music toggle
+document.getElementById('cp-music').addEventListener('change', e => {
+  document.getElementById('cp-music-picker').style.display = e.target.checked ? 'flex' : 'none';
+  saveComposeCache();
+});
+document.querySelectorAll('input[name="cp-music-mode"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const isPick = document.getElementById('cp-music-pick').checked;
+    document.getElementById('cp-music-select-row').style.display = isPick ? 'flex' : 'none';
+    if (isPick) loadComposeMusicList();
+    saveComposeCache();
+  });
+});
+
+// Auto-save compose fields on change
+['cp-folder','cp-sheet-url','cp-prompt-col','cp-header-rows','cp-voice','cp-duration','cp-count','cp-music-file'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', saveComposeCache);
+  document.getElementById(id)?.addEventListener('input', saveComposeCache);
+});
+document.getElementById('cp-btn-preview').addEventListener('click', () => {
+  const sel = document.getElementById('cp-music-file');
+  const audio = document.getElementById('cp-audio-preview');
+  const btn = document.getElementById('cp-btn-preview');
+  if (!sel.value) return;
+  if (!audio.paused) { audio.pause(); btn.textContent = '▶'; return; }
+  audio.src = `/audio/${sel.value}`;
+  audio.style.display = 'block';
+  audio.play();
+  btn.textContent = '⏹';
+  audio.onended = () => { btn.textContent = '▶'; };
+});
+
+// ── Compose: remove VEO logo toggle ─────────────────────────────────────────
+document.getElementById('cp-remove-veo').addEventListener('change', e => {
+  document.getElementById('cp-veo-corner-row').style.display = e.target.checked ? 'flex' : 'none';
+});
+
+// ── Compose watermark sliders ─────────────────────────────────────────────────
+document.getElementById('cp-wm-fontsize').addEventListener('input', e => {
+  document.getElementById('cp-wm-size-val').textContent = e.target.value;
+});
+document.getElementById('cp-wm-opacity').addEventListener('input', e => {
+  document.getElementById('cp-wm-opacity-val').textContent = e.target.value;
+});
+document.getElementById('cp-wm-scale').addEventListener('input', e => {
+  document.getElementById('cp-wm-scale-val').textContent = e.target.value;
+});
+document.getElementById('cp-wm-img-opacity').addEventListener('input', e => {
+  document.getElementById('cp-wm-img-opacity-val').textContent = e.target.value;
+});
+
+// ── Compose watermark image upload ───────────────────────────────────────────
+let _cpWmFile = null;
+document.getElementById('cp-wm-input').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  _cpWmFile = f;
+  document.getElementById('cp-wm-name').textContent = f.name;
+  document.getElementById('cp-wm-name').style.color = 'var(--text)';
+  document.getElementById('cp-wm-clear').style.display = 'inline';
+});
+function clearCpWatermark() {
+  _cpWmFile = null;
+  document.getElementById('cp-wm-input').value = '';
+  document.getElementById('cp-wm-name').textContent = 'Chọn ảnh watermark...';
+  document.getElementById('cp-wm-name').style.color = 'var(--muted)';
+  document.getElementById('cp-wm-clear').style.display = 'none';
+}
+
+async function checkComposeFolder() {
+  const folder = document.getElementById('cp-folder').value.trim();
+  const el = document.getElementById('cp-clip-count');
+  if (!folder) { el.textContent = ''; return; }
+  try {
+    const r = await fetch(`${API}/api/compose/count?folder=${encodeURIComponent(folder)}`);
+    const d = await r.json();
+    if (d.count !== undefined) {
+      el.textContent = `✅ ${d.count} clips tìm thấy`;
+      el.style.color = d.count > 0 ? 'var(--success)' : 'var(--error)';
+    } else {
+      el.textContent = '❌ ' + (d.error || 'Không tìm thấy');
+      el.style.color = 'var(--error)';
+    }
+  } catch(e) { el.textContent = '❌ ' + e; el.style.color = 'var(--error)'; }
+}
+
+async function startComposeSession() {
+  const folder = document.getElementById('cp-folder').value.trim();
+  if (!folder) {
+    document.getElementById('cp-start-status').textContent = '⚠️ Nhập đường dẫn folder';
+    return;
+  }
+  const enableMusic = document.getElementById('cp-music').checked;
+  const musicRandom = document.getElementById('cp-music-random').checked;
+  const musicFile = (!musicRandom && document.getElementById('cp-music-pick').checked)
+    ? document.getElementById('cp-music-file').value
+    : '';
+  const statusEl = document.getElementById('cp-start-status');
+  statusEl.textContent = '⏳ Đang khởi động...';
+  statusEl.style.color = 'var(--muted)';
+
+  // Upload watermark image first if selected
+  let wmImagePath = null;
+  if (_cpWmFile) {
+    statusEl.textContent = '⏳ Đang tải ảnh watermark...';
+    const fd = new FormData();
+    fd.append('file', _cpWmFile);
+    const wmRes = await fetch(`${API}/api/upload/image`, { method: 'POST', body: fd });
+    const wmData = await wmRes.json();
+    if (!wmRes.ok || !wmData.path) {
+      statusEl.textContent = '❌ Upload ảnh watermark thất bại: ' + (wmData.error || '');
+      statusEl.style.color = 'var(--error)';
+      return;
+    }
+    wmImagePath = wmData.path;
+    statusEl.textContent = '⏳ Đang khởi động...';
+  }
+
+  const body = {
+    clips_folder: folder,
+    sheet_url: document.getElementById('cp-sheet-url').value.trim(),
+    prompt_col: parseInt(document.getElementById('cp-prompt-col').value),
+    header_rows: parseInt(document.getElementById('cp-header-rows').value),
+    voice_code: document.getElementById('cp-voice').value,
+    tts_engine: document.getElementById('cp-tts-engine').value,
+    duration: parseInt(document.getElementById('cp-duration').value),
+    count: parseInt(document.getElementById('cp-count').value),
+    enable_music: enableMusic,
+    music_random: musicRandom,
+    music_file: musicFile,
+    watermark_text: document.getElementById('cp-watermark-text').value.trim(),
+    watermark_position: document.getElementById('cp-watermark-pos').value,
+    watermark_fontsize: parseInt(document.getElementById('cp-wm-fontsize').value),
+    watermark_opacity: parseInt(document.getElementById('cp-wm-opacity').value) / 100,
+    watermark_scale: parseInt(document.getElementById('cp-wm-scale').value) / 100,
+    watermark_img_opacity: parseInt(document.getElementById('cp-wm-img-opacity').value) / 100,
+    watermark_image_path: wmImagePath,
+    subtitle_enabled: document.getElementById('cp-subtitle').checked,
+    subtitle_fontsize: parseInt(document.getElementById('cp-subtitle-size').value),
+    subtitle_color: document.getElementById('cp-subtitle-color').value,
+    subtitle_position: document.getElementById('cp-subtitle-pos').value,
+    remove_veo_logo: document.getElementById('cp-remove-veo').checked,
+    veo_logo_corner: document.getElementById('cp-veo-corner').value,
+  };
+  try {
+    const res = await fetch(`${API}/api/compose/start`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body),
+    });
+    const d = await res.json();
+    if (res.ok && d.session_id) {
+      statusEl.textContent = `✅ Session ${d.session_id} — ${d.clip_count} clips — đang chạy`;
+      statusEl.style.color = 'var(--success)';
+      loadComposeSessions();
+      openComposeDetail(d.session_id);
+    } else {
+      statusEl.textContent = '❌ ' + (d.error || 'Lỗi');
+      statusEl.style.color = 'var(--error)';
+    }
+  } catch(e) {
+    statusEl.textContent = '❌ ' + e;
+    statusEl.style.color = 'var(--error)';
+  }
+}
+
+async function loadComposeSessions() {
+  const container = document.getElementById('compose-sessions-list');
+  try {
+    const r = await fetch(`${API}/api/compose`);
+    const d = await r.json();
+    const sessions = (d.sessions || []).sort((a,b) => (b.created_at||0) - (a.created_at||0));
+    if (!sessions.length) { container.textContent = 'Chưa có session nào.'; return; }
+    container.textContent = '';
+    sessions.forEach(s => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:8px;margin-bottom:8px;cursor:pointer';
+      row.addEventListener('click', () => openComposeDetail(s.id));
+
+      const info = document.createElement('div');
+      info.style.flex = '1';
+
+      const title = document.createElement('div');
+      title.style.cssText = 'font-weight:600;font-size:13px';
+      title.textContent = s.id;
+
+      const meta = document.createElement('div');
+      meta.style.cssText = 'font-size:11px;color:var(--muted);margin-top:2px';
+      meta.textContent = `${s.clip_count||'?'} clips · ${s.count} videos · ${s.done||0} done · ${fmtTime(s.created_at)}`;
+
+      info.appendChild(title);
+      info.appendChild(meta);
+      row.appendChild(info);
+      row.appendChild(makeBadge(s.status));
+
+      const del = document.createElement('button');
+      del.className = 'btn';
+      del.style.cssText = 'font-size:11px;padding:3px 8px;color:var(--error)';
+      del.textContent = '🗑';
+      del.addEventListener('click', async e => {
+        e.stopPropagation();
+        if (!confirm('Xoá session này?')) return;
+        await fetch(`${API}/api/compose/${s.id}`, {method:'DELETE'});
+        loadComposeSessions();
+      });
+      row.appendChild(del);
+      container.appendChild(row);
+    });
+  } catch(e) { container.textContent = '❌ ' + e; }
+}
+
+function openComposeDetail(sessionId) {
+  _composeDetailId = sessionId;
+  document.getElementById('compose-detail-modal').style.display = 'block';
+  refreshComposeDetail();
+  if (_composeDetailTimer) clearInterval(_composeDetailTimer);
+  _composeDetailTimer = setInterval(() => {
+    if (_composeDetailId) refreshComposeDetail();
+    else { clearInterval(_composeDetailTimer); _composeDetailTimer = null; }
+  }, 4000);
+}
+
+async function refreshComposeDetail() {
+  if (!_composeDetailId) return;
+  try {
+    const r = await fetch(`${API}/api/compose/${_composeDetailId}`);
+    const s = await r.json();
+
+    document.getElementById('compose-detail-title').textContent = `Session ${s.id}`;
+
+    const info = document.getElementById('compose-detail-info');
+    info.textContent = `${s.clip_count||'?'} clips · ${s.count} videos · done:${s.done||0} fail:${s.failed||0} · ${s.clips_folder||''}`;
+
+    const logEl = document.getElementById('compose-detail-log');
+    logEl.textContent = (s.log || []).join('\n');
+    logEl.scrollTop = logEl.scrollHeight;
+
+    // Videos grid
+    const grid = document.getElementById('compose-detail-videos');
+    grid.textContent = '';
+    const videos = s.videos || {};
+    Object.entries(videos).forEach(([key, v]) => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background:var(--bg);border-radius:8px;padding:10px;font-size:12px';
+
+      const label = document.createElement('div');
+      label.style.cssText = 'font-weight:600;margin-bottom:6px';
+      label.textContent = key.replace('video_', 'Video ');
+      card.appendChild(label);
+
+      if (v.status === 'done' && v.url) {
+        const vid = document.createElement('video');
+        vid.src = v.url;
+        vid.controls = true;
+        vid.style.cssText = 'width:100%;border-radius:6px;margin-bottom:4px';
+        card.appendChild(vid);
+
+        const dl = document.createElement('a');
+        dl.href = v.url;
+        dl.download = '';
+        dl.className = 'btn';
+        dl.style.cssText = 'font-size:11px;padding:3px 8px;display:inline-block';
+        dl.textContent = '⬇ Tải về';
+        card.appendChild(dl);
+      } else if (v.status === 'error') {
+        const err = document.createElement('div');
+        err.style.color = 'var(--error)';
+        err.textContent = '❌ ' + (v.error || 'Lỗi');
+        card.appendChild(err);
+      } else {
+        const sp = document.createElement('div');
+        sp.style.color = 'var(--muted)';
+        sp.textContent = v.status === 'running' ? '⏳ Đang xử lý...' : '⏸ Chờ...';
+        card.appendChild(sp);
+      }
+      grid.appendChild(card);
+    });
+
+    if (['done', 'error', 'partial'].includes(s.status)) {
+      if (_composeDetailTimer) { clearInterval(_composeDetailTimer); _composeDetailTimer = null; }
+    }
+  } catch(e) { /* ignore */ }
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 restoreFormCache();
+restoreComposeCache();
 loadVoices();
 loadAudioList();
-loadDashboard();
+loadComposeVoices();
 </script>
 </body>
 </html>
