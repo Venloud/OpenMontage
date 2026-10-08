@@ -1,0 +1,69 @@
+name: JJK Culling Game - Zero Key Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openmontage-jjk-zero-key
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install offline narration and video inspection tools
+        run: sudo apt-get update && sudo apt-get install -y espeak-ng ffmpeg
+      - name: Prepare isolated test props
+        run: python3 experiments/jjk_culling_game.py
+      - name: Generate narration without API keys
+        run: |
+          mkdir -p remotion-composer/public/jjk-test
+          espeak-ng -v en-us -s 142 -w remotion-composer/public/jjk-test/narration.wav \
+            "The Culling Game is not just a tournament. It is Kenjaku's deadly ritual. Across Japan, ten colonies become battlefields. Players earn points by killing other players. A sorcerer is worth five points, and a non-sorcerer is worth one. With one hundred points, a player can propose a new rule. The game master may reject rules that seriously disrupt the game. If a player's points do not change for nineteen days, their cursed technique is removed, a punishment considered fatal. Entering the game means accepting its rules. But Kenjaku is not looking for a champion. The fighting generates cursed energy for his larger plan involving Tengen. The Culling Game is not about who wins. The game itself is part of the ritual."
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 remotion-composer/public/jjk-test/narration.wav
+      - name: Install composer dependencies
+        working-directory: remotion-composer
+        run: npm install --no-audit --no-fund
+      - name: Render original 9:16 MP4
+        working-directory: remotion-composer
+        run: |
+          mkdir -p ../projects/jjk-culling-game/renders
+          npx remotion render src/index.tsx Explainer ../projects/jjk-culling-game/renders/jjk-culling-game.mp4 \
+            --props public/jjk-test/props.json --codec h264 --width 1080 --height 1920 --concurrency 2
+      - name: Verify playable output
+        run: |
+          test -s projects/jjk-culling-game/renders/jjk-culling-game.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height -show_entries format=duration,size \
+            -of json projects/jjk-culling-game/renders/jjk-culling-game.mp4 | tee projects/jjk-culling-game/renders/validation.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("projects/jjk-culling-game/renders/validation.json").read_text())
+          assert 60 <= float(data["format"]["duration"]) <= 68, data
+          assert any(s.get("width")==1080 and s.get("height")==1920 for s in data["streams"]), data
+          print("PASS: vertical playable MP4, target duration")
+          PY
+      - name: Preserve output even if rendering fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jjk-culling-game-zero-key
+          path: |
+            projects/jjk-culling-game/renders/
+            remotion-composer/public/jjk-test/props.json
+          if-no-files-found: warn
+          retention-days: 30
