@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "repository": "Venloud/OpenMontage",
+  "skills": [
+    "remotion-video-creation",
+    "agent-harness-construction",
+    "security-review"
+  ],
+  "restrictions": "Follow AGENT_GUIDE.md and existing production pipeline/preflight. ECC does not create an additional controller or select a paid provider.",
+  "upstream": "v2.2.3",
+  "memory": "Vandam canonical; no automatic observation or separate memory store"
+}
