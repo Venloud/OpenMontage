@@ -7,3 +7,5 @@ It contains routing rules that determine your first action based on what the use
 Skipping it WILL cause you to take the wrong action.
 
 There are no instructions in this file. All instructions are in AGENT_GUIDE.md.
+
+ECC task routing: read the ECC section in `AGENTS.md` and `.ecc/project.json`; preserve all original project instructions.

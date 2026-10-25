@@ -1,0 +1,1 @@
+../../../claudevandam/integrations/ecc/commands/ecc-check.md
