@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from tools import openverse_common as ov
+from tools import openverse_assets
 from tools.base_tool import (
     BaseTool,
     Determinism,
@@ -93,7 +94,10 @@ class OpenverseImage(BaseTool):
         output = Path(inputs.get("output_path") or f"openverse_{hit['id']}.{(hit.get('filetype') or 'jpg').lower()}")
         candidates = [ov.rights(h) for h in hits]
         try:
-            ov.download(hit["url"], output, "image")
+            cached, record = openverse_assets.acquire(hit, "images")
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_bytes(cached.read_bytes())
+            output.with_suffix(output.suffix + ".license.json").write_text(__import__("json").dumps(record, indent=2), encoding="utf-8")
         except Exception as e:
             return ToolResult(success=False, error=f"Openverse download failed: {e}", data={"candidates": candidates})
         return ToolResult(
