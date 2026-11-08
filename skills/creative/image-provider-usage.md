@@ -123,3 +123,8 @@ and texture. Use the playbook as a consistency source, not a script to paste.
 ### Strategy: Avoid Mixing Styles Within a Scene
 Don't use a stock photo for one element and an AI illustration for another in the same scene.
 Keep each scene internally consistent — all stock or all generated.
+
+
+## Optional Openverse source (2026-11-08)
+
+When OPENMONTAGE_OPENVERSE=1 and the registry reports availability, openverse_image can supply existing openly licensed historical/documentary images and illustrations. It does not generate custom artwork or supply video footage. Use scene descriptions/narration as queries, inspect candidates for relevance, preserve source/license sidecars and CC BY credits, and follow the existing approval before switching an approved video treatment to stills. openverse_audio supports music/SFX discovery through the same opt-in. Search/download failure leaves existing provider choices available; do not invent a successful asset. See docs/OPENVERSE.md for validation and limits.

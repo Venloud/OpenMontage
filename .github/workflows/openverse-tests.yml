@@ -1,0 +1,20 @@
+name: Openverse offline contracts
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install requests pytest Pillow numpy pyyaml
+      - name: Verify optional providers without network or credentials
+        run: |
+          python -m pytest tests/tools/test_openverse.py tests/tools/test_openverse_assets.py -q
