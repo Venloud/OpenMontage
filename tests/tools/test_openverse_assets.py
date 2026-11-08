@@ -97,3 +97,27 @@ def test_candidate_failure_tries_next():
 def test_not_a_video_provider():
     with pytest.raises(ValueError, match="not video"):
         ov.search("video", "ocean")
+
+
+@pytest.mark.parametrize("bad", [[], {"results": "bad"}, {"results": [None, 7]}])
+def test_valid_json_corrupt_cache_recovers(tmp_path, bad):
+    with patch.object(ov.requests, "get", return_value=reply()):
+        ov.search("images", "cache shape")
+    next(tmp_path.glob("*.json")).write_text(json.dumps(bad))
+    with patch.object(ov.requests, "get", return_value=reply()) as get:
+        assert len(ov.search("images", "cache shape")) == 1
+        assert get.call_count == 1
+
+
+def test_corrupt_asset_sidecar_reacquires(tmp_path):
+    with patch.object(ov.requests, "get", side_effect=[reply(), reply()]), patch.object(ov, "_decode"):
+        path, _ = ov.acquire(hit(), "images")
+    next(path.parent.glob("*.license.json")).write_text("[]")
+    with patch.object(ov.requests, "get", side_effect=[reply(), reply()]) as get, patch.object(ov, "_decode"):
+        assert ov.acquire(hit(), "images")[1]["source_verified"]
+        assert get.call_count == 2
+
+
+def test_license_version_must_match_url():
+    with pytest.raises(ValueError):
+        ov.rights(hit(license="by", license_version="4.0", license_url="https://creativecommons.org/licenses/by/3.0/"))

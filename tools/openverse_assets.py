@@ -31,6 +31,8 @@ def _url(value: str) -> bool:
 
 
 def rights(hit: dict, allowed=("cc0", "pdm", "by")) -> dict:
+    if not isinstance(hit, dict):
+        raise ValueError("Openverse result must be an object")
     lic = str(hit.get("license") or "").lower()
     url = str(hit.get("license_url") or "")
     p = urlsplit(url)
@@ -39,6 +41,9 @@ def rights(hit: dict, allowed=("cc0", "pdm", "by")) -> dict:
             or not _url(hit.get("foreign_landing_url", "")) or not _url(hit.get("url", ""))
             or not hit.get("id") or hit.get("mature") or hit.get("sensitive")):
         raise ValueError("Openverse asset has unsupported or incomplete rights metadata")
+    expected_path = "/" + LICENSES[lic] + (str(hit.get("license_version") or "") if lic == "by" else "")
+    if p.path.rstrip("/") != expected_path.rstrip("/"):
+        raise ValueError("License version and URL disagree")
     if lic == "by" and not hit.get("creator"):
         raise ValueError("CC BY asset has no creator")
     attribution = hit.get("attribution") or (
@@ -67,12 +72,15 @@ def search(media: str, query: str, allowed=("cc0", "pdm", "by")) -> list[dict]:
             data = json.loads(cache.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         pass
+    if (not isinstance(data, dict) or not isinstance(data.get("results"), list)
+            or not all(isinstance(h, dict) for h in data["results"])):
+        data = None
     if data is None:
         cooldown = root / "rate-limit.json"
         try:
             if json.loads(cooldown.read_text())["until"] > time.time():
                 raise RuntimeError("Openverse rate limit cooldown; use another provider")
-        except (OSError, ValueError, KeyError):
+        except (OSError, ValueError, KeyError, TypeError):
             pass
         r = requests.get(f"{API}/{media}/", params=params, headers={"User-Agent": UA}, timeout=30)
         if r.status_code == 429:
@@ -84,7 +92,7 @@ def search(media: str, query: str, allowed=("cc0", "pdm", "by")) -> list[dict]:
             raise RuntimeError("Openverse rate limit; use cached or existing providers")
         r.raise_for_status()
         data = r.json()
-        if not isinstance(data.get("results"), list):
+        if not isinstance(data, dict) or not isinstance(data.get("results"), list):
             raise ValueError("Openverse response has no results list")
         cache.write_text(json.dumps(data), encoding="utf-8")
     out, seen = [], set()
@@ -119,7 +127,12 @@ def acquire(hit: dict, media: str, allowed=("cc0", "pdm", "by")) -> tuple[Path, 
     key = hashlib.sha256(hit["url"].encode()).hexdigest()
     path, side = root / key, root / (key + ".license.json")
     if path.exists() and side.exists():
-        saved = json.loads(side.read_text(encoding="utf-8"))
+        try:
+            saved = json.loads(side.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            saved = {}
+        if not isinstance(saved, dict):
+            saved = {}
         if (saved.get("sha256") == hashlib.sha256(path.read_bytes()).hexdigest()
                 and saved.get("license_url") == record["license_url"] and saved.get("source_verified")):
             _decode(path, media)
