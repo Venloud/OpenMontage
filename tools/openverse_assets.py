@@ -134,6 +134,11 @@ def acquire(hit: dict, media: str, allowed=("cc0", "pdm", "by")) -> tuple[Path, 
         raise ValueError("Original source does not confirm the indexed license; review required")
     r = requests.get(hit["url"], headers={"User-Agent": UA}, timeout=60, stream=True)
     r.raise_for_status()
+    expected = "image/" if media == "images" else "audio/"
+    content_type = r.headers.get("Content-Type", "").lower()
+    if content_type and not (content_type.startswith(expected) or content_type.startswith("application/octet-stream")):
+        r.close()
+        raise ValueError(f"download is not {expected.rstrip('/')} (Content-Type {content_type})")
     limit = (40 if media == "images" else 80) * 1024 * 1024
     chunks, size = [], 0
     try:

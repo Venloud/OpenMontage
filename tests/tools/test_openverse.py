@@ -19,6 +19,13 @@ class Reply:
         self._body = body if body is not None else {}
         self.headers = headers or {}
         self.content = content
+        self.text = "https://creativecommons.org/licenses/by/4.0/ https://creativecommons.org/publicdomain/zero/1.0/"
+
+    def iter_content(self, size):
+        return [self.content]
+
+    def close(self):
+        pass
 
     def json(self):
         return self._body
@@ -31,7 +38,7 @@ class Reply:
 def hit(i, lic, **kw):
     return {"id": f"id{i}", "title": f"item {i}", "url": f"https://cdn.example/{i}", "filetype": "jpg",
             "foreign_landing_url": f"https://src.example/{i}", "creator": f"maker{i}", "license": lic,
-            "license_version": "4.0", "license_url": f"https://creativecommons.org/{lic}",
+            "license_version": "4.0", "license_url": "https://creativecommons.org/" + ({"cc0":"publicdomain/zero/1.0/", "pdm":"publicdomain/mark/1.0/", "by":"licenses/by/4.0/"}.get(lic, "licenses/by-nc/4.0/")),
             "attribution": f'"item {i}" by maker{i}', "source": "flickr", "duration": 3000, **kw}
 
 
@@ -43,6 +50,7 @@ BODY = {"results": [hit(1, "by"), hit(2, "by-nc"), hit(3, "by-sa"), hit(4, "cc0"
 def env(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENVERSE_CACHE_DIR", str(tmp_path / "cache"))
     monkeypatch.setenv(ov.ENABLE_ENV, "1")
+    monkeypatch.setattr("tools.openverse_assets._decode", lambda *a: None)
     return tmp_path
 
 
