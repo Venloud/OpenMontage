@@ -127,7 +127,9 @@ def acquire(hit: dict, media: str, allowed=("cc0", "pdm", "by")) -> tuple[Path, 
     page = requests.get(record["source_url"], headers={"User-Agent": UA}, timeout=30)
     page.raise_for_status()
     # Match the exact license, allowing HTTP links and a missing final slash.
-    needle = record["license_url"].split("://", 1)[1].rstrip("/").lower()
+    needle = ("creativecommons.org/" + LICENSES[record["license"]]).rstrip("/").lower()
+    if record["license"] == "by":
+        needle += "/" + str(record["license_version"] or "4.0")
     if needle not in page.text.lower().replace("\\/", "/"):
         raise ValueError("Original source does not confirm the indexed license; review required")
     r = requests.get(hit["url"], headers={"User-Agent": UA}, timeout=60, stream=True)
