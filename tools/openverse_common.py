@@ -30,26 +30,12 @@ def _cache_dir() -> Path:
 
 def search(media: str, params: dict[str, Any], cache_days: float = 7) -> list[dict]:
     """Search /images/ or /audio/ and return only allowed, non-mature results."""
-    import requests
+    from tools import openverse_assets
 
-    params = {**params, "license": ",".join(sorted(ALLOWED_LICENSES)), "mature": "false"}
-    key = hashlib.sha256(json.dumps([media, params], sort_keys=True).encode()).hexdigest()[:24]
-    cache = _cache_dir() / f"{media}_{key}.json"
-    if cache.exists() and time.time() - cache.stat().st_mtime < cache_days * 86400:
-        data = json.loads(cache.read_text(encoding="utf-8"))
-    else:
-        r = requests.get(f"{API}/{media}/", params=params, headers={"User-Agent": UA}, timeout=30)
-        if r.status_code == 429:
-            raise RuntimeError("rate_limit: Openverse allows 20 requests/min and 200/day without a key "
-                               f"(retry after {r.headers.get('Retry-After', '?')} s)")
-        r.raise_for_status()
-        data = r.json()
-        if not isinstance(data.get("results"), list):
-            raise ValueError("Openverse response has no results list")
-        cache.parent.mkdir(parents=True, exist_ok=True)
-        cache.write_text(json.dumps(data), encoding="utf-8")
-    return [h for h in data["results"]
-            if str(h.get("license") or "").lower() in ALLOWED_LICENSES and not h.get("mature") and h.get("url")]
+    try:
+        return openverse_assets.search(media, params.get("q", ""), filters=params)
+    except RuntimeError as exc:
+        raise RuntimeError(f"rate_limit: {exc}") from exc
 
 
 def rights(hit: dict) -> dict:

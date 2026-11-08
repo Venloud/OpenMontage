@@ -98,8 +98,14 @@ def test_rate_limit_invalid_response_and_wrong_content(env):
     with patch("requests.get", return_value=Reply(429, headers={"Retry-After": "30"})):
         res = OpenverseImage().execute({"query": "limited"})
     assert not res.success and "rate_limit" in res.error
+
+
+def test_invalid_response(env):
     with patch("requests.get", return_value=Reply(body={"detail": "oops"})):
         assert "no results list" in OpenverseImage().execute({"query": "broken"}).error
+
+
+def test_wrong_content_type(env):
     with patch("requests.get", side_effect=fake_get(Reply(body=BODY), "text/html")):
         res = OpenverseImage().execute({"query": "html page", "output_path": str(env / "h.jpg")})
     assert not res.success and "not image" in res.error and not (env / "h.jpg").exists()

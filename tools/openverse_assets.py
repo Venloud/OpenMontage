@@ -56,10 +56,14 @@ def rights(hit: dict, allowed=("cc0", "pdm", "by")) -> dict:
             "attribution_required": lic == "by", "commercial_use": True, "modification": True}
 
 
-def search(media: str, query: str, allowed=("cc0", "pdm", "by")) -> list[dict]:
+def search(media: str, query: str, allowed=("cc0", "pdm", "by"), *, filters=None) -> list[dict]:
     if media not in ("images", "audio"):
         raise ValueError("Openverse supports images and audio, not video")
     params = {"q": query.strip()[:200], "license": ",".join(sorted(allowed)), "mature": "false", "page_size": 20}
+    for name in ("aspect_ratio", "category", "page_size"):
+        if filters and name in filters:
+            params[name] = filters[name]
+    params["page_size"] = max(1, min(20, int(params["page_size"])))
     if not params["q"]:
         return []
     root = cache_root()
